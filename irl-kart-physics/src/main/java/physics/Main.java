@@ -3,7 +3,10 @@ package physics;
 import rx.Observable;
 
 /**
- * Created by bigpopakap on 10/29/15.
+ * TODO bigpopakap Javadoc this class
+ *
+ * @author bigpopakap
+ * @since 10/29/15
  */
 public class Main {
 
