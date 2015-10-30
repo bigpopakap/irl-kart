@@ -8,6 +8,10 @@ package irl.fw.physics.bodies;
  */
 public interface Body {
 
-    //TODO this is the base interface for all bodies that go in the physics engine
+    /**
+     * Returns true if the object is a virtual object that doesn't exist in the real
+     * world
+     */
+    boolean isVirtual();
 
 }

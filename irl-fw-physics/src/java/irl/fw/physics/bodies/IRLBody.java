@@ -8,6 +8,9 @@ package irl.fw.physics.bodies;
  */
 public interface IRLBody extends Body {
 
-    //TODO this is the interface for bodies whose physics are determined in the real world
+    @Override
+    default boolean isVirtual() {
+        return false;
+    }
 
 }

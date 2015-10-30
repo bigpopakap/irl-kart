@@ -1,5 +1,8 @@
 package irl.fw.physics.world;
 
+import irl.fw.physics.bodies.Body;
+import irl.util.universe.Universe;
+
 /**
  * TODO bigpopakap Javadoc this class
  *
@@ -8,6 +11,15 @@ package irl.fw.physics.world;
  */
 public class World {
 
-    //TODO this class tracks all the bodies in the physics model
+    private final Universe<BodyInstance> universe;
+
+    public World() {
+        universe = new Universe<>();
+    }
+
+    //TODO how to set initial position and stuff?
+    public String addBody(Body body) {
+        return universe.add(new BodyInstance(body));
+    }
 
 }

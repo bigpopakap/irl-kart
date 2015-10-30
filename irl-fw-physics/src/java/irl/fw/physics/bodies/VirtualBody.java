@@ -8,6 +8,9 @@ package irl.fw.physics.bodies;
  */
 public interface VirtualBody extends Body {
 
-    //TODO these are bodies that are completely calculated
+    @Override
+    default boolean isVirtual() {
+        return true;
+    }
 
 }
