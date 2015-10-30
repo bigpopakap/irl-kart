@@ -8,4 +8,12 @@
     <artifactId>irl-kart-graphics</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.kart.irl</groupId>
+            <artifactId>irl-fw-graphics</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
 </project>
