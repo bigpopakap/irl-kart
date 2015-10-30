@@ -1,8 +1,7 @@
 package irl.fw.physics.world;
 
 import irl.fw.physics.bodies.Body;
-
-import javax.vecmath.Vector2d;
+import rx.Observable;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -10,13 +9,15 @@ import javax.vecmath.Vector2d;
  * @author bigpopakap
  * @since 10/29/15
  */
-class BodyInstance {
+public class BodyInstance {
 
     private final Body body;
-    //TODO rotation, position, velocity, accel
+    private Observable<PhysicalState> stateObservable; //TODO use this
+    //TODO add an observer for collisions
 
-    public BodyInstance(Body body) {
+    BodyInstance(Body body, Observable<PhysicalState> stateObservable) {
         this.body = body;
+        this.stateObservable = stateObservable;
     }
 
     public Body getBody() {
