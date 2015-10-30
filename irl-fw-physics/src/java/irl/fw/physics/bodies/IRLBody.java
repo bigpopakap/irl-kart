@@ -1,4 +1,4 @@
-package irl.kart.physics.bodies;
+package irl.fw.physics.bodies;
 
 /**
  * TODO bigpopakap Javadoc this class
