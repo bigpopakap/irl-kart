@@ -1,4 +1,4 @@
-package physics;
+package irl.kart.physics;
 
 import rx.Observable;
 
