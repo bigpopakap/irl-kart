@@ -8,10 +8,4 @@ package irl.fw.physics.bodies;
  */
 public interface Body {
 
-    /**
-     * Returns true if the object is a virtual object that doesn't exist in the real
-     * world
-     */
-    boolean isVirtual();
-
 }

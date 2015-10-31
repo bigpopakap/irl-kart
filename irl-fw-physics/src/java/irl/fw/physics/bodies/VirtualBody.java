@@ -8,9 +8,4 @@ package irl.fw.physics.bodies;
  */
 public abstract class VirtualBody implements Body {
 
-    @Override
-    public boolean isVirtual() {
-        return true;
-    }
-
 }

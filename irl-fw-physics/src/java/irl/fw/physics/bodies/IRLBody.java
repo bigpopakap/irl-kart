@@ -11,11 +11,6 @@ import rx.Observable;
  */
 public abstract class IRLBody implements Body {
 
-    public abstract Observable<UpdateBody> getUpdates();
-
-    @Override
-    public boolean isVirtual() {
-        return false;
-    }
+    public abstract Observable<UpdateBody> updates();
 
 }
