@@ -3,7 +3,7 @@ package irl.fw.physics.world;
 import irl.fw.physics.bodies.IRLBody;
 import irl.fw.physics.bodies.VirtualBody;
 import irl.fw.physics.collisions.CollisionResolver;
-import irl.fw.physics.events.Event;
+import irl.fw.physics.events.PhysicalEvent;
 import irl.fw.physics.runner.Loopable;
 import irl.util.universe.Universe;
 import rx.Observable;
@@ -14,25 +14,25 @@ import rx.Observable;
  * @author bigpopakap
  * @since 10/29/15
  */
-public class World implements Loopable {
+public class World implements Loopable<PhysicalEvent> {
 
     private final CollisionResolver collisionResolver;
     private final Universe<BodyInstance> universe;
 
-    private volatile Observable<Event> eventQueue;
+    private final EventQueue<PhysicalEvent> eventQueue;
 
     public World(CollisionResolver collisionResolver) {
         universe = new Universe<>();
-        eventQueue = Observable.empty();
+        eventQueue = new EventQueue<>();
 
         this.collisionResolver = collisionResolver;
-        eventQueue = eventQueue.mergeWith(this.collisionResolver.getAdds())
-                                .mergeWith(this.collisionResolver.getRemoves());
+        eventQueue.merge(this.collisionResolver.adds())
+                  .merge(this.collisionResolver.removes());
     }
 
     public String addIRLBody(IRLBody body) {
         BodyInstance bodyInstance = new BodyInstance(body);
-        eventQueue = eventQueue.mergeWith(body.updates());
+        eventQueue.merge(body.updates());
         return universe.add(bodyInstance);
     }
 
@@ -40,15 +40,14 @@ public class World implements Loopable {
         return universe.add(new BodyInstance(body));
     }
 
-
     @Override
-    public Observable<Event> eventQueue() {
-        return eventQueue;
+    public Observable<PhysicalEvent> eventQueue() {
+        return eventQueue.getQueue();
     }
 
     @Override
-    public void onNext(Event event) {
-        System.out.println("Processing event: " + event);
+    public void onNext(PhysicalEvent event) {
+        System.out.println("Processing event: " + event.getName());
     }
 
     @Override

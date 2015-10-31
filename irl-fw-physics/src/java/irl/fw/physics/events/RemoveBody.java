@@ -6,7 +6,7 @@ package irl.fw.physics.events;
  * @author bigpopakap
  * @since 10/30/15
  */
-public class RemoveBody implements Event {
+public class RemoveBody implements PhysicalEvent {
 
     //TODO serialize
 

@@ -6,7 +6,7 @@ package irl.fw.physics.events;
  * @author bigpopakap
  * @since 10/30/15
  */
-public class Collision implements Event {
+public class Collision implements PhysicalEvent {
 
     //TODO serialize
 

@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class Looper implements Runnable {
 
-    private static final long DEFAULT_MILLIS_PER_UPDATE = 30; //roughly 30fps
+    private static final long DEFAULT_MILLIS_PER_UPDATE = 33; //roughly 30fps
 
     private final long millisPerUpdate;
     private final Loopable loopable;

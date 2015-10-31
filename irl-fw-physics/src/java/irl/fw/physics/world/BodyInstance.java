@@ -11,7 +11,7 @@ import irl.fw.physics.bodies.Body;
 class BodyInstance {
 
     private final Body body;
-    private volatile PhysicalState state;
+    private PhysicalState state;
 
     BodyInstance(Body body) {
         this.body = body;

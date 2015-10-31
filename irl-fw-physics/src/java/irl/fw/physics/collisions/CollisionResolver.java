@@ -15,7 +15,7 @@ public interface CollisionResolver {
 
     void onCollision(Collision collision);
 
-    Observable<AddBody> getAdds();
-    Observable<RemoveBody> getRemoves();
+    Observable<AddBody> adds();
+    Observable<RemoveBody> removes();
 
 }
