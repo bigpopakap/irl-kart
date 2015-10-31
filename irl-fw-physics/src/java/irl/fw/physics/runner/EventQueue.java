@@ -1,4 +1,4 @@
-package irl.fw.physics.world;
+package irl.fw.physics.runner;
 
 import rx.Observable;
 
@@ -8,14 +8,14 @@ import rx.Observable;
  * @author bigpopakap
  * @since 10/31/15
  */
-class EventQueue<T> {
+public class EventQueue<T> {
 
     //TODO IMPORTANT!
     // This class should handle buffering all the events
     // so that none of them get lost
     private Observable<T> eventQueue;
 
-    public EventQueue() {
+    EventQueue() {
         eventQueue = Observable.empty();
     }
 

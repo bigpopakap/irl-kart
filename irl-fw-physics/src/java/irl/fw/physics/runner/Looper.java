@@ -30,6 +30,8 @@ public class Looper implements Runnable {
          * Copied from http://gameprogrammingpatterns.com/game-loop.html
          */
         long previous = now();
+        TimeUnit timeUnit = nowUnit();
+
         long lag = 0;
         while (!loopable.isDone()) {
             long current = now();
@@ -37,19 +39,23 @@ public class Looper implements Runnable {
             previous = current;
             lag += elapsed;
 
+            loopable.processInput(millisPerUpdate, timeUnit);
+
             while (lag >= millisPerUpdate) {
-                loopable.eventQueue()
-                        .take(millisPerUpdate, TimeUnit.MILLISECONDS)
-                        .subscribe(loopable);
+                loopable.updatePhysics(millisPerUpdate, timeUnit);
                 lag -= millisPerUpdate;
             }
 
-            loopable.render(lag / millisPerUpdate);
+            loopable.render(lag / millisPerUpdate, timeUnit);
         }
     }
 
     private long now() {
         return System.currentTimeMillis();
+    }
+
+    private TimeUnit nowUnit() {
+        return TimeUnit.MILLISECONDS;
     }
 
 }

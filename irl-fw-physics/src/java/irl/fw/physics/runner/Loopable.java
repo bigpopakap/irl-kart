@@ -1,7 +1,6 @@
 package irl.fw.physics.runner;
 
-import rx.Observable;
-import rx.Observer;
+import java.util.concurrent.TimeUnit;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -9,13 +8,14 @@ import rx.Observer;
  * @author bigpopakap
  * @since 10/31/15
  */
-public interface Loopable<T> extends Observer<T> {
+public interface Loopable<T> {
 
     default boolean isDone() {
         return false;
     }
 
-    Observable<T> eventQueue();
-    void render(long timeSinceLastUpdate);
+    void processInput(long timeStep, TimeUnit timeUnit);
+    void updatePhysics(long timeStep, TimeUnit timeUnit);
+    void render(long timeSinceLastUpdate, TimeUnit timeUnit);
 
 }
