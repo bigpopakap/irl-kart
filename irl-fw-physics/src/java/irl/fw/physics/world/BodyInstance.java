@@ -1,7 +1,6 @@
 package irl.fw.physics.world;
 
 import irl.fw.physics.bodies.Body;
-import rx.Observable;
 
 /**
  * TODO bigpopakap Javadoc this class
