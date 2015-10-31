@@ -6,10 +6,10 @@ package irl.fw.physics.bodies;
  * @author bigpopakap
  * @since 10/29/15
  */
-public interface VirtualBody extends Body {
+public abstract class VirtualBody implements Body {
 
     @Override
-    default boolean isVirtual() {
+    public boolean isVirtual() {
         return true;
     }
 

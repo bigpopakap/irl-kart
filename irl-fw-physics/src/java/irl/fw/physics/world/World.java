@@ -1,8 +1,11 @@
 package irl.fw.physics.world;
 
-import irl.fw.physics.bodies.Body;
 import irl.fw.physics.bodies.IRLBody;
 import irl.fw.physics.bodies.VirtualBody;
+import irl.fw.physics.collisions.CollisionResolver;
+import irl.fw.physics.events.Collision;
+import irl.fw.physics.events.Event;
+import irl.fw.physics.events.UpdateBody;
 import irl.util.universe.Universe;
 import rx.Observable;
 
@@ -14,19 +17,35 @@ import rx.Observable;
  */
 public class World {
 
+    private final CollisionResolver collisionResolver;
     private final Universe<BodyInstance> universe;
+    private volatile Observable<Event> eventQueue;
 
-    public World() {
+    public World(CollisionResolver collisionResolver) {
         universe = new Universe<>();
+        eventQueue = Observable.empty();
+
+        this.collisionResolver = collisionResolver;
+        eventQueue = eventQueue.mergeWith(this.collisionResolver.getAdds())
+                                .mergeWith(this.collisionResolver.getRemoves());
     }
 
-    //TODO how to set initial position and stuff?
-    public String addIRLBody(IRLBody body, Observable<PhysicalState> stateObservable) {
-        return universe.add(new BodyInstance(body, stateObservable));
+    public String addIRLBody(IRLBody body) {
+        BodyInstance bodyInstance = new BodyInstance(body);
+        eventQueue = eventQueue.mergeWith(body.getUpdates());
+        return universe.add(bodyInstance);
     }
 
     public String addVirtualBody(VirtualBody body) {
-        return universe.add(new BodyInstance(body, null)); //TODO add an observable for the state
+        return universe.add(new BodyInstance(body));
+    }
+
+    public Observable<UpdateBody> getUpdates() {
+        return Observable.empty();
+    }
+
+    public Observable<Collision> getCollisions() {
+        return Observable.empty();
     }
 
 }

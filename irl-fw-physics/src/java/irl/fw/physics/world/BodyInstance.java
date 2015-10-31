@@ -9,19 +9,25 @@ import rx.Observable;
  * @author bigpopakap
  * @since 10/29/15
  */
-public class BodyInstance {
+class BodyInstance {
 
     private final Body body;
-    private Observable<PhysicalState> stateObservable; //TODO use this
-    //TODO add an observer for collisions
+    private volatile PhysicalState state;
 
-    BodyInstance(Body body, Observable<PhysicalState> stateObservable) {
+    BodyInstance(Body body) {
         this.body = body;
-        this.stateObservable = stateObservable;
     }
 
     public Body getBody() {
         return body;
+    }
+
+    public void setState(PhysicalState state) {
+        this.state = state;
+    }
+
+    public PhysicalState getState() {
+        return state;
     }
 
 }

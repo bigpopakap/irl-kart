@@ -1,7 +1,7 @@
 package irl.util.universe;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -11,10 +11,10 @@ import java.util.Map;
  */
 public class Universe<T> {
 
-    private Map<String, UniverseElement<T>> universe;
+    private ConcurrentMap<String, UniverseElement<T>> universe;
 
     public Universe() {
-        this.universe = new HashMap<>();
+        this.universe = new ConcurrentHashMap<>();
     }
 
     public String add(T value) {
