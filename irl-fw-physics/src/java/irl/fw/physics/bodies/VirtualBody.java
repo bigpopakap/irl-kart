@@ -13,7 +13,7 @@ public interface VirtualBody extends Body {
 
     @Override
     default Observable<UpdateBody> updates(String bodyId) {
-        return Observable.empty();
+        return Observable.never();
     }
 
 }

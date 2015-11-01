@@ -4,7 +4,7 @@ import irl.fw.physics.bodies.Body;
 import irl.fw.physics.collisions.CollisionResolver;
 import irl.fw.physics.collisions.NoopCollisionResolver;
 import irl.fw.physics.events.*;
-import irl.fw.physics.runner.EventQueueLoopable;
+import irl.fw.physics.runner.EventQueueSimulatable;
 import irl.util.universe.Universe;
 
 import java.util.concurrent.TimeUnit;
@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  * @author bigpopakap
  * @since 10/29/15
  */
-public class World extends EventQueueLoopable<PhysicalEvent> {
+public class World extends EventQueueSimulatable<PhysicalEvent> {
 
     private final CollisionResolver collisionResolver;
     private final Universe<BodyInstance> universe;
@@ -57,7 +57,7 @@ public class World extends EventQueueLoopable<PhysicalEvent> {
         }
 
         String prepend = wasHandled ? "Handled" : "Unhandled or unexpected";
-        System.out.println(prepend + " event type: " + event.getName());
+        System.out.println(prepend + " event type " + event.getName() + " at time " + System.currentTimeMillis());
     }
 
     void addBody(AddBody event) {
@@ -84,6 +84,7 @@ public class World extends EventQueueLoopable<PhysicalEvent> {
 
         if (universe.contains(bodyToUpdate)) {
             universe.get(bodyToUpdate).setState(newState);
+            System.out.println("Updated body " + bodyToUpdate + " to state " + newState);
         } else {
             System.out.println("Tried to update non-existent body: " + bodyToUpdate
                     + " to new state: " + newState);

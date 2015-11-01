@@ -16,7 +16,7 @@ public class EventQueue<T> {
     private Observable<T> eventQueue;
 
     public EventQueue() {
-        eventQueue = Observable.empty();
+        eventQueue = Observable.never();
     }
 
     public Observable<T> getQueue() {

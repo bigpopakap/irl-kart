@@ -20,12 +20,12 @@ public class NoopCollisionResolver implements CollisionResolver {
 
     @Override
     public Observable<AddBody> adds() {
-        return Observable.empty();
+        return Observable.never();
     }
 
     @Override
     public Observable<RemoveBody> removes() {
-        return Observable.empty();
+        return Observable.never();
     }
 
 }

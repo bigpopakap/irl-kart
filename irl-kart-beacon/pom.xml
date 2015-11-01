@@ -7,5 +7,13 @@
     <groupId>org.kart.irl</groupId>
     <artifactId>irl-kart-beacon</artifactId>
     <version>1.0-SNAPSHOT</version>
-    
+
+    <dependencies>
+        <dependency>
+            <groupId>org.kart.irl</groupId>
+            <artifactId>irl-util</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
 </project>

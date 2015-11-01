@@ -11,11 +11,11 @@ import java.util.concurrent.TimeUnit;
  * @author bigpopakap
  * @since 10/31/15
  */
-public abstract class EventQueueLoopable<T> implements Loopable, Observer<T> {
+public abstract class EventQueueSimulatable<T> implements Simulatable, Observer<T> {
 
     private final EventQueue<T> eventQueue;
 
-    public EventQueueLoopable() {
+    public EventQueueSimulatable() {
         this.eventQueue = new EventQueue<>();
     }
 

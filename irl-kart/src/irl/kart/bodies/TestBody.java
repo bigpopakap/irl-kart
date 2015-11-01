@@ -4,8 +4,11 @@ import irl.fw.physics.bodies.IRLBody;
 import irl.fw.physics.events.PhysicalEvent;
 import irl.fw.physics.events.UpdateBody;
 import irl.fw.physics.world.PhysicalState;
+import irl.kart.beacon.KartBeacon;
 import irl.util.events.EventQueue;
 import rx.Observable;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -15,24 +18,19 @@ import rx.Observable;
  */
 public class TestBody implements IRLBody {
 
-    private EventQueue<PhysicalState> positions;
+    private KartBeacon beacon;
 
-    public TestBody() {
-        positions = new EventQueue<>();
-
-        //TODO this is where the live data will come
-        positions.merge(Observable.from(new PhysicalState[] {
-            new PhysicalState(),
-            new PhysicalState(),
-            new PhysicalState()
-        }));
+    public TestBody(KartBeacon beacon) {
+        this.beacon = beacon;
     }
 
     @Override
     public Observable<UpdateBody> updates(String bodyId) {
         //TODO we should only report the latest position or something
-        return positions.getQueue()
-                        .map((state) -> new UpdateBody(bodyId, state));
+        //TODO filter by the kart's ID somehow
+        return beacon.updates()
+                     .map((update) -> new PhysicalState(update.getPosition()))
+                     .map((state) -> new UpdateBody(bodyId, state));
     }
 
 }
