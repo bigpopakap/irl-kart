@@ -8,6 +8,27 @@ package irl.fw.physics.events;
  */
 public class RemoveBody implements PhysicalEvent {
 
-    //TODO serialize
+    public interface AfterRemoveBody {
+        void afterRemoveBody(boolean wasActuallyRemoved);
+    }
 
+    private final String bodyId;
+    private final AfterRemoveBody callback;
+
+    public RemoveBody(String bodyId) {
+        this(bodyId, (b) -> {});
+    }
+
+    public RemoveBody(String bodyId, AfterRemoveBody callback) {
+        this.bodyId = bodyId;
+        this.callback = callback;
+    }
+
+    public String getBodyId() {
+        return bodyId;
+    }
+
+    public void afterRemoveBody(boolean wasActuallyRemoved) {
+        callback.afterRemoveBody(wasActuallyRemoved);
+    }
 }

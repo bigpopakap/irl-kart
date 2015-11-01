@@ -12,6 +12,7 @@ public class Looper implements Runnable {
 
     private static final long DEFAULT_MILLIS_PER_UPDATE = 33; //roughly 30fps
 
+    private volatile boolean shouldRun;
     private final long millisPerUpdate;
     private final Loopable loopable;
 
@@ -20,12 +21,19 @@ public class Looper implements Runnable {
     }
 
     public Looper(long millisPerUpdate, Loopable loopable) {
+        this.shouldRun = false;
         this.millisPerUpdate = millisPerUpdate;
         this.loopable = loopable;
     }
 
+    public synchronized void stop() {
+        this.shouldRun = false;
+    }
+
     @Override
     public void run() {
+        shouldRun = true;
+
         /*
          * Copied from http://gameprogrammingpatterns.com/game-loop.html
          */
@@ -33,7 +41,10 @@ public class Looper implements Runnable {
         TimeUnit timeUnit = nowUnit();
 
         long lag = 0;
-        while (!loopable.isDone()) {
+        while (shouldRun && !loopable.isDone()) {
+            System.out.println("Looping");
+            //TODO need to add some sleep time so this thread isn't a hog
+
             long current = now();
             long elapsed = current - previous;
             previous = current;

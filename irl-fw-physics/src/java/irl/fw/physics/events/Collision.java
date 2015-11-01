@@ -8,6 +8,4 @@ package irl.fw.physics.events;
  */
 public class Collision implements PhysicalEvent {
 
-    //TODO serialize
-
 }

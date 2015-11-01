@@ -1,6 +1,12 @@
 package irl.fw.physics;
 
+import irl.fw.physics.bodies.VirtualBody;
+import irl.fw.physics.runner.Looper;
+import irl.fw.physics.world.World;
+import irl.fw.physics.world.WorldBuilder;
 import rx.Observable;
+
+import java.awt.*;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -10,10 +16,29 @@ import rx.Observable;
  */
 public class Main {
 
-    public static void main(String[] args) {
-        Observable.from(new String[] { "K", "A", "P", "I", "L"}).forEach((s) -> {
-            System.out.println(s);
-        });
+    private static class EmptyBody extends VirtualBody {
+
+        @Override
+        public Shape getShape() {
+            return null;
+        }
+
+    }
+
+    public static void main(String[] args) throws Exception {
+        //build the world
+        World world = new WorldBuilder()
+                            .addBody(new EmptyBody())
+                            .addBody(new EmptyBody())
+                            .build();
+
+        //start the world in a new thread
+        Looper worldLoop = new Looper(world);
+        Thread worldThread = new Thread(worldLoop);
+        worldThread.start();
+
+        //kill it after a little bit
+        worldLoop.stop();
     }
 
 }

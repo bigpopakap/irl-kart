@@ -1,5 +1,8 @@
 package irl.fw.physics.bodies;
 
+import irl.fw.physics.events.UpdateBody;
+import rx.Observable;
+
 /**
  * TODO bigpopakap Javadoc this class
  *
@@ -8,4 +11,8 @@ package irl.fw.physics.bodies;
  */
 public abstract class VirtualBody implements Body {
 
+    @Override
+    public Observable<UpdateBody> updates() {
+        return Observable.empty();
+    }
 }

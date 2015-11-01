@@ -1,7 +1,5 @@
 package irl.fw.physics.runner;
 
-import irl.fw.physics.events.PhysicalEvent;
-import rx.Observable;
 import rx.Observer;
 
 import java.util.concurrent.TimeUnit;
@@ -12,11 +10,11 @@ import java.util.concurrent.TimeUnit;
  * @author bigpopakap
  * @since 10/31/15
  */
-public abstract class EventQueueLooper<T> implements Loopable<T>, Observer<T> {
+public abstract class EventQueueLoopable<T> implements Loopable, Observer<T> {
 
     private final EventQueue<T> eventQueue;
 
-    public EventQueueLooper() {
+    public EventQueueLoopable() {
         this.eventQueue = new EventQueue<>();
     }
 

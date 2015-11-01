@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
  * @author bigpopakap
  * @since 10/31/15
  */
-public interface Loopable<T> {
+public interface Loopable {
 
     default boolean isDone() {
         return false;
