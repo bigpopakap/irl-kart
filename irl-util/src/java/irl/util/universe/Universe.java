@@ -19,7 +19,7 @@ public class Universe<T> {
 
     public String add(T value) {
         String id = generateId();
-        UniverseElement<T> element = new UniverseElement<>(id, value);
+        UniverseElement<T> element = new UniverseElement<>(value);
         universe.put(id, element);
         return id;
     }
@@ -37,7 +37,7 @@ public class Universe<T> {
     }
 
     public T update(String id, T newValue) {
-        return unpack(universe.replace(id, new UniverseElement<T>(id, newValue)));
+        return unpack(universe.replace(id, new UniverseElement<>(newValue)));
     }
 
     private T unpack(UniverseElement<T> element) {

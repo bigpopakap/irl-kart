@@ -8,16 +8,10 @@ package irl.util.universe;
  */
 class UniverseElement<T> {
 
-    private final String id;
     private final T value;
 
-    UniverseElement(String id, T value) {
-        this.id = id;
+    UniverseElement(T value) {
         this.value = value;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public T getValue() {
