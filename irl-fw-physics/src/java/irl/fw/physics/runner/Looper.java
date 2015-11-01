@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 public class Looper implements Runnable {
 
     private static final long DEFAULT_MILLIS_PER_UPDATE = 33; //roughly 30fps
+    private static final long MIN_MILLIS_PER_UPDATE = 8; //roughly 120fps
 
     private volatile boolean shouldRun;
     private final long millisPerUpdate;
@@ -42,9 +43,6 @@ public class Looper implements Runnable {
 
         long lag = 0;
         while (shouldRun && !loopable.isDone()) {
-            System.out.println("Looping");
-            //TODO need to add some sleep time so this thread isn't a hog
-
             long current = now();
             long elapsed = current - previous;
             previous = current;
@@ -58,6 +56,15 @@ public class Looper implements Runnable {
             }
 
             loopable.render(lag / millisPerUpdate, timeUnit);
+
+            try {
+                long actualTime = now() - previous;
+                if (actualTime < MIN_MILLIS_PER_UPDATE) {
+                    Thread.sleep(MIN_MILLIS_PER_UPDATE - actualTime);
+                }
+            } catch (InterruptedException ex) {
+                //continue
+            }
         }
     }
 
