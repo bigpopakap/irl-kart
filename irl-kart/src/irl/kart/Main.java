@@ -1,6 +1,7 @@
-package irl.fw.physics;
+package irl.kart;
 
-import irl.fw.physics.bodies.VirtualBody;
+import irl.fw.physics.bodies.IRLBody;
+import irl.fw.physics.events.UpdateBody;
 import irl.fw.physics.runner.Looper;
 import irl.fw.physics.world.World;
 import irl.fw.physics.world.WorldBuilder;
@@ -12,14 +13,18 @@ import java.awt.*;
  * TODO bigpopakap Javadoc this class
  *
  * @author bigpopakap
- * @since 10/29/15
+ * @since 11/1/15
  */
 public class Main {
 
-    private static class EmptyBody extends VirtualBody {
+    private static class EmptyBody extends IRLBody {
+
+        public Shape getShape() {
+            return null;
+        }
 
         @Override
-        public Shape getShape() {
+        public Observable<UpdateBody> updates() {
             return null;
         }
 
@@ -28,9 +33,9 @@ public class Main {
     public static void main(String[] args) throws Exception {
         //build the world
         World world = new WorldBuilder()
-                            .addBody(new EmptyBody())
-                            .addBody(new EmptyBody())
-                            .build();
+                .addBody(new EmptyBody())
+                .addBody(new EmptyBody())
+                .build();
 
         //start the world in a new thread
         Looper worldLoop = new Looper(world);

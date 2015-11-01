@@ -57,8 +57,8 @@ public class Looper implements Runnable {
 
             try {
                 long actualTime = now() - previous;
-                if (actualTime < millisPerUpdate) {
-                    Thread.sleep(millisPerUpdate - actualTime);
+                if (actualTime < minMillisPerUpdate) {
+                    Thread.sleep(minMillisPerUpdate - actualTime);
                 }
             } catch (InterruptedException ex) {
                 //continue
