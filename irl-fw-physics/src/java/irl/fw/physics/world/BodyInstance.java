@@ -6,14 +6,14 @@ import irl.fw.physics.bodies.Body;
  * TODO bigpopakap Javadoc this class
  *
  * @author bigpopakap
- * @since 10/29/15
+ * @since 11/1/15
  */
-class BodyInstance {
+public class BodyInstance {
 
     private final Body body;
-    private PhysicalState state;
+    private volatile PhysicalState state;
 
-    BodyInstance(Body body) {
+    public BodyInstance(Body body) {
         this.body = body;
     }
 
@@ -21,12 +21,12 @@ class BodyInstance {
         return body;
     }
 
-    public void setState(PhysicalState state) {
-        this.state = state;
-    }
-
     public PhysicalState getState() {
         return state;
+    }
+
+    public synchronized void setState(PhysicalState state) {
+        this.state = state;
     }
 
 }

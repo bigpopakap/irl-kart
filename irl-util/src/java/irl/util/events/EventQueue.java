@@ -1,4 +1,4 @@
-package irl.fw.physics.runner;
+package irl.util.events;
 
 import rx.Observable;
 
@@ -15,7 +15,7 @@ public class EventQueue<T> {
     // so that none of them get lost
     private Observable<T> eventQueue;
 
-    EventQueue() {
+    public EventQueue() {
         eventQueue = Observable.empty();
     }
 

@@ -1,13 +1,9 @@
 package irl.kart;
 
-import irl.fw.physics.bodies.IRLBody;
-import irl.fw.physics.events.UpdateBody;
 import irl.fw.physics.runner.Looper;
 import irl.fw.physics.world.World;
 import irl.fw.physics.world.WorldBuilder;
-import rx.Observable;
-
-import java.awt.*;
+import irl.kart.bodies.TestBody;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -17,24 +13,11 @@ import java.awt.*;
  */
 public class Main {
 
-    private static class EmptyBody extends IRLBody {
-
-        public Shape getShape() {
-            return null;
-        }
-
-        @Override
-        public Observable<UpdateBody> updates() {
-            return null;
-        }
-
-    }
-
     public static void main(String[] args) throws Exception {
         //build the world
         World world = new WorldBuilder()
-                .addBody(new EmptyBody())
-                .addBody(new EmptyBody())
+                .addBody(new TestBody())
+                .addBody(new TestBody())
                 .build();
 
         //start the world in a new thread

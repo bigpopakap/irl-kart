@@ -3,8 +3,6 @@ package irl.fw.physics.bodies;
 import irl.fw.physics.events.UpdateBody;
 import rx.Observable;
 
-import java.awt.*;
-
 /**
  * TODO bigpopakap Javadoc this class
  *
@@ -13,7 +11,6 @@ import java.awt.*;
  */
 public interface Body {
 
-    Shape getShape();
-    Observable<UpdateBody> updates();
+    Observable<UpdateBody> updates(String bodyId);
 
 }

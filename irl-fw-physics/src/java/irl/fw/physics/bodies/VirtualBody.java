@@ -9,10 +9,11 @@ import rx.Observable;
  * @author bigpopakap
  * @since 10/29/15
  */
-public abstract class VirtualBody implements Body {
+public interface VirtualBody extends Body {
 
     @Override
-    public Observable<UpdateBody> updates() {
+    default Observable<UpdateBody> updates(String bodyId) {
         return Observable.empty();
     }
+
 }

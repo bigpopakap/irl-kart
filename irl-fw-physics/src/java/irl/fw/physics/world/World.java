@@ -62,22 +62,19 @@ public class World extends EventQueueLoopable<PhysicalEvent> {
 
     void addBody(AddBody event) {
         Body bodyToAdd = event.getBody();
-        BodyInstance instance = new BodyInstance(bodyToAdd);
+        BodyInstance bodyInstance = new BodyInstance(bodyToAdd);
 
-        getEventQueue().merge(bodyToAdd.updates());
+        String newBodyId = universe.add(bodyInstance);
 
-        String newBodyId = universe.add(instance);
-        event.afterAddBody(newBodyId);
+        getEventQueue().merge(bodyToAdd.updates(newBodyId));
     }
 
     private void removeBody(RemoveBody event) {
         String bodyToRemove = event.getBodyId();
         if (universe.contains(bodyToRemove)) {
             universe.remove(bodyToRemove);
-            event.afterRemoveBody(true);
         } else {
             System.out.println("Tried to remove non-existent body: " + bodyToRemove);
-            event.afterRemoveBody(false);
         }
     }
 
@@ -87,11 +84,9 @@ public class World extends EventQueueLoopable<PhysicalEvent> {
 
         if (universe.contains(bodyToUpdate)) {
             universe.get(bodyToUpdate).setState(newState);
-            event.afterUpdateBody(true);
         } else {
             System.out.println("Tried to update non-existent body: " + bodyToUpdate
-                                + " to new state: " + newState);
-            event.afterUpdateBody(false);
+                    + " to new state: " + newState);
         }
     }
 

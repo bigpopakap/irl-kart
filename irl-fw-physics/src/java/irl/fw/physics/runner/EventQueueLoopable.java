@@ -1,5 +1,6 @@
 package irl.fw.physics.runner;
 
+import irl.util.events.EventQueue;
 import rx.Observer;
 
 import java.util.concurrent.TimeUnit;
