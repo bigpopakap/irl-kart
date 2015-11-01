@@ -37,17 +37,10 @@ public class Main {
         Thread worldThread = new Thread(worldLoop);
         worldThread.start();
 
-        //kill it after a little bit
-        Thread.sleep(1000);
-        worldLoop.stop();
+        //TODO start an input thread
 
-        //start it again
-        System.out.println("stopping");
-        Thread.sleep(2000);
-        System.out.println("starting again");
-        worldThread = new Thread(worldLoop);
-        worldThread.start();
-        Thread.sleep(1000);
+        //kill it after a little bit
+        Thread.sleep(5000);
         worldLoop.stop();
     }
 
