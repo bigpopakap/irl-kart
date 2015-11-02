@@ -5,7 +5,7 @@ import irl.fw.shared.events.PhysicalEvent;
 import irl.fw.engine.runner.Simulator;
 import irl.fw.engine.world.World;
 import irl.fw.engine.world.WorldBuilder;
-import irl.kart.beacon.AsyncRandomKartBeacon;
+import irl.fw.beacon.beacons.AsyncRandomBeacon;
 import irl.kart.bodies.TestBody;
 
 /**
@@ -20,7 +20,7 @@ public class Main {
         final String KART_1_ID = "kart1";
         final String KART_2_ID = "kart2";
 
-        AsyncRandomKartBeacon beacon = new AsyncRandomKartBeacon(KART_1_ID, KART_2_ID);
+        AsyncRandomBeacon beacon = new AsyncRandomBeacon(KART_1_ID, KART_2_ID);
         World world = new WorldBuilder().build();
         Simulator<PhysicalEvent> worldSim = new Simulator<>(world);
 

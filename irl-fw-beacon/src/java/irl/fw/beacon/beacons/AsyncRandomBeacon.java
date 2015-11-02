@@ -1,4 +1,4 @@
-package irl.kart.beacon;
+package irl.fw.beacon.beacons;
 
 import irl.fw.beacon.Beacon;
 import irl.fw.beacon.BeaconUpdate;
@@ -13,14 +13,14 @@ import rx.subjects.PublishSubject;
  * @author bigpopakap
  * @since 11/1/15
  */
-public class AsyncRandomKartBeacon extends Looper implements Beacon {
+public class AsyncRandomBeacon extends Looper implements Beacon {
 
-    private final String[] kartIds;
+    private final String[] externalIds;
     private volatile PublishSubject<BeaconUpdate> positions;
     private volatile int iteration = 0;
 
-    public AsyncRandomKartBeacon(String... kartIds) {
-        this.kartIds = kartIds;
+    public AsyncRandomBeacon(String... externalIds) {
+        this.externalIds = externalIds;
         positions = PublishSubject.create();
     }
 
@@ -36,10 +36,10 @@ public class AsyncRandomKartBeacon extends Looper implements Beacon {
             //do nothing
         }
 
-        for (String kartId : kartIds) {
+        for (String externalId : externalIds) {
             BeaconUpdate update = new BeaconUpdate(
-                kartId,
-                new PhysicalState(kartId + "-pos-" + iteration++)
+                    externalId,
+                new PhysicalState(externalId + "-pos-" + iteration++)
             );
 
             //TODO remove
