@@ -5,16 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.kart.irl</groupId>
-    <artifactId>irl-kart</artifactId>
+    <artifactId>irl-fw-engine</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
-        <dependency>
-            <groupId>org.kart.irl</groupId>
-            <artifactId>irl-util</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
         <dependency>
             <groupId>org.kart.irl</groupId>
             <artifactId>irl-fw-physics</artifactId>
@@ -29,14 +23,14 @@
 
         <dependency>
             <groupId>org.kart.irl</groupId>
-            <artifactId>irl-kart-beacon</artifactId>
+            <artifactId>irl-util</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>org.kart.irl</groupId>
-            <artifactId>irl-kart-graphics</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>io.reactivex</groupId>
+            <artifactId>rxjava</artifactId>
+            <version>1.0.10</version>
         </dependency>
     </dependencies>
 

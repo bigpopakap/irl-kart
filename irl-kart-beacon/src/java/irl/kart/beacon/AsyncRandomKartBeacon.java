@@ -2,7 +2,6 @@ package irl.kart.beacon;
 
 import irl.util.concurrent.Looper;
 import rx.Observable;
-import rx.subjects.AsyncSubject;
 import rx.subjects.PublishSubject;
 
 /**
