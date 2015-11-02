@@ -1,14 +1,11 @@
 package irl.kart.bodies;
 
 import irl.fw.physics.bodies.IRLBody;
-import irl.fw.physics.events.PhysicalEvent;
 import irl.fw.physics.events.UpdateBody;
 import irl.fw.physics.world.PhysicalState;
+import irl.kart.beacon.HardcodedKartBeacon;
 import irl.kart.beacon.KartBeacon;
-import irl.util.events.EventQueue;
 import rx.Observable;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * TODO bigpopakap Javadoc this class

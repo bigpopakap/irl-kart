@@ -3,7 +3,7 @@ package irl.kart;
 import irl.fw.physics.runner.SimulationLooper;
 import irl.fw.physics.world.World;
 import irl.fw.physics.world.WorldBuilder;
-import irl.kart.beacon.KartBeacon;
+import irl.kart.beacon.HardcodedKartBeacon;
 import irl.kart.bodies.TestBody;
 import rx.subjects.PublishSubject;
 
@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        KartBeacon beacon = new KartBeacon();
+        HardcodedKartBeacon beacon = new HardcodedKartBeacon();
 
         //build the world
         World world = new WorldBuilder()
@@ -34,10 +34,11 @@ public class Main {
 
         //kill it after a little bit
         Thread.sleep(5000);
-        worldLoop.stop();
         beacon.stop();
+        worldLoop.stop();
     }
 
+    //TODO remove this method when done using it for tests
     private static void testPublisher() throws InterruptedException {
         PublishSubject<String> queue = PublishSubject.create();
         queue.buffer(1500, TimeUnit.MILLISECONDS)

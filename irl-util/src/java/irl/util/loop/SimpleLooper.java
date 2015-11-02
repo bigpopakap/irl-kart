@@ -6,12 +6,12 @@ package irl.util.loop;
  * @author bigpopakap
  * @since 11/1/15
  */
-public abstract class Loop implements Runnable {
+public abstract class SimpleLooper implements Looper {
 
     private volatile boolean isStopped;
     private volatile boolean isPaused;
 
-    public Loop() {
+    public SimpleLooper() {
         isStopped = true;
         isPaused = false;
     }
@@ -33,22 +33,27 @@ public abstract class Loop implements Runnable {
         }
     }
 
+    @Override
     public synchronized void stop() {
         isStopped = true;
     }
 
+    @Override
     public synchronized void pause() {
         isPaused = true;
     }
 
+    @Override
     public synchronized void resume() {
         isPaused = false;
     }
 
+    @Override
     public boolean isStopped() {
         return isStopped;
     }
 
+    @Override
     public boolean isPaused() {
         return isPaused;
     }

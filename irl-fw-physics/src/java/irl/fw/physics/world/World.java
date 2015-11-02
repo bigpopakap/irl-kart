@@ -55,9 +55,6 @@ public class World extends EventQueueSimulatable<PhysicalEvent> {
         } else {
             wasHandled = false;
         }
-
-        String prepend = wasHandled ? "Handled" : "Unhandled or unexpected";
-        System.out.println(prepend + " event type " + event.getName() + " at time " + System.currentTimeMillis());
     }
 
     void addBody(AddBody event) {
@@ -74,7 +71,7 @@ public class World extends EventQueueSimulatable<PhysicalEvent> {
         if (universe.contains(bodyToRemove)) {
             universe.remove(bodyToRemove);
         } else {
-            System.out.println("Tried to remove non-existent body: " + bodyToRemove);
+            System.err.println("Tried to remove non-existent body: " + bodyToRemove);
         }
     }
 
@@ -84,9 +81,10 @@ public class World extends EventQueueSimulatable<PhysicalEvent> {
 
         if (universe.contains(bodyToUpdate)) {
             universe.get(bodyToUpdate).setState(newState);
+            //TODO remove
             System.out.println("Updated body " + bodyToUpdate + " to state " + newState);
         } else {
-            System.out.println("Tried to update non-existent body: " + bodyToUpdate
+            System.err.println("Tried to update non-existent body: " + bodyToUpdate
                     + " to new state: " + newState);
         }
     }
