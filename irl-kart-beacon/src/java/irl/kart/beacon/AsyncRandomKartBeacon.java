@@ -1,5 +1,8 @@
 package irl.kart.beacon;
 
+import irl.fw.beacon.Beacon;
+import irl.fw.beacon.BeaconUpdate;
+import irl.fw.shared.bodies.PhysicalState;
 import irl.util.concurrent.Looper;
 import rx.Observable;
 import rx.subjects.PublishSubject;
@@ -10,10 +13,10 @@ import rx.subjects.PublishSubject;
  * @author bigpopakap
  * @since 11/1/15
  */
-public class AsyncRandomKartBeacon extends Looper implements KartBeacon {
+public class AsyncRandomKartBeacon extends Looper implements Beacon {
 
     private final String[] kartIds;
-    private volatile PublishSubject<KartUpdate> positions;
+    private volatile PublishSubject<BeaconUpdate> positions;
     private volatile int iteration = 0;
 
     public AsyncRandomKartBeacon(String... kartIds) {
@@ -21,8 +24,7 @@ public class AsyncRandomKartBeacon extends Looper implements KartBeacon {
         positions = PublishSubject.create();
     }
 
-    @Override
-    public Observable<KartUpdate> updates() {
+    public Observable<BeaconUpdate> updates() {
         return positions;
     }
 
@@ -35,7 +37,10 @@ public class AsyncRandomKartBeacon extends Looper implements KartBeacon {
         }
 
         for (String kartId : kartIds) {
-            KartUpdate update = new KartUpdate(kartId, kartId + "-pos-" + iteration++);
+            BeaconUpdate update = new BeaconUpdate(
+                kartId,
+                new PhysicalState(kartId + "-pos-" + iteration++)
+            );
 
             //TODO remove
             System.out.println("Publishing update " + update);

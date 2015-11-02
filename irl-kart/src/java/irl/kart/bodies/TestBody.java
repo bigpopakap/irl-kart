@@ -1,9 +1,8 @@
 package irl.kart.bodies;
 
+import irl.fw.beacon.Beacon;
 import irl.fw.shared.bodies.IRLBody;
-import irl.fw.shared.bodies.PhysicalState;
 import irl.fw.shared.events.UpdateBody;
-import irl.kart.beacon.KartBeacon;
 import irl.util.string.StringUtils;
 import rx.Observable;
 
@@ -15,11 +14,11 @@ import rx.Observable;
  */
 public class TestBody implements IRLBody {
 
-    private final String externalId;
-    private KartBeacon beacon;
+    private final String kartId;
+    private final Beacon beacon;
 
-    public TestBody(String externalId, KartBeacon beacon) {
-        this.externalId = externalId;
+    public TestBody(String kartId, Beacon beacon) {
+        this.kartId = kartId;
         this.beacon = beacon;
     }
 
@@ -27,9 +26,8 @@ public class TestBody implements IRLBody {
     public Observable<UpdateBody> updates(String bodyId) {
         //TODO we should only report the latest position or something
         return beacon.updates()
-                     .filter(update -> StringUtils.equal(externalId, update.getKartId()))
-                     .map(update -> new PhysicalState(update.getPosition()))
-                     .map(state -> new UpdateBody(bodyId, state));
+                     .filter(update -> StringUtils.equal(kartId, update.getExternalId()))
+                .map(update -> new UpdateBody(bodyId, update.getState()));
     }
 
 }
