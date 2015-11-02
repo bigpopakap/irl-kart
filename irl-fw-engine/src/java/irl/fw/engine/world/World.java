@@ -46,7 +46,7 @@ public class World implements Simulatable<PhysicalEvent> {
     }
 
     @Override
-    public void handleEvent(PhysicalEvent event) {
+    public void onNext(PhysicalEvent event) {
         //TODO use command pattern instead of hardcoding a method per event
         if (event instanceof AddBody) {
             handleAddBody((AddBody) event);
@@ -57,6 +57,11 @@ public class World implements Simulatable<PhysicalEvent> {
         } else {
             System.err.println("Unhandled or unexpected event: " + event.getName());
         }
+    }
+
+    @Override
+    public void onError(Throwable e) {
+        e.printStackTrace();
     }
 
     private void handleAddBody(AddBody event) {

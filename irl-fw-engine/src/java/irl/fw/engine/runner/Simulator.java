@@ -58,12 +58,12 @@ public class Simulator<T> implements StoppableRunnable {
 
                 @Override
                 public void onCompleted() {
-                    //do nothing
+                    simulatable.onCompleted();
                 }
 
                 @Override
                 public void onError(Throwable e) {
-                    e.printStackTrace();
+                    simulatable.onError(e);
                 }
 
                 @Override
@@ -72,7 +72,7 @@ public class Simulator<T> implements StoppableRunnable {
                     lag += elapsed;
 
                     //process the batched inputs
-                    eventBatch.getValue().forEach(simulatable::handleEvent);
+                    eventBatch.getValue().forEach(simulatable::onNext);
 
                     //TODO is there a way to do this more function-oriented?
                     while (lag > TIME_STEP) {

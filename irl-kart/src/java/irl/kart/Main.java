@@ -27,8 +27,8 @@ public class Main {
         //start initializing the world
         //FIXME can we avoid having to declare these karts up front?
         worldSim.prepare();
-        world.handleEvent(new AddBody(new TestBody(KART_1_ID, beacon)));
-        world.handleEvent(new AddBody(new TestBody(KART_2_ID, beacon)));
+        world.onNext(new AddBody(new TestBody(KART_1_ID, beacon)));
+        world.onNext(new AddBody(new TestBody(KART_2_ID, beacon)));
 
         new Thread(worldSim).start();
         new Thread(beacon).start();
