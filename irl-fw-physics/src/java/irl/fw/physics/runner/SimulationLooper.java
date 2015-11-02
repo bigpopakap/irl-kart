@@ -1,6 +1,6 @@
 package irl.fw.physics.runner;
 
-import irl.util.loop.SimpleLooper;
+import irl.util.concurrent.Looper;
 
 import java.util.concurrent.TimeUnit;
 
@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
  * @author bigpopakap
  * @since 10/31/15
  */
-public class SimulationLooper extends SimpleLooper {
+public class SimulationLooper extends Looper {
 
     private static final long DEFAULT_MILLIS_PER_UPDATE = 33; //roughly 30fps
     private static final long DEFAULT_MIN_MILLIS_PER_UPDATE = 8; //roughly 120fps

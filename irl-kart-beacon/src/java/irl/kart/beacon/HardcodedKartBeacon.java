@@ -1,6 +1,6 @@
 package irl.kart.beacon;
 
-import irl.util.loop.SimpleLooper;
+import irl.util.concurrent.Looper;
 import rx.Observable;
 import rx.subjects.PublishSubject;
 
@@ -10,7 +10,7 @@ import rx.subjects.PublishSubject;
  * @author bigpopakap
  * @since 11/1/15
  */
-public class HardcodedKartBeacon extends SimpleLooper implements KartBeacon {
+public class HardcodedKartBeacon extends Looper implements KartBeacon {
 
     private volatile PublishSubject<KartUpdate> positions;
     private volatile int iteration = 0;

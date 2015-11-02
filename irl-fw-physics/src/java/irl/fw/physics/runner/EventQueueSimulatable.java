@@ -1,6 +1,6 @@
 package irl.fw.physics.runner;
 
-import irl.util.events.EventQueue;
+import rx.Observable;
 import rx.Observer;
 
 import java.util.concurrent.TimeUnit;
@@ -13,21 +13,22 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class EventQueueSimulatable<T> implements Simulatable, Observer<T> {
 
-    private final EventQueue<T> eventQueue;
+    private Observable<T> eventQueue;
 
     public EventQueueSimulatable() {
-        this.eventQueue = new EventQueue<>();
+        this.eventQueue = Observable.never();
     }
 
     @Override
     public void processInput(long timeStep, TimeUnit timeUnit) {
-        eventQueue.getQueue()
-                .take(timeStep, timeUnit)
-                .subscribe(this);
+        //TODO handle input
     }
 
-    protected EventQueue<T> getEventQueue() {
-        return eventQueue;
+    @SafeVarargs
+    protected final void queue(Observable<? extends T>... eventses) {
+        for (Observable<? extends T> events : eventses) {
+            eventQueue = eventQueue.mergeWith(events);
+        }
     }
 
 }

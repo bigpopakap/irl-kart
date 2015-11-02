@@ -5,9 +5,6 @@ import irl.fw.physics.world.World;
 import irl.fw.physics.world.WorldBuilder;
 import irl.kart.beacon.HardcodedKartBeacon;
 import irl.kart.bodies.TestBody;
-import rx.subjects.PublishSubject;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -39,24 +36,24 @@ public class Main {
     }
 
     //TODO remove this method when done using it for tests
-    private static void testPublisher() throws InterruptedException {
-        PublishSubject<String> queue = PublishSubject.create();
-        queue.buffer(1500, TimeUnit.MILLISECONDS)
-                .subscribe((str) -> System.out.println(str));
-
-        new Thread(() -> {
-            for (int i = 0; i < 10; i++) {
-                queue.onNext("Iteration " + i);
-
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    //do nothing
-                }
-            }
-        }).start();
-
-        Thread.sleep(5000);
-    }
+//    private static void testPublisher() throws InterruptedException {
+//        PublishSubject<String> queue = PublishSubject.create();
+//        queue.buffer(1500, TimeUnit.MILLISECONDS)
+//                .subscribe((str) -> System.out.println(str));
+//
+//        new Thread(() -> {
+//            for (int i = 0; i < 10; i++) {
+//                queue.onNext("Iteration " + i);
+//
+//                try {
+//                    Thread.sleep(500);
+//                } catch (InterruptedException e) {
+//                    //do nothing
+//                }
+//            }
+//        }).start();
+//
+//        Thread.sleep(5000);
+//    }
 
 }

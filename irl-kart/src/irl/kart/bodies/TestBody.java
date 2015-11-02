@@ -3,7 +3,6 @@ package irl.kart.bodies;
 import irl.fw.physics.bodies.IRLBody;
 import irl.fw.physics.events.UpdateBody;
 import irl.fw.physics.world.PhysicalState;
-import irl.kart.beacon.HardcodedKartBeacon;
 import irl.kart.beacon.KartBeacon;
 import rx.Observable;
 

@@ -1,4 +1,4 @@
-package irl.util.loop;
+package irl.util.concurrent;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -6,7 +6,7 @@ package irl.util.loop;
  * @author bigpopakap
  * @since 11/1/15
  */
-public interface Looper extends Runnable {
+public interface RunAndStoppable extends Runnable {
 
     void stop();
     void pause();

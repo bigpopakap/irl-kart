@@ -26,10 +26,8 @@ public class World extends EventQueueSimulatable<PhysicalEvent> {
 
     public World(CollisionResolver collisionResolver) {
         universe = new Universe<>();
-
         this.collisionResolver = collisionResolver;
-        getEventQueue().merge(this.collisionResolver.adds())
-                        .merge(this.collisionResolver.removes());
+        queue(this.collisionResolver.adds(), this.collisionResolver.removes());
     }
 
     @Override
@@ -45,7 +43,6 @@ public class World extends EventQueueSimulatable<PhysicalEvent> {
     @Override
     public void onNext(PhysicalEvent event) {
         //TODO should each event implement a do() method?
-        boolean wasHandled = true;
         if (event instanceof AddBody) {
             addBody((AddBody) event);
         } else if (event instanceof RemoveBody) {
@@ -53,7 +50,7 @@ public class World extends EventQueueSimulatable<PhysicalEvent> {
         } else if (event instanceof UpdateBody) {
             updateBody((UpdateBody) event);
         } else {
-            wasHandled = false;
+            System.err.println("Unhandled or unexpected event: " + event.getName());
         }
     }
 
@@ -63,7 +60,7 @@ public class World extends EventQueueSimulatable<PhysicalEvent> {
 
         String newBodyId = universe.add(bodyInstance);
 
-        getEventQueue().merge(bodyToAdd.updates(newBodyId));
+        queue(bodyToAdd.updates(newBodyId));
     }
 
     private void removeBody(RemoveBody event) {

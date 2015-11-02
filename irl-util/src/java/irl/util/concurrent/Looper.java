@@ -1,4 +1,4 @@
-package irl.util.loop;
+package irl.util.concurrent;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -6,12 +6,12 @@ package irl.util.loop;
  * @author bigpopakap
  * @since 11/1/15
  */
-public abstract class SimpleLooper implements Looper {
+public abstract class Looper implements RunAndStoppable {
 
     private volatile boolean isStopped;
     private volatile boolean isPaused;
 
-    public SimpleLooper() {
+    public Looper() {
         isStopped = true;
         isPaused = false;
     }
