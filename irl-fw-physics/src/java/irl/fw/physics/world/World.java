@@ -7,8 +7,6 @@ import irl.fw.physics.events.*;
 import irl.fw.physics.runner.EventQueueSimulatable;
 import irl.util.universe.Universe;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  * TODO bigpopakap Javadoc this class
  *
@@ -87,12 +85,12 @@ public class World extends EventQueueSimulatable<PhysicalEvent> {
     }
 
     @Override
-    public void updatePhysics(long timeStep, TimeUnit timeUnit) {
+    public void updatePhysics() {
         //TODO updatePhysics physics
     }
 
     @Override
-    public void render(long timeSinceLastUpdate, TimeUnit timeUnit) {
+    public void render(long timeSinceLastUpdate) {
         //TODO send render events
     }
 }

@@ -22,19 +22,19 @@ public class SimulationLooper extends Looper {
     private final Simulatable simulatable;
     
     private long previous;
-    private TimeUnit timeUnit;
     private long lag;
 
     public SimulationLooper(Simulatable simulatable) {
         this.millisPerUpdate = DEFAULT_MILLIS_PER_UPDATE;
         this.minMillisPerUpdate = DEFAULT_MIN_MILLIS_PER_UPDATE;
+
         this.simulatable = simulatable;
+        this.simulatable.setTiming(millisPerUpdate, timeUnit());
     }
 
     @Override
     protected void beforeLoop() {
         previous = now();
-        timeUnit = nowUnit();
         lag = 0;
     }
 
@@ -45,14 +45,14 @@ public class SimulationLooper extends Looper {
         previous = current;
         lag += elapsed;
 
-        simulatable.processInput(millisPerUpdate, timeUnit);
+        simulatable.processInput();
 
         while (lag >= millisPerUpdate) {
-            simulatable.updatePhysics(millisPerUpdate, timeUnit);
+            simulatable.updatePhysics();
             lag -= millisPerUpdate;
         }
 
-        simulatable.render(lag / millisPerUpdate, timeUnit);
+        simulatable.render(lag / millisPerUpdate);
 
         try {
             long actualTime = now() - previous;
@@ -73,7 +73,7 @@ public class SimulationLooper extends Looper {
         return System.currentTimeMillis();
     }
 
-    private TimeUnit nowUnit() {
+    private TimeUnit timeUnit() {
         return TimeUnit.MILLISECONDS;
     }
 

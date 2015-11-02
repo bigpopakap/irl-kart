@@ -14,8 +14,10 @@ public interface Simulatable {
         return false;
     }
 
-    void processInput(long timeStep, TimeUnit timeUnit);
-    void updatePhysics(long timeStep, TimeUnit timeUnit);
-    void render(long timeSinceLastUpdate, TimeUnit timeUnit);
+    void setTiming(long timeStep, TimeUnit timeUnit);
+
+    void processInput();
+    void updatePhysics();
+    void render(long timeSinceLastUpdate);
 
 }

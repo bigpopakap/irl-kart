@@ -13,6 +13,9 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class EventQueueSimulatable<T> implements Simulatable, Observer<T> {
 
+    private long timeStep;
+    private TimeUnit timeUnit;
+
     private Observable<T> eventQueue;
 
     public EventQueueSimulatable() {
@@ -20,8 +23,24 @@ public abstract class EventQueueSimulatable<T> implements Simulatable, Observer<
     }
 
     @Override
-    public void processInput(long timeStep, TimeUnit timeUnit) {
-        //TODO handle input
+    public void setTiming(long timeStep, TimeUnit timeUnit) {
+        this.timeStep = timeStep;
+        this.timeUnit = timeUnit;
+    }
+
+    @Override
+    public void processInput() {
+        eventQueue
+            .window(getTimeStep(), getTimeUnit())
+            .forEach(window -> window.subscribe(this));
+    }
+
+    protected long getTimeStep() {
+        return timeStep;
+    }
+
+    protected TimeUnit getTimeUnit() {
+        return timeUnit;
     }
 
     @SafeVarargs
