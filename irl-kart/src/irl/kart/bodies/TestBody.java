@@ -4,6 +4,7 @@ import irl.fw.physics.bodies.IRLBody;
 import irl.fw.physics.events.UpdateBody;
 import irl.fw.physics.world.PhysicalState;
 import irl.kart.beacon.KartBeacon;
+import irl.util.string.StringUtils;
 import rx.Observable;
 
 /**
@@ -14,19 +15,21 @@ import rx.Observable;
  */
 public class TestBody implements IRLBody {
 
+    private final String externalId;
     private KartBeacon beacon;
 
-    public TestBody(KartBeacon beacon) {
+    public TestBody(String externalId, KartBeacon beacon) {
+        this.externalId = externalId;
         this.beacon = beacon;
     }
 
     @Override
     public Observable<UpdateBody> updates(String bodyId) {
         //TODO we should only report the latest position or something
-        //TODO filter by the kart's ID somehow
         return beacon.updates()
-                     .map((update) -> new PhysicalState(update.getPosition()))
-                     .map((state) -> new UpdateBody(bodyId, state));
+                     .filter(update -> StringUtils.equal(externalId, update.getKartId()))
+                     .map(update -> new PhysicalState(update.getPosition()))
+                     .map(state -> new UpdateBody(bodyId, state));
     }
 
 }

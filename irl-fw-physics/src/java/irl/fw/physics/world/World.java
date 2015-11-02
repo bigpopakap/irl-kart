@@ -4,8 +4,12 @@ import irl.fw.physics.bodies.Body;
 import irl.fw.physics.collisions.CollisionResolver;
 import irl.fw.physics.collisions.NoopCollisionResolver;
 import irl.fw.physics.events.*;
-import irl.fw.physics.runner.EventQueueSimulatable;
+import irl.fw.physics.runner.Simulatable;
 import irl.util.universe.Universe;
+import rx.Observable;
+
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -13,8 +17,11 @@ import irl.util.universe.Universe;
  * @author bigpopakap
  * @since 10/29/15
  */
-public class World extends EventQueueSimulatable<PhysicalEvent> {
+//TODO separate the actual physics part into a physics module
+//      and then this can become irl-fw-engine
+public class World implements Simulatable<PhysicalEvent> {
 
+    private Consumer<Observable<? extends PhysicalEvent>> queueEvents;
     private final CollisionResolver collisionResolver;
     private final Universe<BodyInstance> universe;
 
@@ -25,43 +32,39 @@ public class World extends EventQueueSimulatable<PhysicalEvent> {
     public World(CollisionResolver collisionResolver) {
         universe = new Universe<>();
         this.collisionResolver = collisionResolver;
-        queue(this.collisionResolver.adds(), this.collisionResolver.removes());
     }
 
     @Override
-    public void onCompleted() {
-        //do nothing
+    public void start(Consumer<Observable<? extends PhysicalEvent>> queueEvents) {
+        this.queueEvents = queueEvents;
+        this.queueEvents.accept(this.collisionResolver.adds());
+        this.queueEvents.accept(this.collisionResolver.removes());
     }
 
     @Override
-    public void onError(Throwable e) {
-        e.printStackTrace(System.out);
-    }
-
-    @Override
-    public void onNext(PhysicalEvent event) {
-        //TODO should each event implement a do() method?
+    public void handleEvent(PhysicalEvent event) {
+        //TODO use command pattern instead of hardcoding a method per event
         if (event instanceof AddBody) {
-            addBody((AddBody) event);
+            handleAddBody((AddBody) event);
         } else if (event instanceof RemoveBody) {
-            removeBody((RemoveBody) event);
+            handleRemoveBody((RemoveBody) event);
         } else if (event instanceof UpdateBody) {
-            updateBody((UpdateBody) event);
+            handleUpdateBody((UpdateBody) event);
         } else {
             System.err.println("Unhandled or unexpected event: " + event.getName());
         }
     }
 
-    void addBody(AddBody event) {
+    private void handleAddBody(AddBody event) {
         Body bodyToAdd = event.getBody();
         BodyInstance bodyInstance = new BodyInstance(bodyToAdd);
 
         String newBodyId = universe.add(bodyInstance);
 
-        queue(bodyToAdd.updates(newBodyId));
+        queueEvents.accept(bodyToAdd.updates(newBodyId));
     }
 
-    private void removeBody(RemoveBody event) {
+    private void handleRemoveBody(RemoveBody event) {
         String bodyToRemove = event.getBodyId();
         if (universe.contains(bodyToRemove)) {
             universe.remove(bodyToRemove);
@@ -70,7 +73,7 @@ public class World extends EventQueueSimulatable<PhysicalEvent> {
         }
     }
 
-    private void updateBody(UpdateBody event) {
+    private void handleUpdateBody(UpdateBody event) {
         String bodyToUpdate = event.getBodyId();
         PhysicalState newState = event.getNewState();
 
@@ -90,7 +93,7 @@ public class World extends EventQueueSimulatable<PhysicalEvent> {
     }
 
     @Override
-    public void render(long timeSinceLastUpdate) {
+    public void render(long timeSinceLastUpdate, TimeUnit timeUnit) {
         //TODO send render events
     }
 }

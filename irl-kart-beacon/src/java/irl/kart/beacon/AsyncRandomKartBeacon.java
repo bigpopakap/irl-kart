@@ -2,6 +2,7 @@ package irl.kart.beacon;
 
 import irl.util.concurrent.Looper;
 import rx.Observable;
+import rx.subjects.AsyncSubject;
 import rx.subjects.PublishSubject;
 
 /**
@@ -10,12 +11,14 @@ import rx.subjects.PublishSubject;
  * @author bigpopakap
  * @since 11/1/15
  */
-public class HardcodedKartBeacon extends Looper implements KartBeacon {
+public class AsyncRandomKartBeacon extends Looper implements KartBeacon {
 
+    private final String[] kartIds;
     private volatile PublishSubject<KartUpdate> positions;
     private volatile int iteration = 0;
 
-    public HardcodedKartBeacon() {
+    public AsyncRandomKartBeacon(String... kartIds) {
+        this.kartIds = kartIds;
         positions = PublishSubject.create();
     }
 
@@ -32,10 +35,14 @@ public class HardcodedKartBeacon extends Looper implements KartBeacon {
             //do nothing
         }
 
-        KartUpdate update = new KartUpdate("my cart", "update-" + iteration++);
-        //TODO remove
-        System.out.println("Publishing update " + update);
-        positions.onNext(update);
+        for (String kartId : kartIds) {
+            KartUpdate update = new KartUpdate(kartId, kartId + "-pos-" + iteration++);
+
+            //TODO remove
+            System.out.println("Publishing update " + update);
+
+            positions.onNext(update);
+        }
     }
 
 }

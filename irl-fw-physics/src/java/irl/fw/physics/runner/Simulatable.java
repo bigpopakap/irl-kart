@@ -1,6 +1,9 @@
 package irl.fw.physics.runner;
 
+import rx.Observable;
+
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -8,16 +11,12 @@ import java.util.concurrent.TimeUnit;
  * @author bigpopakap
  * @since 10/31/15
  */
-public interface Simulatable {
+public interface Simulatable<T> {
 
-    default boolean isDone() {
-        return false;
-    }
+    void start(Consumer<Observable<? extends T>> queueEvents);
 
-    void setTiming(long timeStep, TimeUnit timeUnit);
-
-    void processInput();
+    void handleEvent(T event);
     void updatePhysics();
-    void render(long timeSinceLastUpdate);
+    void render(long timeSinceLastUpdate, TimeUnit timeUnit);
 
 }

@@ -1,9 +1,10 @@
 package irl.kart;
 
-import irl.fw.physics.runner.SimulationLooper;
+import irl.fw.physics.events.AddBody;
+import irl.fw.physics.events.PhysicalEvent;
+import irl.fw.physics.runner.Simulator;
 import irl.fw.physics.world.World;
-import irl.fw.physics.world.WorldBuilder;
-import irl.kart.beacon.HardcodedKartBeacon;
+import irl.kart.beacon.AsyncRandomKartBeacon;
 import irl.kart.bodies.TestBody;
 
 /**
@@ -15,45 +16,26 @@ import irl.kart.bodies.TestBody;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        HardcodedKartBeacon beacon = new HardcodedKartBeacon();
+        final String KART_1_ID = "kart1";
+        final String KART_2_ID = "kart2";
 
-        //build the world
-        World world = new WorldBuilder()
-                .addBody(new TestBody(beacon))
-                .addBody(new TestBody(beacon))
-                .build();
+        AsyncRandomKartBeacon beacon = new AsyncRandomKartBeacon(KART_1_ID, KART_2_ID);
+        World world = new World();
+        Simulator<PhysicalEvent> worldSim = new Simulator<>(world);
 
-        //start the world in a new thread
-        SimulationLooper worldLoop = new SimulationLooper(world);
+        //start initializing the world
+        //TODO can we avoid having to declare these karts up front?
+        worldSim.prepare();
+        world.handleEvent(new AddBody(new TestBody(KART_1_ID, beacon)));
+        world.handleEvent(new AddBody(new TestBody(KART_2_ID, beacon)));
 
-        new Thread(worldLoop).start();
+        new Thread(worldSim).start();
         new Thread(beacon).start();
 
         //kill it after a little bit
-        Thread.sleep(5000);
+        Thread.sleep(10000);
         beacon.stop();
-        worldLoop.stop();
+        worldSim.stop();
     }
-
-    //TODO remove this method when done using it for tests
-//    private static void testPublisher() throws InterruptedException {
-//        PublishSubject<String> queue = PublishSubject.create();
-//        queue.buffer(1500, TimeUnit.MILLISECONDS)
-//                .subscribe((str) -> System.out.println(str));
-//
-//        new Thread(() -> {
-//            for (int i = 0; i < 10; i++) {
-//                queue.onNext("Iteration " + i);
-//
-//                try {
-//                    Thread.sleep(500);
-//                } catch (InterruptedException e) {
-//                    //do nothing
-//                }
-//            }
-//        }).start();
-//
-//        Thread.sleep(5000);
-//    }
 
 }
