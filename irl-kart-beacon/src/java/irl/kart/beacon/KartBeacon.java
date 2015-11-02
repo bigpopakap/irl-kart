@@ -8,7 +8,7 @@ import rx.Observable;
  * @author bigpopakap
  * @since 11/1/15
  */
-//TODO should this be genericized and put into a irl-fw-beacon module?
+//FIXME should this be genericized and put into a irl-fw-beacon module?
 public interface KartBeacon {
 
     Observable<KartUpdate> updates();

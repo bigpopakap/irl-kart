@@ -17,7 +17,7 @@ import java.util.function.Consumer;
  * @author bigpopakap
  * @since 10/29/15
  */
-//TODO separate the actual physics part into a physics module
+//FIXME separate the actual physics part into a physics module
 //      and then this can become irl-fw-engine
 public class World implements Simulatable<PhysicalEvent> {
 

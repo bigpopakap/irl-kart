@@ -24,7 +24,7 @@ public class Main {
         Simulator<PhysicalEvent> worldSim = new Simulator<>(world);
 
         //start initializing the world
-        //TODO can we avoid having to declare these karts up front?
+        //FIXME can we avoid having to declare these karts up front?
         worldSim.prepare();
         world.handleEvent(new AddBody(new TestBody(KART_1_ID, beacon)));
         world.handleEvent(new AddBody(new TestBody(KART_2_ID, beacon)));

@@ -1,8 +1,9 @@
 package irl.fw.physics.runner;
 
-import irl.util.concurrent.RunAndStoppable;
+import irl.util.concurrent.StoppableRunnable;
 import rx.Observable;
 import rx.Observer;
+import rx.Subscription;
 import rx.schedulers.TimeInterval;
 
 import java.util.List;
@@ -14,37 +15,30 @@ import java.util.concurrent.TimeUnit;
  * @author bigpopakap
  * @since 10/31/15
  */
-public class Simulator<T> implements RunAndStoppable {
+public class Simulator<T> implements StoppableRunnable {
 
     private static final long TIME_STEP = 33; //roughly 30fps
 
     private final Simulatable<T> simulatable;
     private volatile Observable<T> eventQueue;
+    private volatile Subscription subscription;
     private boolean isPrepared;
 
     public Simulator(Simulatable<T> simulatable) {
         this.simulatable = simulatable;
-        this.eventQueue = Observable.never();
         isPrepared = false;
     }
 
     @Override
     public void stop() {
-        //TODO
+        if (subscription != null) {
+            subscription.unsubscribe();
+        }
     }
 
-    @Override
-    public void pause() {
-        //TODO
-    }
-
-    @Override
-    public void resume() {
-        //TODO
-    }
-
-    //TODO somehow get rid of the need for this stupid prepare() phase
+    //FIXME somehow get rid of the need for this stupid prepare() phase
     public void prepare() {
+        this.eventQueue = Observable.never();
         simulatable.start(this::queue);
         isPrepared = true;
     }
@@ -55,7 +49,7 @@ public class Simulator<T> implements RunAndStoppable {
             throw new RuntimeException("Make sure you call prepare() before running");
         }
 
-        eventQueue
+        this.subscription = eventQueue
             .buffer(TIME_STEP, TimeUnit.MILLISECONDS)
             .timeInterval()
             .subscribe(new Observer<TimeInterval<List<T>>>() {
@@ -94,12 +88,7 @@ public class Simulator<T> implements RunAndStoppable {
 
     @Override
     public boolean isStopped() {
-        return false; //TODO
-    }
-
-    @Override
-    public boolean isPaused() {
-        return false; //TODO
+        return subscription == null || subscription.isUnsubscribed();
     }
 
     @SafeVarargs

@@ -6,13 +6,10 @@ package irl.util.concurrent;
  * @author bigpopakap
  * @since 11/1/15
  */
-public interface RunAndStoppable extends Runnable {
+public interface PauseableRunnable extends StoppableRunnable {
 
-    void stop();
     void pause();
     void resume();
-
-    boolean isStopped();
     boolean isPaused();
 
 }

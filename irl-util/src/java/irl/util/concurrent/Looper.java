@@ -6,7 +6,7 @@ package irl.util.concurrent;
  * @author bigpopakap
  * @since 11/1/15
  */
-public abstract class Looper implements RunAndStoppable {
+public abstract class Looper implements PauseableRunnable {
 
     private volatile boolean isStopped;
     private volatile boolean isPaused;
