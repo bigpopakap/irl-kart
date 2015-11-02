@@ -9,7 +9,7 @@ import irl.fw.shared.bodies.PhysicalState;
  * @author bigpopakap
  * @since 11/1/15
  */
-public class BodyInstance {
+class BodyInstance {
 
     private final Body body;
     private volatile PhysicalState state;
