@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class Universe<T> {
 
-    private ConcurrentMap<String, UniverseElement<T>> universe;
+    private ConcurrentMap<String, T> universe;
 
     public Universe() {
         this.universe = new ConcurrentHashMap<>();
@@ -19,8 +19,7 @@ public class Universe<T> {
 
     public String add(T value) {
         String id = generateId();
-        UniverseElement<T> element = new UniverseElement<>(value);
-        universe.put(id, element);
+        universe.put(id, value);
         return id;
     }
 
@@ -29,19 +28,15 @@ public class Universe<T> {
     }
 
     public T get(String id) {
-        return unpack(universe.get(id));
+        return universe.get(id);
     }
 
     public T remove(String id) {
-        return unpack(universe.remove(id));
+        return universe.remove(id);
     }
 
     public T update(String id, T newValue) {
-        return unpack(universe.replace(id, new UniverseElement<>(newValue)));
-    }
-
-    private T unpack(UniverseElement<T> element) {
-        return element != null ? element.getValue() : null;
+        return universe.replace(id, newValue);
     }
 
     private String generateId() {
