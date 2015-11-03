@@ -17,7 +17,7 @@ import rx.subjects.Subject;
 public class AsyncRandomBeacon extends Looper implements Beacon {
 
     private final String[] externalIds;
-    private volatile Subject<BeaconUpdate, BeaconUpdate> positions;
+    private final Subject<BeaconUpdate, BeaconUpdate> positions;
     private volatile int iteration = 0;
 
     public AsyncRandomBeacon(String... externalIds) {

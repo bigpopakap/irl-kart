@@ -1,5 +1,6 @@
 package irl.kart;
 
+import irl.fw.beacon.beacons.ArrowKeyBeacon;
 import irl.fw.shared.events.AddBody;
 import irl.fw.shared.events.PhysicalEvent;
 import irl.fw.engine.runner.Simulator;
@@ -19,8 +20,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         //create the karts and the beacon to talk to them
         final String KART_1_ID = "kart1";
-        final String KART_2_ID = "kart2";
-        AsyncRandomBeacon beacon = new AsyncRandomBeacon(KART_1_ID, KART_2_ID);
+        ArrowKeyBeacon beacon = new ArrowKeyBeacon(KART_1_ID);
 
         //create the world and engine
         World world = new WorldBuilder().build();
