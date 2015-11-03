@@ -43,9 +43,6 @@ public class AsyncRandomBeacon extends Looper implements Beacon {
                 new PhysicalState(externalId + "-pos-" + iteration++)
             );
 
-            //TODO remove
-            System.out.println("Publishing update " + update);
-
             positions.onNext(update);
         }
     }

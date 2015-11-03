@@ -12,7 +12,7 @@ import irl.fw.engine.runner.Simulatable;
 import irl.util.reactiveio.Pipe;
 import irl.util.universe.Universe;
 
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -68,8 +68,6 @@ public class World implements Simulatable<PhysicalEvent> {
         String newBodyId = universe.add(bodyInstance);
 
         eventQueue.mergeIn(bodyToAdd.updates(newBodyId));
-
-        System.out.println("Added body " + newBodyId + " with intial state " + bodyInstance.getState());
     }
 
     private void handleRemoveBody(RemoveBody event) {
@@ -87,8 +85,6 @@ public class World implements Simulatable<PhysicalEvent> {
 
         if (universe.contains(bodyToUpdate)) {
             universe.get(bodyToUpdate).setState(newState);
-            //TODO remove
-            System.out.println("Updated body " + bodyToUpdate + " to state " + newState);
         } else {
             System.err.println("Tried to update non-existent body: " + bodyToUpdate
                     + " to new state: " + newState);
@@ -101,7 +97,22 @@ public class World implements Simulatable<PhysicalEvent> {
     }
 
     @Override
-    public void render(long timeSinceLastUpdate, TimeUnit timeUnit) {
-        //TODO
+    public void render(long timeSinceLastUpdate) {
+        long now = System.currentTimeMillis();
+
+        StringBuilder str = new StringBuilder();
+
+        str.append("\nWorld")
+            .append(String.format(" updated at %s", (now - timeSinceLastUpdate)))
+            .append(String.format(", rendered %s millis later\n", timeSinceLastUpdate));
+
+        for (Map.Entry<String, BodyInstance> idAndBody : universe) {
+            String id = idAndBody.getKey();
+            PhysicalState state = idAndBody.getValue().getState();
+
+            str.append(String.format("Body %s in state %s\n", id, state));
+        }
+
+        System.out.print(str);
     }
 }

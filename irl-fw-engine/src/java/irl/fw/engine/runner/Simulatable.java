@@ -2,8 +2,6 @@ package irl.fw.engine.runner;
 
 import irl.util.reactiveio.Pipe;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  * TODO bigpopakap Javadoc this class
  *
@@ -16,6 +14,6 @@ public interface Simulatable<T> {
 
     void handleEvent(T event);
     void updatePhysics(long timeStep);
-    void render(long timeSinceLastUpdate, TimeUnit timeUnit);
+    void render(long timeSinceLastUpdate);
 
 }

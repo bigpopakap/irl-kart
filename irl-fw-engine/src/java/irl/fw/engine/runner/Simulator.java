@@ -80,7 +80,7 @@ public class Simulator<T> implements StoppableRunnable {
                         lag -= TIME_STEP;
                     }
 
-                    simulatable.render(lag / TIME_STEP, TimeUnit.MILLISECONDS);
+                    simulatable.render(lag / TIME_STEP);
                 }
 
             });
