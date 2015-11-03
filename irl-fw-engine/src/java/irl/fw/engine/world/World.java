@@ -1,6 +1,5 @@
 package irl.fw.engine.world;
 
-import irl.fw.graphics.Frame;
 import irl.fw.shared.bodies.PhysicalState;
 import irl.fw.shared.events.AddBody;
 import irl.fw.shared.events.PhysicalEvent;
@@ -102,8 +101,7 @@ public class World implements Simulatable<PhysicalEvent> {
     }
 
     @Override
-    public Frame render(long timeSinceLastUpdate, TimeUnit timeUnit) {
+    public void render(long timeSinceLastUpdate, TimeUnit timeUnit) {
         //TODO
-        return null;
     }
 }
