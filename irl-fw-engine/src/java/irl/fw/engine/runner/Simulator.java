@@ -1,7 +1,7 @@
 package irl.fw.engine.runner;
 
 import irl.util.concurrent.StoppableRunnable;
-import rx.Observable;
+import irl.util.reactiveio.Pipe;
 import rx.Observer;
 import rx.Subscription;
 import rx.schedulers.TimeInterval;
@@ -20,13 +20,12 @@ public class Simulator<T> implements StoppableRunnable {
     private static final long TIME_STEP = 33; //roughly 30fps
 
     private final Simulatable<T> simulatable;
-    private volatile Observable<T> eventQueue;
+    private volatile Pipe<T> eventQueue;
     private volatile Subscription subscription;
-    private boolean isPrepared;
 
     public Simulator(Simulatable<T> simulatable) {
         this.simulatable = simulatable;
-        isPrepared = false;
+        this.eventQueue = new Pipe<>();
     }
 
     @Override
@@ -36,20 +35,20 @@ public class Simulator<T> implements StoppableRunnable {
         }
     }
 
-    //FIXME somehow get rid of the need for this stupid prepare() phase
-    public void prepare() {
-        this.eventQueue = Observable.never();
-        simulatable.start(this::queue);
-        isPrepared = true;
+    @Override
+    public boolean isStopped() {
+        return subscription == null || subscription.isUnsubscribed();
+    }
+
+    public Pipe<T> getEventQueue() {
+        return eventQueue;
     }
 
     @Override
     public void run() {
-        if (!isPrepared) {
-            throw new RuntimeException("Make sure you call prepare() before running");
-        }
+        simulatable.start(eventQueue);
 
-        this.subscription = eventQueue
+        this.subscription = eventQueue.get()
             .buffer(TIME_STEP, TimeUnit.MILLISECONDS)
             .timeInterval()
             .subscribe(new Observer<TimeInterval<List<T>>>() {
@@ -58,12 +57,12 @@ public class Simulator<T> implements StoppableRunnable {
 
                 @Override
                 public void onCompleted() {
-                    simulatable.onCompleted();
+                    //do nothing
                 }
 
                 @Override
                 public void onError(Throwable e) {
-                    simulatable.onError(e);
+                    e.printStackTrace();
                 }
 
                 @Override
@@ -72,7 +71,8 @@ public class Simulator<T> implements StoppableRunnable {
                     lag += elapsed;
 
                     //process the batched inputs
-                    eventBatch.getValue().forEach(simulatable::onNext);
+                    //TODO is there a way to do this with observables instead of just iterating?
+                    eventBatch.getValue().forEach(simulatable::handleEvent);
 
                     //TODO is there a way to do this more function-oriented?
                     while (lag > TIME_STEP) {
@@ -84,18 +84,6 @@ public class Simulator<T> implements StoppableRunnable {
                 }
 
             });
-    }
-
-    @Override
-    public boolean isStopped() {
-        return subscription == null || subscription.isUnsubscribed();
-    }
-
-    @SafeVarargs
-    private final void queue(Observable<? extends T>... eventses) {
-        for (Observable<? extends T> events : eventses) {
-            eventQueue = eventQueue.mergeWith(events);
-        }
     }
 
 }

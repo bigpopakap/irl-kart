@@ -26,8 +26,8 @@ public class TestBody implements IRLBody {
     public Observable<UpdateBody> updates(String bodyId) {
         //TODO we should only report the latest position or something
         return beacon.updates()
-                     .filter(update -> StringUtils.equal(kartId, update.getExternalId()))
-                .map(update -> new UpdateBody(bodyId, update.getState()));
+                    .filter(update -> StringUtils.equal(kartId, update.getExternalId()))
+                    .map(update -> new UpdateBody(bodyId, update.getState()));
     }
 
 }

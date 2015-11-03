@@ -17,24 +17,32 @@ import irl.kart.bodies.TestBody;
 public class Main {
 
     public static void main(String[] args) throws Exception {
+        //create the karts and the beacon to talk to them
         final String KART_1_ID = "kart1";
         final String KART_2_ID = "kart2";
-
         AsyncRandomBeacon beacon = new AsyncRandomBeacon(KART_1_ID, KART_2_ID);
+
+        //create the world and engine
         World world = new WorldBuilder().build();
         Simulator<PhysicalEvent> worldSim = new Simulator<>(world);
 
-        //start initializing the world
-        //FIXME can we avoid having to declare these karts up front?
-        worldSim.prepare();
-        world.onNext(new AddBody(new TestBody(KART_1_ID, beacon)));
-        world.onNext(new AddBody(new TestBody(KART_2_ID, beacon)));
+        //TODO this should move somewhere more generic
+        //set up a process to add new bodies whenever a new kart is detected
+        worldSim.getEventQueue().mergeIn(
+            beacon.updates()
+                .distinct(update -> update.getExternalId())
+                .map(update -> new AddBody(
+                    new TestBody(update.getExternalId(), beacon),
+                    update.getState()
+                ))
+        );
 
+        //start the engine and beacons
         new Thread(worldSim).start();
         new Thread(beacon).start();
 
         //kill it after a little bit
-        Thread.sleep(10000);
+        Thread.sleep(6000);
         beacon.stop();
         worldSim.stop();
     }

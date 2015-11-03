@@ -14,8 +14,9 @@ class BodyInstance {
     private final Body body;
     private volatile PhysicalState state;
 
-    public BodyInstance(Body body) {
+    public BodyInstance(Body body, PhysicalState initialState) {
         this.body = body;
+        setState(initialState);
     }
 
     public Body getBody() {

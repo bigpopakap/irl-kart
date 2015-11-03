@@ -1,10 +1,8 @@
 package irl.fw.engine.runner;
 
-import rx.Observable;
-import rx.Observer;
+import irl.util.reactiveio.Pipe;
 
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -12,15 +10,11 @@ import java.util.function.Consumer;
  * @author bigpopakap
  * @since 10/31/15
  */
-public interface Simulatable<T> extends Observer<T> {
+public interface Simulatable<T> {
 
-    void start(Consumer<Observable<? extends T>> queueEvents);
+    void start(Pipe<T> eventQueue);
 
-    @Override
-    default void onCompleted() {
-        //do nothing
-    }
-
+    void handleEvent(T event);
     void updatePhysics(long timeStep);
     void render(long timeSinceLastUpdate, TimeUnit timeUnit);
 

@@ -9,11 +9,10 @@ import irl.fw.shared.bodies.Body;
 import irl.fw.engine.collisions.CollisionResolver;
 import irl.fw.physics.modeling.PhysicsModeler;
 import irl.fw.engine.runner.Simulatable;
+import irl.util.reactiveio.Pipe;
 import irl.util.universe.Universe;
-import rx.Observable;
 
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -23,10 +22,10 @@ import java.util.function.Consumer;
  */
 public class World implements Simulatable<PhysicalEvent> {
 
-    private Consumer<Observable<? extends PhysicalEvent>> queueEvents;
     private final PhysicsModeler physicsModeler;
     private final CollisionResolver collisionResolver;
     private final Universe<BodyInstance> universe;
+    private Pipe<PhysicalEvent> eventQueue;
 
     World(PhysicsModeler physicsModeler, CollisionResolver collisionResolver) {
         if (physicsModeler == null || collisionResolver == null) {
@@ -39,14 +38,14 @@ public class World implements Simulatable<PhysicalEvent> {
     }
 
     @Override
-    public void start(Consumer<Observable<? extends PhysicalEvent>> queueEvents) {
-        this.queueEvents = queueEvents;
-        this.queueEvents.accept(this.collisionResolver.adds());
-        this.queueEvents.accept(this.collisionResolver.removes());
+    public void start(Pipe<PhysicalEvent> eventQueue) {
+        this.eventQueue = eventQueue;
+        this.eventQueue.mergeIn(this.collisionResolver.adds());
+        this.eventQueue.mergeIn(this.collisionResolver.removes());
     }
 
     @Override
-    public void onNext(PhysicalEvent event) {
+    public void handleEvent(PhysicalEvent event) {
         //TODO use command pattern instead of hardcoding a method per event
         if (event instanceof AddBody) {
             handleAddBody((AddBody) event);
@@ -59,18 +58,18 @@ public class World implements Simulatable<PhysicalEvent> {
         }
     }
 
-    @Override
-    public void onError(Throwable e) {
-        e.printStackTrace();
-    }
-
     private void handleAddBody(AddBody event) {
         Body bodyToAdd = event.getBody();
-        BodyInstance bodyInstance = new BodyInstance(bodyToAdd);
+        BodyInstance bodyInstance = new BodyInstance(
+            bodyToAdd,
+            event.getInitialState()
+        );
 
         String newBodyId = universe.add(bodyInstance);
 
-        queueEvents.accept(bodyToAdd.updates(newBodyId));
+        eventQueue.mergeIn(bodyToAdd.updates(newBodyId));
+
+        System.out.println("Added body " + newBodyId + " with intial state " + bodyInstance.getState());
     }
 
     private void handleRemoveBody(RemoveBody event) {

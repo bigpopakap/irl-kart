@@ -6,7 +6,6 @@ import irl.fw.shared.bodies.PhysicalState;
 import irl.util.concurrent.Looper;
 import rx.Observable;
 import rx.subjects.PublishSubject;
-import rx.subjects.SerializedSubject;
 import rx.subjects.Subject;
 
 /**
@@ -23,7 +22,7 @@ public class AsyncRandomBeacon extends Looper implements Beacon {
 
     public AsyncRandomBeacon(String... externalIds) {
         this.externalIds = externalIds;
-        positions = new SerializedSubject<BeaconUpdate, BeaconUpdate>(PublishSubject.create());
+        positions = PublishSubject.<BeaconUpdate>create().toSerialized();
     }
 
     public Observable<BeaconUpdate> updates() {
@@ -40,7 +39,7 @@ public class AsyncRandomBeacon extends Looper implements Beacon {
 
         for (String externalId : externalIds) {
             BeaconUpdate update = new BeaconUpdate(
-                    externalId,
+                externalId,
                 new PhysicalState(externalId + "-pos-" + iteration++)
             );
 
