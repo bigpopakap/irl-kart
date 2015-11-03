@@ -1,7 +1,10 @@
 package irl.fw.engine.runner;
 
+import irl.fw.graphics.Frame;
+import irl.fw.graphics.Renderable;
 import irl.util.concurrent.StoppableRunnable;
 import irl.util.reactiveio.Pipe;
+import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
 import rx.schedulers.TimeInterval;
@@ -15,7 +18,7 @@ import java.util.concurrent.TimeUnit;
  * @author bigpopakap
  * @since 10/31/15
  */
-public class Simulator<T> implements StoppableRunnable {
+public class Simulator<T> implements StoppableRunnable, Renderable {
 
     private static final long TIME_STEP = 33; //roughly 30fps
 
@@ -86,4 +89,9 @@ public class Simulator<T> implements StoppableRunnable {
             });
     }
 
+    @Override
+    public Observable<Frame> frames() {
+        //TODO make sure they are all in chronological order
+        return Observable.never();
+    }
 }

@@ -1,5 +1,6 @@
 package irl.fw.engine.runner;
 
+import irl.fw.graphics.Frame;
 import irl.util.reactiveio.Pipe;
 
 import java.util.concurrent.TimeUnit;
@@ -16,6 +17,6 @@ public interface Simulatable<T> {
 
     void handleEvent(T event);
     void updatePhysics(long timeStep);
-    void render(long timeSinceLastUpdate, TimeUnit timeUnit);
+    Frame render(long timeSinceLastUpdate, TimeUnit timeUnit);
 
 }
