@@ -57,19 +57,19 @@ public class ArrowKeyBeacon implements Beacon, StoppableRunnable {
         panel.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
+                //do nothing
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
                 BeaconUpdate update = new BeaconUpdate(
-                        kartId,
-                        new PhysicalState("" + e.getKeyChar())
+                    kartId,
+                    new PhysicalState("" + e.getKeyChar())
                 );
 
                 synchronized (positions) {
                     positions.onNext(update);
                 }
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-                //do nothing
             }
 
             @Override
