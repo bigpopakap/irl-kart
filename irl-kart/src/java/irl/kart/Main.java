@@ -7,6 +7,7 @@ import irl.fw.engine.simulation.Simulator;
 import irl.fw.engine.world.World;
 import irl.fw.engine.world.WorldBuilder;
 import irl.kart.bodies.TestBody;
+import irl.util.concurrent.ParallelRunnable;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -37,13 +38,14 @@ public class Main {
         );
 
         //start the engine and beacons
-        new Thread(worldSim).start();
-        new Thread(beacon).start();
+        ParallelRunnable runAll = new ParallelRunnable(
+            worldSim, beacon
+        );
+        new Thread(runAll).start();
 
         //kill it after a little bit
         Thread.sleep(6000);
-        beacon.stop();
-        worldSim.stop();
+        runAll.stop();
     }
 
 }

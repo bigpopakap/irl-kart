@@ -23,24 +23,29 @@ public class ArrowKeyBeacon implements Beacon, StoppableRunnable {
     private final String kartId;
     private final Subject<BeaconUpdate, BeaconUpdate> positions;
 
+    private volatile boolean isStopped;
+    private JFrame frame;
+
     public ArrowKeyBeacon(String kartId) {
         this.kartId = kartId;
         this.positions = PublishSubject.<BeaconUpdate>create().toSerialized();
+        isStopped = true;
     }
 
     @Override
     public void stop() {
-        //TODO
+        frame.dispose();
+        isStopped = true;
     }
 
     @Override
     public boolean isStopped() {
-        return false; //TODO
+        return frame.isActive();
     }
 
     @Override
     public void run() {
-        JFrame frame = new JFrame();
+        this.frame = new JFrame();
         JPanel panel = new JPanel();
         frame.add(panel);
 
@@ -76,6 +81,7 @@ public class ArrowKeyBeacon implements Beacon, StoppableRunnable {
         frame.setVisible(true);
         panel.setVisible(true);
         panel.requestFocusInWindow();
+        isStopped = false;
     }
 
     @Override
