@@ -26,7 +26,7 @@ public class Main {
 
         //TODO this should move somewhere more generic
         //set up a process to add new bodies whenever a new kart is detected
-        engine.getEventQueue().mergeIn(g
+        engine.getEventQueue().mergeIn(
             world.updates()
                 .distinct(update -> update.getExternalId())
                 .map(update -> new AddBody(

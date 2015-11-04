@@ -1,6 +1,5 @@
 package irl.fw.engine.bodies;
 
-import irl.fw.engine.events.UpdateBody;
 import rx.Observable;
 
 /**
@@ -11,6 +10,6 @@ import rx.Observable;
  */
 public interface Body {
 
-    Observable<UpdateBody> updates(String bodyId);
+    Observable<PhysicalState> updates();
 
 }

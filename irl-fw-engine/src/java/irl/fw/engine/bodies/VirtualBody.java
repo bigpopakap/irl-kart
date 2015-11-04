@@ -1,6 +1,5 @@
 package irl.fw.engine.bodies;
 
-import irl.fw.engine.events.UpdateBody;
 import rx.Observable;
 
 /**
@@ -12,7 +11,7 @@ import rx.Observable;
 public interface VirtualBody extends Body {
 
     @Override
-    default Observable<UpdateBody> updates(String bodyId) {
+    default Observable<PhysicalState> updates() {
         return Observable.never();
     }
 

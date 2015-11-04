@@ -56,7 +56,9 @@ public class NoopPhysicsModeler implements PhysicsModeler {
         PhysicalState newState = event.getNewState();
 
         if (universe.contains(bodyToUpdate)) {
-            universe.get(bodyToUpdate).setState(newState);
+            BodyInstance current = universe.get(bodyToUpdate);
+            BodyInstance updated = current.setState(newState);
+            universe.update(bodyToUpdate, updated);
         } else {
             System.err.println("Tried to update non-existent body: " + bodyToUpdate
                     + " to new state: " + newState);

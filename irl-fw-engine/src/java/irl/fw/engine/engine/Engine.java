@@ -1,5 +1,6 @@
 package irl.fw.engine.engine;
 
+import irl.fw.engine.bodies.Body;
 import irl.fw.engine.graphics.Renderer;
 import irl.fw.engine.collisions.CollisionResolver;
 import irl.fw.engine.events.AddBody;
@@ -106,8 +107,11 @@ public class Engine implements StoppableRunnable {
         //TODO use command pattern instead of hardcoding a method per event
         if (event instanceof AddBody) {
             AddBody addBodyEvent = (AddBody) event;
-            String newBodyId = phyisicsModel.addBody((AddBody) event);
-            eventQueue.mergeIn(addBodyEvent.getBody().updates(newBodyId));
+            Body newBody = ((AddBody) event).getBody();
+
+            String newBodyId = phyisicsModel.addBody(addBodyEvent);
+            eventQueue.mergeIn(newBody.updates()
+                    .map(state -> new UpdateBody(newBodyId, state)));
         }
         else if (event instanceof RemoveBody) {
             phyisicsModel.removeBody((RemoveBody) event);

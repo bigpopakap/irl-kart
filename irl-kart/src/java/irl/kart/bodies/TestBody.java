@@ -2,7 +2,7 @@ package irl.kart.bodies;
 
 import irl.fw.engine.beacon.Beacon;
 import irl.fw.engine.bodies.IRLBody;
-import irl.fw.engine.events.UpdateBody;
+import irl.fw.engine.bodies.PhysicalState;
 import irl.util.string.StringUtils;
 import rx.Observable;
 
@@ -23,11 +23,11 @@ public class TestBody implements IRLBody {
     }
 
     @Override
-    public Observable<UpdateBody> updates(String bodyId) {
+    public Observable<PhysicalState> updates() {
         //TODO we should only report the latest position or something
         return beacon.updates()
                     .filter(update -> StringUtils.equal(kartId, update.getExternalId()))
-                    .map(update -> new UpdateBody(bodyId, update.getState()));
+                    .map(update -> update.getState());
     }
 
 }

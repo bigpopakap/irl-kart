@@ -12,11 +12,11 @@ import irl.fw.engine.bodies.PhysicalState;
 public class BodyInstance {
 
     private final Body body;
-    private volatile PhysicalState state;
+    private final PhysicalState state;
 
-    public BodyInstance(Body body, PhysicalState initialState) {
+    public BodyInstance(Body body, PhysicalState state) {
         this.body = body;
-        setState(initialState);
+        this.state = state;
     }
 
     public Body getBody() {
@@ -27,8 +27,8 @@ public class BodyInstance {
         return state;
     }
 
-    public synchronized void setState(PhysicalState state) {
-        this.state = state;
+    public BodyInstance setState(PhysicalState state) {
+        return new BodyInstance(body, state);
     }
 
 }
