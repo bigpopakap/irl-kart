@@ -16,7 +16,7 @@ import irl.util.concurrent.ParallelRunnable;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        //create the karts and the world to talk to them
+        //create the beacon and renderer
         SwingWorld world = new SwingWorld("kart1", "kart2");
 
         //create the engine
@@ -26,7 +26,7 @@ public class Main {
 
         //TODO this should move somewhere more generic
         //set up a process to add new bodies whenever a new kart is detected
-        engine.getEventQueue().mergeIn(
+        engine.getEventQueue().mergeIn(g
             world.updates()
                 .distinct(update -> update.getExternalId())
                 .map(update -> new AddBody(
