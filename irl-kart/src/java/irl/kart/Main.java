@@ -20,7 +20,8 @@ public class Main {
     public static void main(String[] args) throws Exception {
         //create the karts and the beacon to talk to them
         final String KART_1_ID = "kart1";
-        ArrowKeyBeacon beacon = new ArrowKeyBeacon(KART_1_ID);
+        final String KART_2_ID = "kart2";
+        ArrowKeyBeacon beacon = new ArrowKeyBeacon(KART_1_ID, KART_2_ID);
 
         //create the world and engine
         World world = new WorldBuilder().build();

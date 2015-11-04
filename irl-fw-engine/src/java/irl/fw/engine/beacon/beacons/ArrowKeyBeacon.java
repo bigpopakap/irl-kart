@@ -20,14 +20,16 @@ import java.awt.event.KeyListener;
  */
 public class ArrowKeyBeacon implements Beacon, StoppableRunnable {
 
-    private final String kartId;
+    private final String kart1Id;
+    private final String kart2Id;
     private final Subject<BeaconUpdate, BeaconUpdate> positions;
 
     private volatile boolean isStopped;
     private JFrame frame;
 
-    public ArrowKeyBeacon(String kartId) {
-        this.kartId = kartId;
+    public ArrowKeyBeacon(String kart1Id, String kart2Id) {
+        this.kart1Id = kart1Id;
+        this.kart2Id = kart2Id;
         this.positions = PublishSubject.<BeaconUpdate>create().toSerialized();
         isStopped = true;
     }
@@ -63,7 +65,7 @@ public class ArrowKeyBeacon implements Beacon, StoppableRunnable {
             @Override
             public void keyPressed(KeyEvent e) {
                 BeaconUpdate update = new BeaconUpdate(
-                    kartId,
+                    Character.isDigit(e.getKeyChar()) ? kart1Id : kart2Id,
                     new PhysicalState("" + e.getKeyChar())
                 );
 
