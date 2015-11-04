@@ -2,12 +2,15 @@ package irl.fw.engine.beacon.beacons;
 
 import irl.fw.engine.beacon.Beacon;
 import irl.fw.engine.beacon.BeaconUpdate;
+import irl.fw.engine.bodies.PhysicalState;
 import irl.util.concurrent.StoppableRunnable;
 import rx.Observable;
 import rx.subjects.PublishSubject;
 import rx.subjects.Subject;
 
 import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -38,8 +41,41 @@ public class ArrowKeyBeacon implements Beacon, StoppableRunnable {
     @Override
     public void run() {
         JFrame frame = new JFrame();
+        JPanel panel = new JPanel();
+        frame.add(panel);
+
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setSize(400, 400);
+        panel.setSize(400, 400);
+
+        panel.setFocusable(true);
+        panel.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                BeaconUpdate update = new BeaconUpdate(
+                        kartId,
+                        new PhysicalState("" + e.getKeyChar())
+                );
+
+                synchronized (positions) {
+                    positions.onNext(update);
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                //do nothing
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                //do nothing
+            }
+        });
+
         frame.setVisible(true);
-        //TODO
+        panel.setVisible(true);
+        panel.requestFocusInWindow();
     }
 
     @Override
