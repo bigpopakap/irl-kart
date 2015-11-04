@@ -3,7 +3,7 @@ package irl.fw.beacon.beacons;
 import irl.fw.beacon.Beacon;
 import irl.fw.beacon.BeaconUpdate;
 import irl.fw.shared.bodies.PhysicalState;
-import irl.util.concurrent.Looper;
+import irl.util.concurrent.LoopingRunnable;
 import rx.Observable;
 import rx.subjects.PublishSubject;
 import rx.subjects.Subject;
@@ -14,7 +14,7 @@ import rx.subjects.Subject;
  * @author bigpopakap
  * @since 11/1/15
  */
-public class AsyncRandomBeacon extends Looper implements Beacon {
+public class AsyncRandomBeacon extends LoopingRunnable implements Beacon {
 
     private final String[] externalIds;
     private final Subject<BeaconUpdate, BeaconUpdate> positions;
