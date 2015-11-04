@@ -1,4 +1,4 @@
-package irl.fw.engine.beacon.beacons;
+package irl.fw.engine.beacon.impl;
 
 import irl.fw.engine.beacon.Beacon;
 import irl.fw.engine.beacon.BeaconUpdate;

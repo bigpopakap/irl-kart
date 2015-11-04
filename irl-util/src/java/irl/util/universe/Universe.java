@@ -1,7 +1,6 @@
 package irl.util.universe;
 
-import java.util.Iterator;
-import java.util.Map;
+import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -11,7 +10,7 @@ import java.util.concurrent.ConcurrentMap;
  * @author bigpopakap
  * @since 10/29/15
  */
-public class Universe<T> implements Iterable<Map.Entry<String, T>> {
+public class Universe<T> {
 
     private ConcurrentMap<String, T> universe;
 
@@ -51,8 +50,8 @@ public class Universe<T> implements Iterable<Map.Entry<String, T>> {
         return id;
     }
 
-    @Override
-    public Iterator<Map.Entry<String, T>> iterator() {
-        return universe.entrySet().iterator();
+    public Collection<T> get() {
+        return universe.values();
     }
+
 }

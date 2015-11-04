@@ -1,4 +1,4 @@
-package irl.fw.engine.world;
+package irl.fw.engine.physics;
 
 import irl.fw.engine.bodies.Body;
 import irl.fw.engine.bodies.PhysicalState;
@@ -9,7 +9,7 @@ import irl.fw.engine.bodies.PhysicalState;
  * @author bigpopakap
  * @since 11/1/15
  */
-class BodyInstance {
+public class BodyInstance {
 
     private final Body body;
     private volatile PhysicalState state;

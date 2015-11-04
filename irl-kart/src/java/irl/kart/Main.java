@@ -1,11 +1,9 @@
 package irl.kart;
 
-import irl.fw.engine.beacon.beacons.ArrowKeyBeacon;
+import irl.fw.engine.engine.Engine;
+import irl.kart.world.SwingWorld;
 import irl.fw.engine.events.AddBody;
-import irl.fw.engine.events.PhysicalEvent;
-import irl.fw.engine.simulation.Simulator;
-import irl.fw.engine.world.World;
-import irl.fw.engine.world.WorldBuilder;
+import irl.fw.engine.engine.EngineBuilder;
 import irl.kart.bodies.TestBody;
 import irl.util.concurrent.ParallelRunnable;
 
@@ -18,31 +16,32 @@ import irl.util.concurrent.ParallelRunnable;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        //create the karts and the beacon to talk to them
-        ArrowKeyBeacon beacon = new ArrowKeyBeacon("kart1", "kart2");
+        //create the karts and the world to talk to them
+        SwingWorld world = new SwingWorld("kart1", "kart2");
 
-        //create the world and engine
-        World world = new WorldBuilder().build();
-        Simulator<PhysicalEvent> worldSim = new Simulator<>(world);
+        //create the engine
+        Engine engine = new EngineBuilder()
+            .renderer(world)
+            .build();
 
         //TODO this should move somewhere more generic
         //set up a process to add new bodies whenever a new kart is detected
-        worldSim.getEventQueue().mergeIn(
-            beacon.updates()
+        engine.getEventQueue().mergeIn(
+            world.updates()
                 .distinct(update -> update.getExternalId())
                 .map(update -> new AddBody(
-                    new TestBody(update.getExternalId(), beacon),
+                    new TestBody(update.getExternalId(), world),
                     update.getState()
                 ))
         );
 
-        //start the engine and beacons
+        //start the engine and impl
         ParallelRunnable runAll = new ParallelRunnable(
-            worldSim, beacon
+            engine, world
         );
         new Thread(runAll).start();
 
-        //kill it after a little bit
+        //kill the program after a little bit
         Thread.sleep(6000);
         runAll.stop();
     }

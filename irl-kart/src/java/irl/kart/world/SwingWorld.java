@@ -1,8 +1,10 @@
-package irl.fw.engine.beacon.beacons;
+package irl.kart.world;
 
 import irl.fw.engine.beacon.Beacon;
 import irl.fw.engine.beacon.BeaconUpdate;
 import irl.fw.engine.bodies.PhysicalState;
+import irl.fw.engine.graphics.Renderer;
+import irl.fw.engine.physics.BodyInstance;
 import irl.util.concurrent.StoppableRunnable;
 import rx.Observable;
 import rx.subjects.PublishSubject;
@@ -11,6 +13,7 @@ import rx.subjects.Subject;
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Collection;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -18,7 +21,7 @@ import java.awt.event.KeyListener;
  * @author bigpopakap
  * @since 11/2/15
  */
-public class ArrowKeyBeacon implements Beacon, StoppableRunnable {
+public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
 
     private final String kart1Id;
     private final String kart2Id;
@@ -30,7 +33,7 @@ public class ArrowKeyBeacon implements Beacon, StoppableRunnable {
     private volatile boolean isStopped = true;
     private JFrame frame;
 
-    public ArrowKeyBeacon(String kart1Id, String kart2Id) {
+    public SwingWorld(String kart1Id, String kart2Id) {
         this.kart1Id = kart1Id;
         this.kart2Id = kart2Id;
         this.positions = PublishSubject.<KeyEvent>create().toSerialized();
@@ -86,6 +89,23 @@ public class ArrowKeyBeacon implements Beacon, StoppableRunnable {
         return positions
                 .map(this::keyEventToUpdate)
                 .filter(update -> update != null);
+    }
+
+    @Override
+    public void render(Collection<BodyInstance> bodies, long timeSinceLastUpdate) {
+        long now = System.currentTimeMillis();
+
+        StringBuilder str = new StringBuilder();
+
+        str.append("\nEngine")
+                .append(String.format(" updated at %s", (now - timeSinceLastUpdate)))
+                .append(String.format(", rendered %s millis later\n", timeSinceLastUpdate));
+
+        for (BodyInstance bodyInstance : bodies) {
+            str.append(String.format("Body %s in state %s\n", bodyInstance.toString(), bodyInstance.getState()));
+        }
+
+        System.out.print(str);
     }
 
     private BeaconUpdate keyEventToUpdate(KeyEvent evt) {

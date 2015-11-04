@@ -1,9 +1,9 @@
 package irl.fw.engine.collisions;
 
-import irl.fw.engine.events.AddBody;
 import irl.fw.engine.events.Collision;
-import irl.fw.engine.events.RemoveBody;
-import rx.Observable;
+import irl.fw.engine.events.PhysicalEvent;
+
+import java.util.List;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -13,9 +13,6 @@ import rx.Observable;
  */
 public interface CollisionResolver {
 
-    void onCollision(Collision collision);
-
-    Observable<AddBody> adds();
-    Observable<RemoveBody> removes();
+    List<PhysicalEvent> onCollision(Collision collision);
 
 }
