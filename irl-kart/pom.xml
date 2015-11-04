@@ -11,37 +11,13 @@
     <dependencies>
         <dependency>
             <groupId>org.kart.irl</groupId>
-            <artifactId>irl-util</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.kart.irl</groupId>
-            <artifactId>irl-fw-physics</artifactId>
+            <artifactId>irl-fw-engine</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>org.kart.irl</groupId>
             <artifactId>irl-fw-shared</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.kart.irl</groupId>
-            <artifactId>irl-kart-beacon</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.kart.irl</groupId>
-            <artifactId>irl-fw-beacon</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.kart.irl</groupId>
-            <artifactId>irl-kart-graphics</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
