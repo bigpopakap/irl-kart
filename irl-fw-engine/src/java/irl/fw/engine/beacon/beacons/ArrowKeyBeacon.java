@@ -69,9 +69,7 @@ public class ArrowKeyBeacon implements Beacon, StoppableRunnable {
                     new PhysicalState("" + e.getKeyChar())
                 );
 
-                synchronized (positions) {
-                    positions.onNext(update);
-                }
+                positions.onNext(update);
             }
 
             @Override
