@@ -11,9 +11,12 @@ import rx.subjects.PublishSubject;
 import rx.subjects.Subject;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -32,6 +35,7 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
 
     private volatile boolean isStopped = true;
     private JFrame frame;
+    private MyPanel panel;
 
     public SwingWorld(String kart1Id, String kart2Id) {
         this.kart1Id = kart1Id;
@@ -53,7 +57,7 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
     @Override
     public void run() {
         this.frame = new JFrame();
-        JPanel panel = new JPanel();
+        this.panel = new MyPanel();
         frame.add(panel);
 
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -81,7 +85,6 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
         frame.setVisible(true);
         panel.setVisible(true);
         panel.requestFocusInWindow();
-        isStopped = false;
     }
 
     @Override
@@ -95,17 +98,20 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
     public void render(Collection<BodyInstance> bodies, long timeSinceLastUpdate) {
         long now = System.currentTimeMillis();
 
-        StringBuilder str = new StringBuilder();
+        List<String> lines = new ArrayList<>();
 
-        str.append("\nEngine")
-                .append(String.format(" updated at %s", (now - timeSinceLastUpdate)))
-                .append(String.format(", rendered %s millis later\n", timeSinceLastUpdate));
+        lines.add("World");
+        lines.add(String.format("Updated at %s", (now - timeSinceLastUpdate)));
+        lines.add(String.format("rendered %s millis later\n", timeSinceLastUpdate));
 
         for (BodyInstance bodyInstance : bodies) {
-            str.append(String.format("Body %s in state %s\n", bodyInstance.toString(), bodyInstance.getState()));
+            lines.add(String.format("Body %s in state %s\n", bodyInstance.toString(), bodyInstance.getState()));
         }
 
-        System.out.print(str);
+        if (frame != null && panel != null) {
+            panel.setContents(lines);
+            frame.repaint();
+        }
     }
 
     private BeaconUpdate keyEventToUpdate(KeyEvent evt) {
@@ -135,4 +141,25 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
         }
     }
 
+    private static class MyPanel extends JPanel {
+
+        private volatile List<String> contents;
+
+        public synchronized void setContents(List<String> contents) {
+            this.contents = contents;
+        }
+
+        @Override
+        public void paint(Graphics g) {
+            super.paint(g);
+
+            if (contents != null) {
+                int y = 25;
+                for (String content : contents) {
+                    g.drawString(content, 25, y);
+                    y += 10;
+                }
+            }
+        }
+    }
 }

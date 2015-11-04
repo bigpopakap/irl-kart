@@ -6,6 +6,9 @@ import irl.fw.engine.events.AddBody;
 import irl.fw.engine.engine.EngineBuilder;
 import irl.kart.bodies.TestBody;
 import irl.util.concurrent.ParallelRunnable;
+import irl.util.concurrent.StoppableRunnable;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -27,23 +30,21 @@ public class Main {
         //TODO this should move somewhere more generic
         //set up a process to add new bodies whenever a new kart is detected
         engine.getEventQueue().mergeIn(
-            world.updates()
-                .distinct(update -> update.getExternalId())
-                .map(update -> new AddBody(
-                    new TestBody(update.getExternalId(), world),
-                    update.getState()
-                ))
+                world.updates()
+                        .distinct(update -> update.getExternalId())
+                        .map(update -> new AddBody(
+                                new TestBody(update.getExternalId(), world),
+                                update.getState()
+                        ))
         );
 
         //start the engine and impl
         ParallelRunnable runAll = new ParallelRunnable(
-            engine, world
+            world,
+            new StoppableRunnable[] { engine },
+            1, TimeUnit.MINUTES
         );
-        new Thread(runAll).start();
-
-        //kill the program after a little bit
-        Thread.sleep(6000);
-        runAll.stop();
+        runAll.run();
     }
 
 }
