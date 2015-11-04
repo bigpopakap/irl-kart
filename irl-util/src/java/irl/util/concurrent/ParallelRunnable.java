@@ -1,7 +1,5 @@
 package irl.util.concurrent;
 
-import javafx.scene.paint.Stop;
-
 /**
  * TODO bigpopakap Javadoc this class
  *

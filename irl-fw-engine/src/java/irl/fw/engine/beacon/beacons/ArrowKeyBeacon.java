@@ -40,7 +40,7 @@ public class ArrowKeyBeacon implements Beacon, StoppableRunnable {
 
     @Override
     public boolean isStopped() {
-        return frame.isActive();
+        return isStopped;
     }
 
     @Override
