@@ -1,6 +1,6 @@
-package irl.fw.beacon;
+package irl.fw.engine.beacon;
 
-import irl.fw.shared.bodies.PhysicalState;
+import irl.fw.engine.bodies.PhysicalState;
 
 /**
  * TODO bigpopakap Javadoc this class

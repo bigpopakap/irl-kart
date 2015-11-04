@@ -1,7 +1,7 @@
-package irl.fw.beacon.beacons;
+package irl.fw.engine.beacon.beacons;
 
-import irl.fw.beacon.Beacon;
-import irl.fw.beacon.BeaconUpdate;
+import irl.fw.engine.beacon.Beacon;
+import irl.fw.engine.beacon.BeaconUpdate;
 import irl.util.concurrent.StoppableRunnable;
 import rx.Observable;
 import rx.subjects.PublishSubject;

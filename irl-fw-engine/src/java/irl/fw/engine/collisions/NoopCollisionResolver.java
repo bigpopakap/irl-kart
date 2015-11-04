@@ -1,8 +1,8 @@
 package irl.fw.engine.collisions;
 
-import irl.fw.shared.events.Collision;
-import irl.fw.shared.events.AddBody;
-import irl.fw.shared.events.RemoveBody;
+import irl.fw.engine.events.Collision;
+import irl.fw.engine.events.AddBody;
+import irl.fw.engine.events.RemoveBody;
 import rx.Observable;
 
 /**

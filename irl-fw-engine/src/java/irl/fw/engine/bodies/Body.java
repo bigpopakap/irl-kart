@@ -1,6 +1,6 @@
-package irl.fw.shared.bodies;
+package irl.fw.engine.bodies;
 
-import irl.fw.shared.events.UpdateBody;
+import irl.fw.engine.events.UpdateBody;
 import rx.Observable;
 
 /**

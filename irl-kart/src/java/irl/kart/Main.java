@@ -1,12 +1,11 @@
 package irl.kart;
 
-import irl.fw.beacon.beacons.ArrowKeyBeacon;
-import irl.fw.shared.events.AddBody;
-import irl.fw.shared.events.PhysicalEvent;
-import irl.fw.engine.runner.Simulator;
+import irl.fw.engine.beacon.beacons.ArrowKeyBeacon;
+import irl.fw.engine.events.AddBody;
+import irl.fw.engine.events.PhysicalEvent;
+import irl.fw.engine.simulation.Simulator;
 import irl.fw.engine.world.World;
 import irl.fw.engine.world.WorldBuilder;
-import irl.fw.beacon.beacons.AsyncRandomBeacon;
 import irl.kart.bodies.TestBody;
 
 /**

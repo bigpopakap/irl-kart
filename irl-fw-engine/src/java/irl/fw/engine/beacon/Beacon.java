@@ -1,4 +1,4 @@
-package irl.fw.beacon;
+package irl.fw.engine.beacon;
 
 import rx.Observable;
 

@@ -1,8 +1,8 @@
 package irl.kart.bodies;
 
-import irl.fw.beacon.Beacon;
-import irl.fw.shared.bodies.IRLBody;
-import irl.fw.shared.events.UpdateBody;
+import irl.fw.engine.beacon.Beacon;
+import irl.fw.engine.bodies.IRLBody;
+import irl.fw.engine.events.UpdateBody;
 import irl.util.string.StringUtils;
 import rx.Observable;
 

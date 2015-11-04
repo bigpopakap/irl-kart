@@ -1,7 +1,7 @@
 package irl.fw.engine.world;
 
-import irl.fw.shared.bodies.Body;
-import irl.fw.shared.bodies.PhysicalState;
+import irl.fw.engine.bodies.Body;
+import irl.fw.engine.bodies.PhysicalState;
 
 /**
  * TODO bigpopakap Javadoc this class

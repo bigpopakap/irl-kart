@@ -1,4 +1,4 @@
-package irl.fw.shared.events;
+package irl.fw.engine.events;
 
 /**
  * TODO bigpopakap Javadoc this class

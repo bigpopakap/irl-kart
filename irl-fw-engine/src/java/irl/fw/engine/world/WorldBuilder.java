@@ -2,8 +2,6 @@ package irl.fw.engine.world;
 
 import irl.fw.engine.collisions.CollisionResolver;
 import irl.fw.engine.collisions.NoopCollisionResolver;
-import irl.fw.physics.modeling.NoopPhysicsModeler;
-import irl.fw.physics.modeling.PhysicsModeler;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -13,18 +11,11 @@ import irl.fw.physics.modeling.PhysicsModeler;
  */
 public class WorldBuilder {
 
-    private PhysicsModeler physicsModeler;
     private CollisionResolver collisionResolver;
 
     public WorldBuilder() {
         //set defaults
         collisions(new NoopCollisionResolver());
-        physics(new NoopPhysicsModeler());
-    }
-
-    public WorldBuilder physics(PhysicsModeler physicsModeler) {
-        this.physicsModeler = physicsModeler;
-        return this;
     }
 
     public WorldBuilder collisions(CollisionResolver collisionResolver) {
@@ -33,7 +24,7 @@ public class WorldBuilder {
     }
 
     public World build() {
-        return new World(physicsModeler, collisionResolver);
+        return new World(collisionResolver);
     }
 
 }

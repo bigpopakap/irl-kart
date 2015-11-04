@@ -1,4 +1,4 @@
-package irl.fw.shared.bodies;
+package irl.fw.engine.bodies;
 
 /**
  * TODO bigpopakap Javadoc this class

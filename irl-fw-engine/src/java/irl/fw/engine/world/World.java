@@ -1,14 +1,13 @@
 package irl.fw.engine.world;
 
-import irl.fw.shared.bodies.PhysicalState;
-import irl.fw.shared.events.AddBody;
-import irl.fw.shared.events.PhysicalEvent;
-import irl.fw.shared.events.RemoveBody;
-import irl.fw.shared.events.UpdateBody;
-import irl.fw.shared.bodies.Body;
+import irl.fw.engine.bodies.PhysicalState;
+import irl.fw.engine.events.AddBody;
+import irl.fw.engine.events.PhysicalEvent;
+import irl.fw.engine.events.RemoveBody;
+import irl.fw.engine.events.UpdateBody;
+import irl.fw.engine.bodies.Body;
 import irl.fw.engine.collisions.CollisionResolver;
-import irl.fw.physics.modeling.PhysicsModeler;
-import irl.fw.engine.runner.Simulatable;
+import irl.fw.engine.simulation.Simulatable;
 import irl.util.reactiveio.Pipe;
 import irl.util.universe.Universe;
 
@@ -22,17 +21,15 @@ import java.util.Map;
  */
 public class World implements Simulatable<PhysicalEvent> {
 
-    private final PhysicsModeler physicsModeler;
     private final CollisionResolver collisionResolver;
     private final Universe<BodyInstance> universe;
     private Pipe<PhysicalEvent> eventQueue;
 
-    World(PhysicsModeler physicsModeler, CollisionResolver collisionResolver) {
-        if (physicsModeler == null || collisionResolver == null) {
+    World(CollisionResolver collisionResolver) {
+        if (collisionResolver == null) {
             throw new RuntimeException("These fields cannot be null");
         }
 
-        this.physicsModeler = physicsModeler;
         this.collisionResolver = collisionResolver;
         universe = new Universe<>();
     }
@@ -93,7 +90,7 @@ public class World implements Simulatable<PhysicalEvent> {
 
     @Override
     public void updatePhysics(long timeStep) {
-        physicsModeler.runModel(timeStep);
+        //TODO
     }
 
     @Override

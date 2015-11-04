@@ -1,7 +1,7 @@
-package irl.fw.shared.events;
+package irl.fw.engine.events;
 
-import irl.fw.shared.bodies.Body;
-import irl.fw.shared.bodies.PhysicalState;
+import irl.fw.engine.bodies.Body;
+import irl.fw.engine.bodies.PhysicalState;
 
 /**
  * TODO bigpopakap Javadoc this class
