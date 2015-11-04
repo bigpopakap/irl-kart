@@ -8,19 +8,19 @@ package irl.fw.engine.bodies;
  */
 public class PhysicalState {
 
-    private final String value;
+    private final int value;
     //TODO rotation, position, vel, accel
 
-    public PhysicalState(String value) {
+    public PhysicalState(int value) {
         this.value = value;
     }
 
-    public String getValue() {
+    public int getValue() {
         return value;
     }
 
     @Override
     public String toString() {
-        return getValue();
+        return String.valueOf(getValue());
     }
 }

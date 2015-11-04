@@ -40,7 +40,7 @@ public class AsyncRandomBeacon extends LoopingRunnable implements Beacon {
         for (String externalId : externalIds) {
             BeaconUpdate update = new BeaconUpdate(
                 externalId,
-                new PhysicalState(externalId + "-pos-" + iteration++)
+                new PhysicalState(iteration++)
             );
 
             positions.onNext(update);

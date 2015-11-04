@@ -22,16 +22,18 @@ public class ArrowKeyBeacon implements Beacon, StoppableRunnable {
 
     private final String kart1Id;
     private final String kart2Id;
-    private final Subject<BeaconUpdate, BeaconUpdate> positions;
 
-    private volatile boolean isStopped;
+    private final Subject<KeyEvent, KeyEvent> positions;
+    private volatile int kart1Position = 0;
+    private volatile int kart2Position = 0;
+
+    private volatile boolean isStopped = true;
     private JFrame frame;
 
     public ArrowKeyBeacon(String kart1Id, String kart2Id) {
         this.kart1Id = kart1Id;
         this.kart2Id = kart2Id;
-        this.positions = PublishSubject.<BeaconUpdate>create().toSerialized();
-        isStopped = true;
+        this.positions = PublishSubject.<KeyEvent>create().toSerialized();
     }
 
     @Override
@@ -64,12 +66,7 @@ public class ArrowKeyBeacon implements Beacon, StoppableRunnable {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                BeaconUpdate update = new BeaconUpdate(
-                    Character.isDigit(e.getKeyChar()) ? kart1Id : kart2Id,
-                    new PhysicalState("" + e.getKeyChar())
-                );
-
-                positions.onNext(update);
+                positions.onNext(e);
             }
 
             @Override
@@ -86,6 +83,36 @@ public class ArrowKeyBeacon implements Beacon, StoppableRunnable {
 
     @Override
     public Observable<BeaconUpdate> updates() {
-        return positions;
+        return positions
+                .map(this::keyEventToUpdate)
+                .filter(update -> update != null);
     }
+
+    private BeaconUpdate keyEventToUpdate(KeyEvent evt) {
+        switch (evt.getKeyCode()) {
+            case KeyEvent.VK_UP:
+                return new BeaconUpdate(
+                        kart1Id,
+                        new PhysicalState(++kart1Position)
+                );
+            case KeyEvent.VK_DOWN:
+                return new BeaconUpdate(
+                        kart1Id,
+                        new PhysicalState(--kart1Position)
+                );
+            case KeyEvent.VK_W:
+                return new BeaconUpdate(
+                        kart2Id,
+                        new PhysicalState(++kart2Position)
+                );
+            case KeyEvent.VK_S:
+                return new BeaconUpdate(
+                        kart2Id,
+                        new PhysicalState(--kart1Position)
+                );
+            default:
+                return null;
+        }
+    }
+
 }
