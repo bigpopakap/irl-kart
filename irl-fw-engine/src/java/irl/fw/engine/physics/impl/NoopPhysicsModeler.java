@@ -10,6 +10,8 @@ import irl.fw.engine.entity.EntityInstance;
 import irl.fw.engine.physics.PhysicsModeler;
 import irl.util.universe.Universe;
 
+import java.util.Collection;
+
 /**
  * TODO bigpopakap Javadoc this class
  *
@@ -25,8 +27,8 @@ public class NoopPhysicsModeler implements PhysicsModeler {
     }
 
     @Override
-    public Universe<EntityInstance> getEntities() {
-        return universe;
+    public Collection<EntityInstance> getEntities() {
+        return universe.toCollection();
     }
 
     @Override

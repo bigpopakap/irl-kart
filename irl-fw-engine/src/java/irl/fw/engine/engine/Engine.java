@@ -140,6 +140,6 @@ public class Engine implements StoppableRunnable {
     }
 
     public void render(long timeSinceLastUpdate) {
-        renderer.render(phyisicsModel.getEntities().get(), timeSinceLastUpdate);
+        renderer.render(phyisicsModel.getEntities(), timeSinceLastUpdate);
     }
 }

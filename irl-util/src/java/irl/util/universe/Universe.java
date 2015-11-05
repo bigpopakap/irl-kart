@@ -50,7 +50,7 @@ public class Universe<T> {
         return id;
     }
 
-    public Collection<T> get() {
+    public Collection<T> toCollection() {
         return universe.values();
     }
 

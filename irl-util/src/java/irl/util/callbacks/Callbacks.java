@@ -26,7 +26,7 @@ public class Callbacks implements Callback {
 
     @Override
     public void run() {
-        callbacks.get().forEach(callback -> callback.run());
+        callbacks.toCollection().forEach(callback -> callback.run());
     }
 
 }

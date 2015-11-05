@@ -172,6 +172,8 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
 
     private static class MyPanel extends JPanel {
 
+        public static final long serialVersionUID = 1L;
+
         private volatile List<String> contents;
 
         public synchronized void setContents(List<String> contents) {

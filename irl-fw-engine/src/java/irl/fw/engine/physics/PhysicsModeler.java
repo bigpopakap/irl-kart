@@ -5,7 +5,8 @@ import irl.fw.engine.collisions.CollisionResolver;
 import irl.fw.engine.events.AddEntity;
 import irl.fw.engine.events.RemoveEntity;
 import irl.fw.engine.events.UpdateEntity;
-import irl.util.universe.Universe;
+
+import java.util.Collection;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -15,7 +16,7 @@ import irl.util.universe.Universe;
  */
 public interface PhysicsModeler {
 
-    Universe<EntityInstance> getEntities();
+    Collection<EntityInstance> getEntities();
 
     String add(AddEntity event);
     EntityInstance remove(RemoveEntity event);
