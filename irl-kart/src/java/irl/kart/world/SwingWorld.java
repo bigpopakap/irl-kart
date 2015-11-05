@@ -59,7 +59,7 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
     }
 
     @Override
-    public void stop() {
+    public synchronized void stop() {
         if (!isStopped()) {
             frame.dispose();
             isStopped = true;
@@ -79,6 +79,8 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
 
     @Override
     public void run() {
+        isStopped = false;
+
         this.frame = new JFrame();
         this.panel = new MyPanel();
         frame.add(panel);
@@ -86,7 +88,7 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosed(WindowEvent e) {
+            public void windowClosing(WindowEvent e) {
                 stop();
             }
         });

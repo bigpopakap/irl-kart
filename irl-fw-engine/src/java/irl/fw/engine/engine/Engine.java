@@ -37,7 +37,7 @@ public class Engine implements StoppableRunnable {
     private Subscription subscription;
 
     private final CollisionResolver collisionResolver;
-    private final Renderer render;
+    private final Renderer renderer;
 
     Engine(CollisionResolver collisionResolver, Renderer renderer) {
         if (collisionResolver == null || renderer == null) {
@@ -50,11 +50,11 @@ public class Engine implements StoppableRunnable {
         this.phyisicsModel = new NoopPhysicsModeler();
 
         this.collisionResolver = collisionResolver;
-        this.render = renderer;
+        this.renderer = renderer;
     }
 
     @Override
-    public void stop() {
+    public synchronized void stop() {
         if (!isStopped()) {
             subscription.unsubscribe();
             onStop.run();
@@ -141,6 +141,6 @@ public class Engine implements StoppableRunnable {
     }
 
     public void render(long timeSinceLastUpdate) {
-        render.render(phyisicsModel.getBodies().get(), timeSinceLastUpdate);
+        renderer.render(phyisicsModel.getBodies().get(), timeSinceLastUpdate);
     }
 }

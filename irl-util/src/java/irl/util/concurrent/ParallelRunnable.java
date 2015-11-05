@@ -31,7 +31,7 @@ public class ParallelRunnable implements StoppableRunnable {
     }
 
     @Override
-    public void stop() {
+    public synchronized void stop() {
         if (!isStopped()) {
             for (StoppableRunnable runnable : runnables) {
                 runnable.stop();
