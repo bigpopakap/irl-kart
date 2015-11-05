@@ -2,13 +2,14 @@ package irl.kart.world;
 
 import irl.fw.engine.beacon.Beacon;
 import irl.fw.engine.beacon.BeaconUpdate;
-import irl.fw.engine.entity.EntityState;
+import irl.fw.engine.physics.EntityState;
 import irl.fw.engine.graphics.Renderer;
 import irl.fw.engine.entity.EntityInstance;
 import irl.util.callbacks.Callback;
 import irl.util.callbacks.Callbacks;
 import irl.util.concurrent.StoppableRunnable;
 import irl.util.reactiveio.Pipe;
+import org.dyn4j.geometry.Vector2;
 import rx.Observable;
 import rx.subjects.PublishSubject;
 import rx.subjects.Subject;
@@ -131,10 +132,12 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
 
         lines.add("World");
         lines.add(String.format("Updated at %s", (now - timeSinceLastUpdate)));
-        lines.add(String.format("rendered %s millis later\n", timeSinceLastUpdate));
+        lines.add(String.format("rendered %s millis later", timeSinceLastUpdate));
 
         for (EntityInstance entityInstance : entities) {
-            lines.add(String.format("Entity %s in state %s\n", entityInstance.toString(), entityInstance.getState()));
+            lines.add(String.format("Entity %s", entityInstance.toString()));
+            lines.add(String.format("State %s", entityInstance.getState()));
+            lines.add("");
         }
 
         if (frame != null && panel != null) {
@@ -148,26 +151,30 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
             case KeyEvent.VK_UP:
                 return new BeaconUpdate(
                     kart1Id,
-                    new EntityState(++kart1Position)
+                    intToState(++kart1Position)
                 );
             case KeyEvent.VK_DOWN:
                 return new BeaconUpdate(
                     kart1Id,
-                    new EntityState(--kart1Position)
+                    intToState(--kart1Position)
                 );
             case KeyEvent.VK_W:
                 return new BeaconUpdate(
                     kart2Id,
-                    new EntityState(++kart2Position)
+                    intToState(++kart2Position)
                 );
             case KeyEvent.VK_S:
                 return new BeaconUpdate(
                     kart2Id,
-                    new EntityState(--kart2Position)
+                    intToState(--kart2Position)
                 );
             default:
                 return null;
         }
+    }
+
+    private EntityState intToState(int value) {
+        return new EntityState(null, new Vector2(value, value));
     }
 
     private static class MyPanel extends JPanel {

@@ -2,7 +2,7 @@ package irl.kart.entities;
 
 import irl.fw.engine.beacon.Beacon;
 import irl.fw.engine.entity.IRLEntity;
-import irl.fw.engine.entity.EntityState;
+import irl.fw.engine.physics.EntityState;
 import irl.util.string.StringUtils;
 import rx.Observable;
 

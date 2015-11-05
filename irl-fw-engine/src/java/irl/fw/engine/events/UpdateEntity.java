@@ -1,6 +1,6 @@
 package irl.fw.engine.events;
 
-import irl.fw.engine.entity.EntityState;
+import irl.fw.engine.physics.EntityState;
 
 /**
  * TODO bigpopakap Javadoc this class

@@ -1,7 +1,7 @@
-package irl.fw.engine.physics.impl;
+package irl.fw.engine.physics.impl.noop;
 
 import irl.fw.engine.entity.Entity;
-import irl.fw.engine.entity.EntityState;
+import irl.fw.engine.physics.EntityState;
 import irl.fw.engine.collisions.CollisionResolver;
 import irl.fw.engine.events.AddEntity;
 import irl.fw.engine.events.RemoveEntity;
@@ -42,13 +42,12 @@ public class NoopPhysicsModeler implements PhysicsModeler {
     }
 
     @Override
-    public EntityInstance remove(RemoveEntity event) {
+    public void remove(RemoveEntity event) {
         String entityToRemove = event.getEntityId();
         if (universe.contains(entityToRemove)) {
-            return universe.remove(entityToRemove);
+            universe.remove(entityToRemove);
         } else {
             System.err.println("Tried to remove non-existent entity: " + entityToRemove);
-            return null;
         }
     }
 

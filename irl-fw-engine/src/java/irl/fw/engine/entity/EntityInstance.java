@@ -1,5 +1,7 @@
 package irl.fw.engine.entity;
 
+import irl.fw.engine.physics.EntityState;
+
 /**
  * TODO bigpopakap Javadoc this class
  *

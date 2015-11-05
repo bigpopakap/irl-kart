@@ -2,8 +2,9 @@ package irl.fw.engine.beacon.impl;
 
 import irl.fw.engine.beacon.Beacon;
 import irl.fw.engine.beacon.BeaconUpdate;
-import irl.fw.engine.entity.EntityState;
+import irl.fw.engine.physics.EntityState;
 import irl.util.concurrent.LoopingRunnable;
+import org.dyn4j.geometry.Vector2;
 import rx.Observable;
 import rx.subjects.PublishSubject;
 import rx.subjects.Subject;
@@ -40,8 +41,9 @@ public class AsyncRandomBeacon extends LoopingRunnable implements Beacon {
         for (String externalId : externalIds) {
             BeaconUpdate update = new BeaconUpdate(
                 externalId,
-                new EntityState(iteration++)
+                new EntityState(null, new Vector2(iteration, iteration))
             );
+            iteration++;
 
             positions.onNext(update);
         }
