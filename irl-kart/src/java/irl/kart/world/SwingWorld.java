@@ -30,8 +30,8 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
     private final String kart2Id;
 
     private final Subject<KeyEvent, KeyEvent> positions;
-    private volatile int kart1Position = 0;
-    private volatile int kart2Position = 0;
+    private volatile Integer kart1Position = 0;
+    private volatile Integer kart2Position = 0;
 
     private volatile boolean isStopped = true;
     private JFrame frame;
@@ -61,8 +61,8 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
         frame.add(panel);
 
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(400, 400);
-        panel.setSize(400, 400);
+        frame.setSize(800, 400);
+        panel.setSize(800, 400);
 
         panel.setFocusable(true);
         panel.addKeyListener(new KeyListener() {
@@ -73,6 +73,7 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
 
             @Override
             public void keyPressed(KeyEvent e) {
+                //TODO figure out why this is causing two updates!
                 positions.onNext(e);
             }
 
@@ -117,21 +118,25 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
     private BeaconUpdate keyEventToUpdate(KeyEvent evt) {
         switch (evt.getKeyCode()) {
             case KeyEvent.VK_UP:
+                System.out.println("up");
                 return new BeaconUpdate(
                         kart1Id,
                         new PhysicalState(++kart1Position)
                 );
             case KeyEvent.VK_DOWN:
+                System.out.println("down");
                 return new BeaconUpdate(
                         kart1Id,
                         new PhysicalState(--kart1Position)
                 );
             case KeyEvent.VK_W:
+                System.out.println("W");
                 return new BeaconUpdate(
                         kart2Id,
                         new PhysicalState(++kart2Position)
                 );
             case KeyEvent.VK_S:
+                System.out.println("S");
                 return new BeaconUpdate(
                         kart2Id,
                         new PhysicalState(--kart1Position)
