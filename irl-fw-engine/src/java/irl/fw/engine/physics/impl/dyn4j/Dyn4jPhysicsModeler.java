@@ -1,4 +1,4 @@
-package irl.fw.engine.physics.impl;
+package irl.fw.engine.physics.impl.dyn4j;
 
 import irl.fw.engine.bodies.Body;
 import irl.fw.engine.bodies.BodyInstance;

@@ -5,7 +5,7 @@ import irl.fw.engine.collisions.impl.NoopCollisionResolver;
 import irl.fw.engine.graphics.Renderer;
 import irl.fw.engine.graphics.impl.NoopRenderer;
 import irl.fw.engine.physics.PhysicsModeler;
-import irl.fw.engine.physics.impl.Dyn4jPhysicsModeler;
+import irl.fw.engine.physics.impl.dyn4j.Dyn4jPhysicsModeler;
 
 /**
  * TODO bigpopakap Javadoc this class
