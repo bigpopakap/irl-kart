@@ -85,7 +85,7 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
         this.panel = new MyPanel();
         frame.add(panel);
 
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
