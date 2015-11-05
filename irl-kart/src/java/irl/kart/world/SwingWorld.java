@@ -195,7 +195,7 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
                 int y = 25;
                 for (String content : contents) {
                     g.drawString(content, 25, y);
-                    y += 10;
+                    y += 20;
                 }
             }
         }

@@ -12,6 +12,7 @@ import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.World;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Rectangle;
+import org.dyn4j.geometry.Vector2;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -28,10 +29,17 @@ import java.util.stream.Collectors;
 public class Dyn4jPhysicsModeler implements PhysicsModeler {
 
     private final World world;
+    private volatile long accumulatedTimeStep = 0;
 
     public Dyn4jPhysicsModeler() {
         world = new World();
-        //TODO add floor here?
+
+        //add a floor
+        Body floor = new Body();
+        floor.addFixture(new Rectangle(100, 100));
+        floor.setMass(MassType.INFINITE);
+        floor.translate(-50, -50);
+        world.addBody(floor);
     }
 
     @Override
@@ -48,15 +56,16 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         body.setUserData(event.getEntity());
 
         //TODO remove these lines
-        body.translateToOrigin();
+        body.translate(5, 5);
         body.setMass(MassType.NORMAL);
         body.addFixture(new Rectangle(3, 3));
-        body.setLinearVelocity(1, 2);
+        body.setLinearVelocity(20, 20);
 
-        if (body.getFixtureCount() != 1) {
-            throw new IllegalStateException("We need exactly one fixture per body");
-        }
+//        if (body.getFixtureCount() != 1) {
+//            throw new IllegalStateException("We need exactly one fixture per body");
+//        }
         body.setActive(true);
+        body.setAsleep(false);
         world.addBody(body);
         return body.getId().toString();
     }
@@ -87,8 +96,13 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
 
     @Override
     public synchronized void model(CollisionResolver collisionResolver, long timeStep) {
-        double timeStepInSeconds = TimeUnit.SECONDS.convert(timeStep, TimeUnit.MILLISECONDS);
-        world.update(timeStepInSeconds);
+        accumulatedTimeStep += timeStep;
+        double timeStepInSeconds = accumulatedTimeStep / 1000.0;
+
+        boolean updated = world.update(timeStepInSeconds);
+        if (updated) {
+            accumulatedTimeStep = 0;
+        }
     }
 
     private Optional<Body> findBody(String entityId) {
