@@ -1,8 +1,8 @@
-package irl.kart.bodies;
+package irl.kart.entities;
 
 import irl.fw.engine.beacon.Beacon;
-import irl.fw.engine.bodies.IRLBody;
-import irl.fw.engine.bodies.PhysicalState;
+import irl.fw.engine.entity.IRLEntity;
+import irl.fw.engine.entity.EntityState;
 import irl.util.string.StringUtils;
 import rx.Observable;
 
@@ -12,18 +12,18 @@ import rx.Observable;
  * @author bigpopakap
  * @since 11/1/15
  */
-public class TestBody implements IRLBody {
+public class TestEntity implements IRLEntity {
 
     private final String kartId;
     private final Beacon beacon;
 
-    public TestBody(String kartId, Beacon beacon) {
+    public TestEntity(String kartId, Beacon beacon) {
         this.kartId = kartId;
         this.beacon = beacon;
     }
 
     @Override
-    public Observable<PhysicalState> updates() {
+    public Observable<EntityState> updates() {
         //TODO we should only report the latest position or something
         return beacon.updates()
                     .filter(update -> StringUtils.equal(kartId, update.getExternalId()))

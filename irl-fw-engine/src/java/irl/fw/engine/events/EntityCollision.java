@@ -6,6 +6,6 @@ package irl.fw.engine.events;
  * @author bigpopakap
  * @since 10/30/15
  */
-public class Collision implements PhysicalEvent {
+public class EntityCollision implements EngineEvent {
 
 }

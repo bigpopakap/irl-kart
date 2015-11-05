@@ -1,4 +1,4 @@
-package irl.fw.engine.bodies;
+package irl.fw.engine.entity;
 
 import rx.Observable;
 
@@ -8,8 +8,8 @@ import rx.Observable;
  * @author bigpopakap
  * @since 10/29/15
  */
-public interface Body {
+public interface Entity {
 
-    Observable<PhysicalState> updates();
+    Observable<EntityState> updates();
 
 }

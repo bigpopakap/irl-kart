@@ -1,12 +1,12 @@
 package irl.fw.engine.physics.impl.dyn4j;
 
-import irl.fw.engine.bodies.Body;
-import irl.fw.engine.bodies.BodyInstance;
-import irl.fw.engine.bodies.PhysicalState;
+import irl.fw.engine.entity.Entity;
+import irl.fw.engine.entity.EntityInstance;
+import irl.fw.engine.entity.EntityState;
 import irl.fw.engine.collisions.CollisionResolver;
-import irl.fw.engine.events.AddBody;
-import irl.fw.engine.events.RemoveBody;
-import irl.fw.engine.events.UpdateBody;
+import irl.fw.engine.events.AddEntity;
+import irl.fw.engine.events.RemoveEntity;
+import irl.fw.engine.events.UpdateEntity;
 import irl.fw.engine.physics.PhysicsModeler;
 import irl.util.universe.Universe;
 
@@ -18,49 +18,49 @@ import irl.util.universe.Universe;
  */
 public class Dyn4jPhysicsModeler implements PhysicsModeler {
 
-    private final Universe<BodyInstance> universe;
+    private final Universe<EntityInstance> universe;
 
     public Dyn4jPhysicsModeler() {
         universe = new Universe<>();
     }
 
     @Override
-    public Universe<BodyInstance> getBodies() {
+    public Universe<EntityInstance> getEntities() {
         return universe;
     }
 
     @Override
-    public String addBody(AddBody event) {
-        Body bodyToAdd = event.getBody();
-        BodyInstance bodyInstance = new BodyInstance(
-                bodyToAdd,
+    public String add(AddEntity event) {
+        Entity entityToAdd = event.getEntity();
+        EntityInstance entityInstance = new EntityInstance(
+                entityToAdd,
                 event.getInitialState()
         );
-        return universe.add(bodyInstance);
+        return universe.add(entityInstance);
     }
 
     @Override
-    public BodyInstance removeBody(RemoveBody event) {
-        String bodyToRemove = event.getBodyId();
-        if (universe.contains(bodyToRemove)) {
-            return universe.remove(bodyToRemove);
+    public EntityInstance remove(RemoveEntity event) {
+        String entityToRemove = event.getEntityId();
+        if (universe.contains(entityToRemove)) {
+            return universe.remove(entityToRemove);
         } else {
-            System.err.println("Tried to remove non-existent body: " + bodyToRemove);
+            System.err.println("Tried to remove non-existent entity: " + entityToRemove);
             return null;
         }
     }
 
     @Override
-    public void updateBody(UpdateBody event) {
-        String bodyToUpdate = event.getBodyId();
-        PhysicalState newState = event.getNewState();
+    public void update(UpdateEntity event) {
+        String entityToUpdate = event.getEntityId();
+        EntityState newState = event.getNewState();
 
-        if (universe.contains(bodyToUpdate)) {
-            BodyInstance current = universe.get(bodyToUpdate);
-            BodyInstance updated = current.setState(newState);
-            universe.update(bodyToUpdate, updated);
+        if (universe.contains(entityToUpdate)) {
+            EntityInstance current = universe.get(entityToUpdate);
+            EntityInstance updated = current.setState(newState);
+            universe.update(entityToUpdate, updated);
         } else {
-            System.err.println("Tried to update non-existent body: " + bodyToUpdate
+            System.err.println("Tried to update non-existent entity: " + entityToUpdate
                     + " to new state: " + newState);
         }
     }

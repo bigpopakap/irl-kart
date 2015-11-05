@@ -1,8 +1,8 @@
 package irl.fw.engine.collisions.impl;
 
 import irl.fw.engine.collisions.CollisionResolver;
-import irl.fw.engine.events.Collision;
-import irl.fw.engine.events.PhysicalEvent;
+import irl.fw.engine.events.EntityCollision;
+import irl.fw.engine.events.EngineEvent;
 
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
 public class NoopCollisionResolver implements CollisionResolver {
 
     @Override
-    public List<PhysicalEvent> onCollision(Collision collision) {
+    public List<EngineEvent> onCollision(EntityCollision collision) {
         return Collections.emptyList();
     }
 

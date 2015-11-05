@@ -1,12 +1,12 @@
 package irl.fw.engine.engine;
 
-import irl.fw.engine.bodies.Body;
+import irl.fw.engine.entity.Entity;
 import irl.fw.engine.graphics.Renderer;
 import irl.fw.engine.collisions.CollisionResolver;
-import irl.fw.engine.events.AddBody;
-import irl.fw.engine.events.PhysicalEvent;
-import irl.fw.engine.events.RemoveBody;
-import irl.fw.engine.events.UpdateBody;
+import irl.fw.engine.events.AddEntity;
+import irl.fw.engine.events.EngineEvent;
+import irl.fw.engine.events.RemoveEntity;
+import irl.fw.engine.events.UpdateEntity;
 import irl.fw.engine.physics.PhysicsModeler;
 import irl.util.callbacks.Callback;
 import irl.util.callbacks.Callbacks;
@@ -31,7 +31,7 @@ public class Engine implements StoppableRunnable {
 
     private final Callbacks onStop;
 
-    private final Pipe<PhysicalEvent> eventQueue;
+    private final Pipe<EngineEvent> eventQueue;
     private final PhysicsModeler phyisicsModel;
     private Subscription subscription;
 
@@ -70,7 +70,7 @@ public class Engine implements StoppableRunnable {
         return onStop.add(callback);
     }
 
-    public Pipe<PhysicalEvent> getEventQueue() {
+    public Pipe<EngineEvent> getEventQueue() {
         return eventQueue;
     }
 
@@ -79,7 +79,7 @@ public class Engine implements StoppableRunnable {
         subscription = eventQueue.get()
             .buffer(TIME_STEP, TimeUnit.MILLISECONDS)
             .timeInterval()
-            .subscribe(new Observer<TimeInterval<List<PhysicalEvent>>>() {
+            .subscribe(new Observer<TimeInterval<List<EngineEvent>>>() {
 
                 private volatile long lag = 0;
 
@@ -94,7 +94,7 @@ public class Engine implements StoppableRunnable {
                 }
 
                 @Override
-                public void onNext(TimeInterval<List<PhysicalEvent>> eventBatch) {
+                public void onNext(TimeInterval<List<EngineEvent>> eventBatch) {
                     long elapsed = eventBatch.getIntervalInMilliseconds();
                     lag += elapsed;
 
@@ -114,21 +114,21 @@ public class Engine implements StoppableRunnable {
             });
     }
 
-    public void handleEvent(PhysicalEvent event) {
+    public void handleEvent(EngineEvent event) {
         //TODO use command pattern instead of hardcoding a method per event
-        if (event instanceof AddBody) {
-            AddBody addBodyEvent = (AddBody) event;
-            Body newBody = ((AddBody) event).getBody();
+        if (event instanceof AddEntity) {
+            AddEntity addEntityEvent = (AddEntity) event;
+            Entity newEntity = ((AddEntity) event).getEntity();
 
-            String newBodyId = phyisicsModel.addBody(addBodyEvent);
-            eventQueue.mergeIn(newBody.updates()
-                    .map(state -> new UpdateBody(newBodyId, state)));
+            String newEntityId = phyisicsModel.add(addEntityEvent);
+            eventQueue.mergeIn(newEntity.updates()
+                    .map(state -> new UpdateEntity(newEntityId, state)));
         }
-        else if (event instanceof RemoveBody) {
-            phyisicsModel.removeBody((RemoveBody) event);
+        else if (event instanceof RemoveEntity) {
+            phyisicsModel.remove((RemoveEntity) event);
         }
-        else if (event instanceof UpdateBody) {
-            phyisicsModel.updateBody((UpdateBody) event);
+        else if (event instanceof UpdateEntity) {
+            phyisicsModel.update((UpdateEntity) event);
         }
         else {
             System.err.println("Unhandled or unexpected event: " + event.getName());
@@ -140,6 +140,6 @@ public class Engine implements StoppableRunnable {
     }
 
     public void render(long timeSinceLastUpdate) {
-        renderer.render(phyisicsModel.getBodies().get(), timeSinceLastUpdate);
+        renderer.render(phyisicsModel.getEntities().get(), timeSinceLastUpdate);
     }
 }

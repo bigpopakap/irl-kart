@@ -1,4 +1,4 @@
-package irl.fw.engine.bodies;
+package irl.fw.engine.entity;
 
 import rx.Observable;
 
@@ -8,10 +8,10 @@ import rx.Observable;
  * @author bigpopakap
  * @since 10/29/15
  */
-public interface VirtualBody extends Body {
+public interface VirtualEntity extends Entity {
 
     @Override
-    default Observable<PhysicalState> updates() {
+    default Observable<EntityState> updates() {
         return Observable.never();
     }
 

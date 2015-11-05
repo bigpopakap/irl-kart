@@ -2,9 +2,9 @@ package irl.kart.world;
 
 import irl.fw.engine.beacon.Beacon;
 import irl.fw.engine.beacon.BeaconUpdate;
-import irl.fw.engine.bodies.PhysicalState;
+import irl.fw.engine.entity.EntityState;
 import irl.fw.engine.graphics.Renderer;
-import irl.fw.engine.bodies.BodyInstance;
+import irl.fw.engine.entity.EntityInstance;
 import irl.util.callbacks.Callback;
 import irl.util.callbacks.Callbacks;
 import irl.util.concurrent.StoppableRunnable;
@@ -124,7 +124,7 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
     }
 
     @Override
-    public void render(Collection<BodyInstance> bodies, long timeSinceLastUpdate) {
+    public void render(Collection<EntityInstance> entities, long timeSinceLastUpdate) {
         long now = System.currentTimeMillis();
 
         List<String> lines = new ArrayList<>();
@@ -133,8 +133,8 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
         lines.add(String.format("Updated at %s", (now - timeSinceLastUpdate)));
         lines.add(String.format("rendered %s millis later\n", timeSinceLastUpdate));
 
-        for (BodyInstance bodyInstance : bodies) {
-            lines.add(String.format("Body %s in state %s\n", bodyInstance.toString(), bodyInstance.getState()));
+        for (EntityInstance entityInstance : entities) {
+            lines.add(String.format("Entity %s in state %s\n", entityInstance.toString(), entityInstance.getState()));
         }
 
         if (frame != null && panel != null) {
@@ -148,22 +148,22 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
             case KeyEvent.VK_UP:
                 return new BeaconUpdate(
                     kart1Id,
-                    new PhysicalState(++kart1Position)
+                    new EntityState(++kart1Position)
                 );
             case KeyEvent.VK_DOWN:
                 return new BeaconUpdate(
                     kart1Id,
-                    new PhysicalState(--kart1Position)
+                    new EntityState(--kart1Position)
                 );
             case KeyEvent.VK_W:
                 return new BeaconUpdate(
                     kart2Id,
-                    new PhysicalState(++kart2Position)
+                    new EntityState(++kart2Position)
                 );
             case KeyEvent.VK_S:
                 return new BeaconUpdate(
                     kart2Id,
-                    new PhysicalState(--kart2Position)
+                    new EntityState(--kart2Position)
                 );
             default:
                 return null;

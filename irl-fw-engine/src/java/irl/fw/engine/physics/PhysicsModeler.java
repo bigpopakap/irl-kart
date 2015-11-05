@@ -1,10 +1,10 @@
 package irl.fw.engine.physics;
 
-import irl.fw.engine.bodies.BodyInstance;
+import irl.fw.engine.entity.EntityInstance;
 import irl.fw.engine.collisions.CollisionResolver;
-import irl.fw.engine.events.AddBody;
-import irl.fw.engine.events.RemoveBody;
-import irl.fw.engine.events.UpdateBody;
+import irl.fw.engine.events.AddEntity;
+import irl.fw.engine.events.RemoveEntity;
+import irl.fw.engine.events.UpdateEntity;
 import irl.util.universe.Universe;
 
 /**
@@ -15,11 +15,11 @@ import irl.util.universe.Universe;
  */
 public interface PhysicsModeler {
 
-    Universe<BodyInstance> getBodies();
+    Universe<EntityInstance> getEntities();
 
-    String addBody(AddBody event);
-    BodyInstance removeBody(RemoveBody event);
-    void updateBody(UpdateBody event);
+    String add(AddEntity event);
+    EntityInstance remove(RemoveEntity event);
+    void update(UpdateEntity event);
 
     void model(CollisionResolver collisionResolver, long timeStep);
 

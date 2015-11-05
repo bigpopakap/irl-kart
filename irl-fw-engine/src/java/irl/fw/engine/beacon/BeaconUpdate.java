@@ -1,6 +1,6 @@
 package irl.fw.engine.beacon;
 
-import irl.fw.engine.bodies.PhysicalState;
+import irl.fw.engine.entity.EntityState;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -11,9 +11,9 @@ import irl.fw.engine.bodies.PhysicalState;
 public class BeaconUpdate {
 
     private final String externalId;
-    private final PhysicalState state;
+    private final EntityState state;
 
-    public BeaconUpdate(String externalId, PhysicalState state) {
+    public BeaconUpdate(String externalId, EntityState state) {
         this.externalId = externalId;
         this.state = state;
     }
@@ -22,7 +22,7 @@ public class BeaconUpdate {
         return externalId;
     }
 
-    public PhysicalState getState() {
+    public EntityState getState() {
         return state;
     }
 

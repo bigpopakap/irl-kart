@@ -2,7 +2,7 @@ package irl.fw.engine.beacon.impl;
 
 import irl.fw.engine.beacon.Beacon;
 import irl.fw.engine.beacon.BeaconUpdate;
-import irl.fw.engine.bodies.PhysicalState;
+import irl.fw.engine.entity.EntityState;
 import irl.util.concurrent.LoopingRunnable;
 import rx.Observable;
 import rx.subjects.PublishSubject;
@@ -40,7 +40,7 @@ public class AsyncRandomBeacon extends LoopingRunnable implements Beacon {
         for (String externalId : externalIds) {
             BeaconUpdate update = new BeaconUpdate(
                 externalId,
-                new PhysicalState(iteration++)
+                new EntityState(iteration++)
             );
 
             positions.onNext(update);

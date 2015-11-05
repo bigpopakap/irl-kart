@@ -1,6 +1,6 @@
 package irl.fw.engine.graphics;
 
-import irl.fw.engine.bodies.BodyInstance;
+import irl.fw.engine.entity.EntityInstance;
 
 import java.util.Collection;
 
@@ -12,6 +12,6 @@ import java.util.Collection;
  */
 public interface Renderer {
 
-    void render(Collection<BodyInstance> bodies, long timeSinceLastUpdate);
+    void render(Collection<EntityInstance> entities, long timeSinceLastUpdate);
 
 }

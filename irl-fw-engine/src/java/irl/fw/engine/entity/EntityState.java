@@ -1,4 +1,4 @@
-package irl.fw.engine.bodies;
+package irl.fw.engine.entity;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -6,12 +6,12 @@ package irl.fw.engine.bodies;
  * @author bigpopakap
  * @since 10/29/15
  */
-public class PhysicalState {
+public class EntityState {
 
     private final int value;
     //TODO rotation, position, vel, accel
 
-    public PhysicalState(int value) {
+    public EntityState(int value) {
         this.value = value;
     }
 

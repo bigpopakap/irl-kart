@@ -1,7 +1,7 @@
 package irl.fw.engine.collisions;
 
-import irl.fw.engine.events.Collision;
-import irl.fw.engine.events.PhysicalEvent;
+import irl.fw.engine.events.EntityCollision;
+import irl.fw.engine.events.EngineEvent;
 
 import java.util.List;
 
@@ -13,6 +13,6 @@ import java.util.List;
  */
 public interface CollisionResolver {
 
-    List<PhysicalEvent> onCollision(Collision collision);
+    List<EngineEvent> onCollision(EntityCollision collision);
 
 }

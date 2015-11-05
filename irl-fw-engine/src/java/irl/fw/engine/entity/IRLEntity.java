@@ -1,4 +1,4 @@
-package irl.fw.engine.bodies;
+package irl.fw.engine.entity;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -6,6 +6,6 @@ package irl.fw.engine.bodies;
  * @author bigpopakap
  * @since 10/29/15
  */
-public interface IRLBody extends Body {
+public interface IRLEntity extends Entity {
 
 }

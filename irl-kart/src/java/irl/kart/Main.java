@@ -1,10 +1,10 @@
 package irl.kart;
 
 import irl.fw.engine.engine.Engine;
+import irl.kart.entities.TestEntity;
 import irl.kart.world.SwingWorld;
-import irl.fw.engine.events.AddBody;
+import irl.fw.engine.events.AddEntity;
 import irl.fw.engine.engine.EngineBuilder;
-import irl.kart.bodies.TestBody;
 import irl.util.concurrent.ParallelRunnable;
 
 /**
@@ -25,12 +25,12 @@ public class Main {
             .build();
 
         //TODO this should move somewhere more generic
-        //set up a process to add new bodies whenever a new kart is detected
+        //set up a process to add new entity whenever a new kart is detected
         engine.getEventQueue().mergeIn(
             world.updates()
                 .distinct(update -> update.getExternalId())
-                .map(update -> new AddBody(
-                    new TestBody(update.getExternalId(), world),
+                .map(update -> new AddEntity(
+                    new TestEntity(update.getExternalId(), world),
                     update.getState()
                 ))
         );

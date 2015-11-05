@@ -1,7 +1,7 @@
 package irl.fw.engine.graphics.impl;
 
 import irl.fw.engine.graphics.Renderer;
-import irl.fw.engine.bodies.BodyInstance;
+import irl.fw.engine.entity.EntityInstance;
 
 import java.util.Collection;
 
@@ -14,7 +14,7 @@ import java.util.Collection;
 public class NoopRenderer implements Renderer {
 
     @Override
-    public void render(Collection<BodyInstance> bodies, long timeStep) {
+    public void render(Collection<EntityInstance> entities, long timeStep) {
         //do nothing
     }
 
