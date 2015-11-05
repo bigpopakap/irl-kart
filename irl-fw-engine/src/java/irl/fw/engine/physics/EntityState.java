@@ -1,6 +1,5 @@
 package irl.fw.engine.physics;
 
-import org.dyn4j.geometry.Convex;
 import org.dyn4j.geometry.Vector2;
 
 /**
@@ -11,16 +10,16 @@ import org.dyn4j.geometry.Vector2;
  */
 public class EntityState {
 
-    private final Convex shape;
+    private final Vector2 center;
     private final Vector2 velocity;
 
-    public EntityState(Convex shape, Vector2 velocity) {
-        this.shape = shape;
+    public EntityState(Vector2 center, Vector2 velocity) {
+        this.center = center;
         this.velocity = velocity;
     }
 
-    public Convex getShape() {
-        return shape;
+    public Vector2 getCenter() {
+        return center;
     }
 
     public Vector2 getVelocity() {
@@ -29,8 +28,8 @@ public class EntityState {
 
     @Override
     public String toString() {
-        return String.format("[shape:%s vel:%s]",
-                getShape().getClass().getSimpleName(),
+        return String.format("[center:%s vel:%s]",
+                getCenter(),
                 getVelocity());
     }
 }

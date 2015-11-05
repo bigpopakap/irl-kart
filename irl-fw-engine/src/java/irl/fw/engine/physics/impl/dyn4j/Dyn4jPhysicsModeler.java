@@ -10,6 +10,7 @@ import irl.fw.engine.events.UpdateEntity;
 import irl.fw.engine.physics.PhysicsModeler;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.World;
+import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Rectangle;
 
 import java.util.Collection;
@@ -45,11 +46,17 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         Body body = new Body();
         //FIXME need to set size, shape, mass, velocity and stuff
         body.setUserData(event.getEntity());
-        body.addFixture(new Rectangle(3, 3)); //TODO remove
+
+        //TODO remove these lines
+        body.translateToOrigin();
+        body.setMass(MassType.NORMAL);
+        body.addFixture(new Rectangle(3, 3));
+        body.setLinearVelocity(1, 2);
 
         if (body.getFixtureCount() != 1) {
             throw new IllegalStateException("We need exactly one fixture per body");
         }
+        body.setActive(true);
         world.addBody(body);
         return body.getId().toString();
     }
@@ -94,7 +101,7 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         Entity entity = (Entity) body.getUserData();
 
         EntityState state = new EntityState(
-            body.getFixture(0).getShape(),
+            body.getWorldCenter(),
             body.getLinearVelocity()
         );
 
