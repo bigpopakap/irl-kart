@@ -12,12 +12,10 @@ import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.World;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Rectangle;
-import org.dyn4j.geometry.Vector2;
 
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -29,7 +27,6 @@ import java.util.stream.Collectors;
 public class Dyn4jPhysicsModeler implements PhysicsModeler {
 
     private final World world;
-    private volatile long accumulatedTimeStep = 0;
 
     public Dyn4jPhysicsModeler() {
         world = new World();
@@ -96,13 +93,8 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
 
     @Override
     public synchronized void model(CollisionResolver collisionResolver, long timeStep) {
-        accumulatedTimeStep += timeStep;
-        double timeStepInSeconds = accumulatedTimeStep / 1000.0;
-
+        double timeStepInSeconds = timeStep / 1000.0;
         boolean updated = world.update(timeStepInSeconds);
-        if (updated) {
-            accumulatedTimeStep = 0;
-        }
     }
 
     private Optional<Body> findBody(String entityId) {
