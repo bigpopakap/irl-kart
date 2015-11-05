@@ -41,7 +41,8 @@ public class AsyncRandomBeacon extends LoopingRunnable implements Beacon {
         for (String externalId : externalIds) {
             BeaconUpdate update = new BeaconUpdate(
                 externalId,
-                new EntityState(null, new Vector2(iteration, iteration))
+                new EntityState(new Vector2(iteration, iteration),
+                                new Vector2(iteration, iteration))
             );
             iteration++;
 

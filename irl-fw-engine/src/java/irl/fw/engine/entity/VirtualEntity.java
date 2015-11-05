@@ -13,7 +13,7 @@ public interface VirtualEntity extends Entity {
 
     @Override
     default Observable<EntityState> updates() {
-        return Observable.never();
+        return Observable.empty();
     }
 
 }

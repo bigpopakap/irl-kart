@@ -174,7 +174,7 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
     }
 
     private EntityState intToState(int value) {
-        return new EntityState(null, new Vector2(value, value));
+        return new EntityState(new Vector2(value, value), new Vector2(value, value));
     }
 
     private static class MyPanel extends JPanel {

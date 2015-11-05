@@ -56,7 +56,7 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         body.translate(5, 5);
         body.setMass(MassType.NORMAL);
         body.addFixture(new Rectangle(3, 3));
-        body.setLinearVelocity(20, 20);
+        body.setLinearVelocity(1, 1);
 
 //        if (body.getFixtureCount() != 1) {
 //            throw new IllegalStateException("We need exactly one fixture per body");
@@ -86,8 +86,11 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
 
         if (foundBody.isPresent()) {
             Body body = foundBody.get();
+            EntityState newState = event.getNewState();
+
             body.translateToOrigin();
-            body.translate(event.getNewState().getCenter());
+            body.translate(newState.getCenter());
+            body.setLinearVelocity(newState.getVelocity());
         } else {
             System.err.println("Tried to update non-existent body: " + id);
         }
@@ -96,7 +99,7 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
     @Override
     public synchronized void model(CollisionResolver collisionResolver, long timeStep) {
         double timeStepInSeconds = timeStep / 1000.0;
-        boolean updated = world.update(timeStepInSeconds);
+        world.update(timeStepInSeconds);
     }
 
     private Optional<Body> findBody(String entityId) {
