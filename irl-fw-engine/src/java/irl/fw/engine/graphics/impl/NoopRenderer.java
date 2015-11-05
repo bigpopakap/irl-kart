@@ -1,7 +1,7 @@
 package irl.fw.engine.graphics.impl;
 
 import irl.fw.engine.graphics.Renderer;
-import irl.fw.engine.physics.BodyInstance;
+import irl.fw.engine.bodies.BodyInstance;
 
 import java.util.Collection;
 

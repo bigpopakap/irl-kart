@@ -8,7 +8,6 @@ import irl.fw.engine.events.PhysicalEvent;
 import irl.fw.engine.events.RemoveBody;
 import irl.fw.engine.events.UpdateBody;
 import irl.fw.engine.physics.PhysicsModeler;
-import irl.fw.engine.physics.impl.NoopPhysicsModeler;
 import irl.util.callbacks.Callback;
 import irl.util.callbacks.Callbacks;
 import irl.util.concurrent.StoppableRunnable;
@@ -39,15 +38,15 @@ public class Engine implements StoppableRunnable {
     private final CollisionResolver collisionResolver;
     private final Renderer renderer;
 
-    Engine(CollisionResolver collisionResolver, Renderer renderer) {
-        if (collisionResolver == null || renderer == null) {
+    Engine(PhysicsModeler phyisicsModel, CollisionResolver collisionResolver, Renderer renderer) {
+        if (phyisicsModel == null || collisionResolver == null || renderer == null) {
             throw new RuntimeException("These fields cannot be null");
         }
 
         this.onStop = new Callbacks();
 
         this.eventQueue = new Pipe<>();
-        this.phyisicsModel = new NoopPhysicsModeler();
+        this.phyisicsModel = phyisicsModel;
 
         this.collisionResolver = collisionResolver;
         this.renderer = renderer;

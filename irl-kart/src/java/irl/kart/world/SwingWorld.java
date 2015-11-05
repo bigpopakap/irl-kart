@@ -4,7 +4,7 @@ import irl.fw.engine.beacon.Beacon;
 import irl.fw.engine.beacon.BeaconUpdate;
 import irl.fw.engine.bodies.PhysicalState;
 import irl.fw.engine.graphics.Renderer;
-import irl.fw.engine.physics.BodyInstance;
+import irl.fw.engine.bodies.BodyInstance;
 import irl.util.callbacks.Callback;
 import irl.util.callbacks.Callbacks;
 import irl.util.concurrent.StoppableRunnable;

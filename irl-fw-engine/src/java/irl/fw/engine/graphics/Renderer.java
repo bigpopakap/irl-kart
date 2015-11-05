@@ -1,6 +1,6 @@
 package irl.fw.engine.graphics;
 
-import irl.fw.engine.physics.BodyInstance;
+import irl.fw.engine.bodies.BodyInstance;
 
 import java.util.Collection;
 

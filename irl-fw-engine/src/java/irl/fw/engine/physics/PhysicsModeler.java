@@ -1,5 +1,6 @@
 package irl.fw.engine.physics;
 
+import irl.fw.engine.bodies.BodyInstance;
 import irl.fw.engine.collisions.CollisionResolver;
 import irl.fw.engine.events.AddBody;
 import irl.fw.engine.events.RemoveBody;

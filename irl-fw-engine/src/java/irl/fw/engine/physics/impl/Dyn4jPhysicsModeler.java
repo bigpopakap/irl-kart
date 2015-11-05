@@ -1,12 +1,12 @@
 package irl.fw.engine.physics.impl;
 
 import irl.fw.engine.bodies.Body;
+import irl.fw.engine.bodies.BodyInstance;
 import irl.fw.engine.bodies.PhysicalState;
 import irl.fw.engine.collisions.CollisionResolver;
 import irl.fw.engine.events.AddBody;
 import irl.fw.engine.events.RemoveBody;
 import irl.fw.engine.events.UpdateBody;
-import irl.fw.engine.bodies.BodyInstance;
 import irl.fw.engine.physics.PhysicsModeler;
 import irl.util.universe.Universe;
 
@@ -14,13 +14,13 @@ import irl.util.universe.Universe;
  * TODO bigpopakap Javadoc this class
  *
  * @author bigpopakap
- * @since 11/3/15
+ * @since 11/5/15
  */
-public class NoopPhysicsModeler implements PhysicsModeler {
+public class Dyn4jPhysicsModeler implements PhysicsModeler {
 
     private final Universe<BodyInstance> universe;
 
-    public NoopPhysicsModeler() {
+    public Dyn4jPhysicsModeler() {
         universe = new Universe<>();
     }
 
@@ -67,7 +67,7 @@ public class NoopPhysicsModeler implements PhysicsModeler {
 
     @Override
     public void model(CollisionResolver collisionResolver, long timeStep) {
-        //do nothing
+        //TODO
     }
 
 }

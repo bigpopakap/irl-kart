@@ -1,7 +1,4 @@
-package irl.fw.engine.physics;
-
-import irl.fw.engine.bodies.Body;
-import irl.fw.engine.bodies.PhysicalState;
+package irl.fw.engine.bodies;
 
 /**
  * TODO bigpopakap Javadoc this class
