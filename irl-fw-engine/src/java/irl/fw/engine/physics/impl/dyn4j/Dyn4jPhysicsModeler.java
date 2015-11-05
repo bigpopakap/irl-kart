@@ -85,7 +85,9 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         Optional<Body> foundBody = findBody(id);
 
         if (foundBody.isPresent()) {
-            //FIXME figure out how to translate this thing
+            Body body = foundBody.get();
+            body.translateToOrigin();
+            body.translate(event.getNewState().getCenter());
         } else {
             System.err.println("Tried to update non-existent body: " + id);
         }
