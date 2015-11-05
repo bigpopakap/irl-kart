@@ -6,6 +6,7 @@ import irl.fw.engine.bodies.PhysicalState;
 import irl.fw.engine.graphics.Renderer;
 import irl.fw.engine.physics.BodyInstance;
 import irl.util.concurrent.StoppableRunnable;
+import irl.util.reactiveio.Pipe;
 import rx.Observable;
 import rx.subjects.PublishSubject;
 import rx.subjects.Subject;
@@ -29,7 +30,8 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
     private final String kart1Id;
     private final String kart2Id;
 
-    private final Subject<KeyEvent, KeyEvent> positions;
+    private final Subject<KeyEvent, KeyEvent> rawPositions;
+    private final Pipe<BeaconUpdate> updates;
     private volatile Integer kart1Position = 0;
     private volatile Integer kart2Position = 0;
 
@@ -40,7 +42,12 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
     public SwingWorld(String kart1Id, String kart2Id) {
         this.kart1Id = kart1Id;
         this.kart2Id = kart2Id;
-        this.positions = PublishSubject.<KeyEvent>create().toSerialized();
+        this.rawPositions = PublishSubject.<KeyEvent>create().toSerialized();
+
+        this.updates = new Pipe<>();
+        this.updates.mergeIn(rawPositions
+                .map(this::keyEventToUpdate)
+                .filter(update -> update != null));
     }
 
     @Override
@@ -73,8 +80,7 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                //TODO figure out why this is causing two updates!
-                positions.onNext(e);
+                rawPositions.onNext(e);
             }
 
             @Override
@@ -90,9 +96,7 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
 
     @Override
     public Observable<BeaconUpdate> updates() {
-        return positions
-                .map(this::keyEventToUpdate)
-                .filter(update -> update != null);
+        return updates.get();
     }
 
     @Override
@@ -118,28 +122,24 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
     private BeaconUpdate keyEventToUpdate(KeyEvent evt) {
         switch (evt.getKeyCode()) {
             case KeyEvent.VK_UP:
-                System.out.println("up");
                 return new BeaconUpdate(
-                        kart1Id,
-                        new PhysicalState(++kart1Position)
+                    kart1Id,
+                    new PhysicalState(++kart1Position)
                 );
             case KeyEvent.VK_DOWN:
-                System.out.println("down");
                 return new BeaconUpdate(
-                        kart1Id,
-                        new PhysicalState(--kart1Position)
+                    kart1Id,
+                    new PhysicalState(--kart1Position)
                 );
             case KeyEvent.VK_W:
-                System.out.println("W");
                 return new BeaconUpdate(
-                        kart2Id,
-                        new PhysicalState(++kart2Position)
+                    kart2Id,
+                    new PhysicalState(++kart2Position)
                 );
             case KeyEvent.VK_S:
-                System.out.println("S");
                 return new BeaconUpdate(
-                        kart2Id,
-                        new PhysicalState(--kart1Position)
+                    kart2Id,
+                    new PhysicalState(--kart2Position)
                 );
             default:
                 return null;
