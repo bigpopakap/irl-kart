@@ -1,5 +1,8 @@
 package irl.util.concurrent;
 
+import irl.util.callbacks.Callback;
+import irl.util.callbacks.Callbacks;
+
 /**
  * TODO bigpopakap Javadoc this class
  *
@@ -10,10 +13,12 @@ public abstract class LoopingRunnable implements PauseableRunnable {
 
     private volatile boolean isStopped;
     private volatile boolean isPaused;
+    private final Callbacks onStop;
 
     public LoopingRunnable() {
         isStopped = true;
         isPaused = false;
+        onStop = new Callbacks();
     }
 
     protected void beforeLoop() { /* default to nothing */ };
@@ -35,7 +40,10 @@ public abstract class LoopingRunnable implements PauseableRunnable {
 
     @Override
     public synchronized void stop() {
-        isStopped = true;
+        if (!isStopped()) {
+            isStopped = true;
+            onStop.run();
+        }
     }
 
     @Override
@@ -51,6 +59,11 @@ public abstract class LoopingRunnable implements PauseableRunnable {
     @Override
     public boolean isStopped() {
         return isStopped;
+    }
+
+    @Override
+    public String onStop(Callback callback) {
+        return onStop.add(callback);
     }
 
     @Override

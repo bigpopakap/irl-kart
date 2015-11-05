@@ -1,8 +1,10 @@
 package irl.util.concurrent;
 
+import irl.util.callbacks.Callback;
+import irl.util.callbacks.Callbacks;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -12,29 +14,32 @@ import java.util.concurrent.TimeUnit;
  */
 public class ParallelRunnable implements StoppableRunnable {
 
-    private final long timeout;
-    private final TimeUnit timeoutUnit;
-    private final StoppableRunnable main;
-    private final StoppableRunnable[] others;
+    private final StoppableRunnable[] runnables;
     private volatile boolean isStopped = true;
+    private final Callbacks onStop;
 
-    public ParallelRunnable(StoppableRunnable main, StoppableRunnable[] others,
-                            long timeout, TimeUnit timeoutUnit) {
-        this.timeout = timeout;
-        this.timeoutUnit = timeoutUnit;
-        this.main = main;
-        this.others = others != null ? others : new StoppableRunnable[0];
+    public ParallelRunnable(boolean stopAllTogether, StoppableRunnable... runnables) {
+        this.runnables = runnables;
+        onStop = new Callbacks();
+
+        //stop all processes when one of them stops
+        if (stopAllTogether) {
+            for (StoppableRunnable runnable : runnables) {
+                runnable.onStop(this::stop);
+            }
+        }
     }
 
     @Override
     public void stop() {
-        main.stop();
+        if (!isStopped()) {
+            for (StoppableRunnable runnable : runnables) {
+                runnable.stop();
+            }
 
-        for (StoppableRunnable runnable : others) {
-            runnable.stop();
+            isStopped = true;
+            onStop.run();
         }
-
-        isStopped = true;
     }
 
     @Override
@@ -43,26 +48,18 @@ public class ParallelRunnable implements StoppableRunnable {
     }
 
     @Override
+    public String onStop(Callback callback) {
+        return onStop.add(callback);
+    }
+
+    @Override
     public void run() {
         isStopped = false;
 
-        ExecutorService mainExec = Executors.newSingleThreadExecutor();
-        ExecutorService otherExec = Executors.newCachedThreadPool();
-
-        for (StoppableRunnable runnable : others) {
-            otherExec.execute(runnable);
+        ExecutorService exec = Executors.newCachedThreadPool();
+        for (StoppableRunnable runnable : runnables) {
+            exec.execute(runnable);
         }
-        mainExec.execute(main);
-
-        //now wait for main to complete before killing the others
-        try {
-            mainExec.awaitTermination(timeout, timeoutUnit);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        //FIXME this doesn't actually stop the other threads
-        //when awaitTermintation() times out
-        stop();
     }
 
 }

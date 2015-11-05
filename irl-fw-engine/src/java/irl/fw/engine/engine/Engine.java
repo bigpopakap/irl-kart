@@ -9,6 +9,8 @@ import irl.fw.engine.events.RemoveBody;
 import irl.fw.engine.events.UpdateBody;
 import irl.fw.engine.physics.PhysicsModeler;
 import irl.fw.engine.physics.impl.NoopPhysicsModeler;
+import irl.util.callbacks.Callback;
+import irl.util.callbacks.Callbacks;
 import irl.util.concurrent.StoppableRunnable;
 import irl.util.reactiveio.Pipe;
 import rx.Observer;
@@ -28,6 +30,8 @@ public class Engine implements StoppableRunnable {
 
     private static final long TIME_STEP = 33; //roughly 30fps
 
+    private final Callbacks onStop;
+
     private final Pipe<PhysicalEvent> eventQueue;
     private final PhysicsModeler phyisicsModel;
     private Subscription subscription;
@@ -40,6 +44,8 @@ public class Engine implements StoppableRunnable {
             throw new RuntimeException("These fields cannot be null");
         }
 
+        this.onStop = new Callbacks();
+
         this.eventQueue = new Pipe<>();
         this.phyisicsModel = new NoopPhysicsModeler();
 
@@ -49,14 +55,20 @@ public class Engine implements StoppableRunnable {
 
     @Override
     public void stop() {
-        if (subscription != null) {
+        if (!isStopped()) {
             subscription.unsubscribe();
+            onStop.run();
         }
     }
 
     @Override
     public boolean isStopped() {
         return subscription == null || subscription.isUnsubscribed();
+    }
+
+    @Override
+    public String onStop(Callback callback) {
+        return onStop.add(callback);
     }
 
     public Pipe<PhysicalEvent> getEventQueue() {

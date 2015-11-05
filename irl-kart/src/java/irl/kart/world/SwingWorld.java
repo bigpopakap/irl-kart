@@ -5,6 +5,8 @@ import irl.fw.engine.beacon.BeaconUpdate;
 import irl.fw.engine.bodies.PhysicalState;
 import irl.fw.engine.graphics.Renderer;
 import irl.fw.engine.physics.BodyInstance;
+import irl.util.callbacks.Callback;
+import irl.util.callbacks.Callbacks;
 import irl.util.concurrent.StoppableRunnable;
 import irl.util.reactiveio.Pipe;
 import rx.Observable;
@@ -15,6 +17,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -29,6 +33,8 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
 
     private final String kart1Id;
     private final String kart2Id;
+
+    private final Callbacks onStop;
 
     private final Subject<KeyEvent, KeyEvent> rawPositions;
     private final Pipe<BeaconUpdate> updates;
@@ -48,17 +54,27 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
         this.updates.mergeIn(rawPositions
                 .map(this::keyEventToUpdate)
                 .filter(update -> update != null));
+
+        onStop = new Callbacks();
     }
 
     @Override
     public void stop() {
-        frame.dispose();
-        isStopped = true;
+        if (!isStopped()) {
+            frame.dispose();
+            isStopped = true;
+            onStop.run();
+        }
     }
 
     @Override
     public boolean isStopped() {
         return isStopped;
+    }
+
+    @Override
+    public String onStop(Callback callback) {
+        return onStop.add(callback);
     }
 
     @Override
@@ -68,8 +84,12 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
         frame.add(panel);
 
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(800, 400);
-        panel.setSize(800, 400);
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                stop();
+            }
+        });
 
         panel.setFocusable(true);
         panel.addKeyListener(new KeyListener() {
@@ -89,6 +109,8 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
             }
         });
 
+        frame.setSize(800, 400);
+        panel.setSize(800, 400);
         frame.setVisible(true);
         panel.setVisible(true);
         panel.requestFocusInWindow();

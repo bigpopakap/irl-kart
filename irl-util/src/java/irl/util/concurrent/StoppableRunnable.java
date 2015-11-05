@@ -1,5 +1,7 @@
 package irl.util.concurrent;
 
+import irl.util.callbacks.Callback;
+
 /**
  * TODO bigpopakap Javadoc this class
  *
@@ -10,5 +12,6 @@ public interface StoppableRunnable extends Runnable {
 
     void stop();
     boolean isStopped();
+    String onStop(Callback callback);
 
 }
