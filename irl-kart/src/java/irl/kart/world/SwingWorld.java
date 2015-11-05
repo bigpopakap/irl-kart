@@ -32,8 +32,8 @@ public class SwingWorld implements Beacon, Renderer, StoppableRunnable {
 
     private final Subject<KeyEvent, KeyEvent> rawPositions;
     private final Pipe<BeaconUpdate> updates;
-    private volatile Integer kart1Position = 0;
-    private volatile Integer kart2Position = 0;
+    private volatile int kart1Position = 0;
+    private volatile int kart2Position = 0;
 
     private volatile boolean isStopped = true;
     private JFrame frame;
