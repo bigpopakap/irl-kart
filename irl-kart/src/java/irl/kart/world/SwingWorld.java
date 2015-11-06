@@ -169,8 +169,6 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
         public void paint(Graphics g) {
             super.paint(g);
 
-            final int PADDING = 10;
-
             Graphics2D g2 = (Graphics2D) g;
             AffineTransform savedTrans = g2.getTransform();
 
@@ -178,26 +176,39 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
             AffineTransform transform = new AffineTransform();
             transform.translate(0, getHeight());
             transform.scale(1, -1);
-            transform.translate(PADDING, PADDING);
+            {
+                final int PADDING = 10;
+                transform.translate(PADDING, PADDING);
+                transform.scale((getWidth() - 2.0*PADDING) / getWidth(),
+                                (getHeight() - 2.0*PADDING) / getHeight());
+            }
             g2.setTransform(transform);
 
             //draw axes
+            g2.setColor(Color.RED);
+            g2.drawRect(0, 0, getWidth(), getHeight());
+            g2.setColor(Color.BLACK);
             drawArrow(g, 0, 0, 400, 0);
             drawArrow(g, 0, 0, 0, 200);
 
+            //TODO transform the graphics so the world is scaled
 //            transform.translate(world.getMinX(), world.getMinY());
 //            transform.scale(getWidth() / world.getWidth(),
 //                            getHeight() / world.getHeight());
             g2.setTransform(transform);
 
-//            g2.draw(new Rectangle2D.Double(10, 20, 200, 20));
+            //draw bounds around the world
+            g2.setColor(Color.GREEN);
             g2.draw(new Rectangle2D.Double(world.getMinX(), world.getMinY(),
                                             world.getWidth(), world.getHeight()));
+            g2.setColor(Color.BLACK);
 
+            //draw all the items in the world
             world.getEntities().stream()
                 .map(entity -> entity.getState().getTransformedShape())
                     .forEach(g2::draw);
 
+            //revert backt to the original transform
             g2.setTransform(savedTrans);
         }
 
