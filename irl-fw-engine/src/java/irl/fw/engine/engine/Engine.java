@@ -77,6 +77,7 @@ public class Engine implements StoppableRunnable {
     @Override
     public void run() {
         subscription = eventQueue.get()
+            .serialize()
             .buffer(TIME_STEP, TimeUnit.MILLISECONDS)
             .timeInterval()
             .subscribe(new Observer<TimeInterval<List<EngineEvent>>>() {

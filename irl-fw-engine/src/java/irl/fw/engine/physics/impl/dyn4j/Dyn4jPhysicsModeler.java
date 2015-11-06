@@ -8,10 +8,15 @@ import irl.fw.engine.events.AddEntity;
 import irl.fw.engine.events.RemoveEntity;
 import irl.fw.engine.events.UpdateEntity;
 import irl.fw.engine.physics.PhysicsModeler;
+import org.dyn4j.collision.manifold.Manifold;
+import org.dyn4j.collision.narrowphase.Penetration;
 import org.dyn4j.dynamics.Body;
+import org.dyn4j.dynamics.BodyFixture;
+import org.dyn4j.dynamics.CollisionListener;
 import org.dyn4j.dynamics.World;
+import org.dyn4j.dynamics.contact.ContactConstraint;
+import org.dyn4j.geometry.Geometry;
 import org.dyn4j.geometry.MassType;
-import org.dyn4j.geometry.Rectangle;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -30,13 +35,39 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
 
     public Dyn4jPhysicsModeler() {
         world = new World();
+        world.setGravity(World.ZERO_GRAVITY);
 
-        //add a floor
-        Body floor = new Body();
-        floor.addFixture(new Rectangle(100, 100));
-        floor.setMass(MassType.INFINITE);
-        floor.translate(-50, -50);
-        world.addBody(floor);
+        BodyFixture fixture = new BodyFixture(Geometry.createRectangle(0.2, 100));
+        fixture.setRestitution(1.0);
+        Body wallr = new Body();
+        wallr.addFixture(fixture);
+        wallr.translate(10, 0);
+        wallr.setMass(MassType.INFINITE);
+        world.addBody(wallr);
+
+        world.setUpdateRequired(true);
+
+        world.addListener(new CollisionListener() {
+            @Override
+            public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2) {
+                return true;
+            }
+
+            @Override
+            public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2, Penetration penetration) {
+                return true;
+            }
+
+            @Override
+            public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2, Manifold manifold) {
+                return true;
+            }
+
+            @Override
+            public boolean collision(ContactConstraint contactConstraint) {
+                return true;
+            }
+        });
     }
 
     @Override
@@ -53,9 +84,11 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         body.setUserData(event.getEntity());
 
         //TODO remove these lines
+        BodyFixture fixture = new BodyFixture(Geometry.createRectangle(0.5, 0.5));
+        fixture.setRestitution(1.0);
         body.translate(5, 5);
         body.setMass(MassType.NORMAL);
-        body.addFixture(new Rectangle(3, 3));
+        body.addFixture(fixture);
         body.setLinearVelocity(1, 1);
 
 //        if (body.getFixtureCount() != 1) {
@@ -63,7 +96,10 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
 //        }
         body.setActive(true);
         body.setAsleep(false);
+
         world.addBody(body);
+        world.setUpdateRequired(true);
+
         return body.getId().toString();
     }
 
@@ -74,6 +110,7 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
 
         if (foundBody.isPresent()) {
             world.removeBody(foundBody.get());
+            world.setUpdateRequired(true);
         } else {
             System.err.println("Tried to remove non-existent body: " + id);
         }
@@ -91,6 +128,8 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
             body.translateToOrigin();
             body.translate(newState.getCenter());
             body.setLinearVelocity(newState.getVelocity());
+
+            world.setUpdateRequired(true);
         } else {
             System.err.println("Tried to update non-existent body: " + id);
         }
