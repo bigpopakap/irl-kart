@@ -1,9 +1,7 @@
 package irl.fw.engine.graphics.impl;
 
 import irl.fw.engine.graphics.Renderer;
-import irl.fw.engine.entity.EntityInstance;
-
-import java.util.Collection;
+import irl.fw.engine.world.World;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -14,7 +12,7 @@ import java.util.Collection;
 public class NoopRenderer implements Renderer {
 
     @Override
-    public void render(Collection<EntityInstance> entities, long timeStep) {
+    public void render(World world, long timeStep) {
         //do nothing
     }
 

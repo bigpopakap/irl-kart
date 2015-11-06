@@ -2,10 +2,10 @@ package irl.kart.world;
 
 import irl.fw.engine.entity.state.EntityStateUpdate;
 import irl.fw.engine.geometry.Vector2D;
+import irl.fw.engine.world.World;
 import irl.kart.beacon.KartBeacon;
 import irl.kart.beacon.KartUpdate;
 import irl.fw.engine.graphics.Renderer;
-import irl.fw.engine.entity.EntityInstance;
 import irl.util.callbacks.Callback;
 import irl.util.callbacks.Callbacks;
 import irl.util.concurrent.StoppableRunnable;
@@ -20,9 +20,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -125,23 +122,9 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
     }
 
     @Override
-    public void render(Collection<EntityInstance> entities, long timeSinceLastUpdate) {
-        long now = System.currentTimeMillis();
-
-        List<String> lines = new ArrayList<>();
-
-        lines.add("World");
-        lines.add(String.format("Updated at %s", (now - timeSinceLastUpdate)));
-        lines.add(String.format("rendered %s millis later", timeSinceLastUpdate));
-
-        for (EntityInstance entityInstance : entities) {
-            lines.add(String.format("Entity %s", entityInstance.toString()));
-            lines.add(String.format("State %s", entityInstance.getState()));
-            lines.add("");
-        }
-
+    public void render(World world, long timeSinceLastUpdate) {
         if (frame != null && panel != null) {
-            panel.setContents(lines);
+            panel.update(world);
             frame.repaint();
         }
     }
@@ -174,23 +157,17 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
 
         public static final long serialVersionUID = 1L;
 
-        private volatile List<String> contents;
+        private World world;
 
-        public synchronized void setContents(List<String> contents) {
-            this.contents = contents;
+        public synchronized void update(World world) {
+            this.world = world;
         }
 
         @Override
         public void paint(Graphics g) {
             super.paint(g);
 
-            if (contents != null) {
-                int y = 25;
-                for (String content : contents) {
-                    g.drawString(content, 25, y);
-                    y += 20;
-                }
-            }
+            //TODO paint the world using scaled dimensions
         }
     }
 }

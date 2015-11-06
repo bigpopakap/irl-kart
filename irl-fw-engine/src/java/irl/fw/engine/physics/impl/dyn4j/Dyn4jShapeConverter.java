@@ -38,7 +38,7 @@ import org.dyn4j.geometry.*;
  * @version 3.1.7
  * @since 3.1.5
  */
-public final class Dyn4jShapeConverter {
+class Dyn4jShapeConverter {
 
     public static ImmutableShape toShape(Shape shape) {
         //noop

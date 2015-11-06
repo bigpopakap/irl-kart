@@ -1,8 +1,6 @@
 package irl.fw.engine.graphics;
 
-import irl.fw.engine.entity.EntityInstance;
-
-import java.util.Collection;
+import irl.fw.engine.world.World;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -12,6 +10,6 @@ import java.util.Collection;
  */
 public interface Renderer {
 
-    void render(Collection<EntityInstance> entities, long timeSinceLastUpdate);
+    void render(World world, long timeSinceLastUpdate);
 
 }

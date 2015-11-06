@@ -1,12 +1,10 @@
 package irl.fw.engine.physics;
 
-import irl.fw.engine.entity.EntityInstance;
 import irl.fw.engine.collisions.CollisionResolver;
 import irl.fw.engine.events.AddEntity;
 import irl.fw.engine.events.RemoveEntity;
 import irl.fw.engine.events.UpdateEntity;
-
-import java.util.Collection;
+import irl.fw.engine.world.World;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -16,7 +14,7 @@ import java.util.Collection;
  */
 public interface PhysicsModeler {
 
-    Collection<EntityInstance> getEntities();
+    World getWorld();
 
     String add(AddEntity add);
     void remove(RemoveEntity remove);

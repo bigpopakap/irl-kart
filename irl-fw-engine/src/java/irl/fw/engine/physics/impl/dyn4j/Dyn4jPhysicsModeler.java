@@ -10,6 +10,7 @@ import irl.fw.engine.events.AddEntity;
 import irl.fw.engine.events.RemoveEntity;
 import irl.fw.engine.events.UpdateEntity;
 import irl.fw.engine.physics.PhysicsModeler;
+import irl.fw.engine.world.SimpleWorld;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.dynamics.World;
@@ -50,10 +51,12 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
     }
 
     @Override
-    public Collection<EntityInstance> getEntities() {
-        return world.getBodies().parallelStream()
-                    .map(this::bodyToEntity)
-                    .collect(Collectors.toList());
+    public irl.fw.engine.world.World getWorld() {
+        Collection<EntityInstance> entityInstances
+            = world.getBodies().parallelStream()
+                .map(this::bodyToEntity)
+                .collect(Collectors.toList());
+        return new SimpleWorld(entityInstances);
     }
 
     @Override
