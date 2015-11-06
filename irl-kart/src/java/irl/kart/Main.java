@@ -2,6 +2,7 @@ package irl.kart;
 
 import irl.fw.engine.engine.Engine;
 import irl.fw.engine.entity.state.EntityStateBuilder;
+import irl.fw.engine.geometry.Angle;
 import irl.fw.engine.geometry.ImmutableShape;
 import irl.fw.engine.geometry.Vector2D;
 import irl.kart.entities.Kart;
@@ -41,6 +42,7 @@ public class Main {
                                 new Kart(update.getExternalId(), world),
                                 new EntityStateBuilder()
                                     .shape(DEFAULT_KART_SHAPE)
+                                    .rotation(Angle.deg(0))
                                     .center(new Vector2D(0, 0))
                                     .velocity(new Vector2D(0, 0))
                                     .build()

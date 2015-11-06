@@ -17,6 +17,14 @@ public interface World {
     double getMinY();
     double getMaxY();
 
+    default double getWidth() {
+        return getMaxX() - getMinX();
+    }
+
+    default double getHeight() {
+        return getMaxY() - getMinY();
+    }
+
     Collection<EntityInstance> getEntities();
 
 }

@@ -1,5 +1,6 @@
 package irl.fw.engine.entity.state;
 
+import irl.fw.engine.geometry.Angle;
 import irl.fw.engine.geometry.ImmutableShape;
 import irl.fw.engine.geometry.Vector2D;
 
@@ -11,9 +12,10 @@ import irl.fw.engine.geometry.Vector2D;
  */
 public class EntityStateBuilder {
 
-    protected ImmutableShape shape;
-    protected Vector2D center;
-    protected Vector2D velocity;
+    private ImmutableShape shape;
+    private Angle rotation;
+    private Vector2D center;
+    private Vector2D velocity;
 
     public EntityStateBuilder() {
         //do nothing
@@ -21,6 +23,11 @@ public class EntityStateBuilder {
 
     public EntityStateBuilder shape(ImmutableShape shape) {
         this.shape = shape;
+        return this;
+    }
+
+    public EntityStateBuilder rotation(Angle rotation) {
+        this.rotation = rotation;
         return this;
     }
 
@@ -35,7 +42,7 @@ public class EntityStateBuilder {
     }
 
     public EntityState build() {
-        return new EntityState(shape, center, velocity);
+        return new EntityState(shape, rotation, center, velocity);
     }
 
     @Override

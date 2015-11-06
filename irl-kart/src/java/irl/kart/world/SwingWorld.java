@@ -20,6 +20,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -167,7 +169,54 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
         public void paint(Graphics g) {
             super.paint(g);
 
-            //TODO paint the world using scaled dimensions
+            final int PADDING = 10;
+
+            Graphics2D g2 = (Graphics2D) g;
+            AffineTransform savedTrans = g2.getTransform();
+
+            //translate so the axes are normal-people axes
+            AffineTransform transform = new AffineTransform();
+            transform.translate(0, getHeight());
+            transform.scale(1, -1);
+            transform.translate(PADDING, PADDING);
+            g2.setTransform(transform);
+
+            //draw axes
+            drawArrow(g, 0, 0, 400, 0);
+            drawArrow(g, 0, 0, 0, 200);
+
+//            transform.translate(world.getMinX(), world.getMinY());
+//            transform.scale(getWidth() / world.getWidth(),
+//                            getHeight() / world.getHeight());
+            g2.setTransform(transform);
+
+//            g2.draw(new Rectangle2D.Double(10, 20, 200, 20));
+            g2.draw(new Rectangle2D.Double(world.getMinX(), world.getMinY(),
+                                            world.getWidth(), world.getHeight()));
+
+            world.getEntities().stream()
+                .map(entity -> entity.getState().getTransformedShape())
+                    .forEach(g2::draw);
+
+            g2.setTransform(savedTrans);
+        }
+
+        private void drawArrow(Graphics g1, int x1, int y1, int x2, int y2) {
+            final int ARR_SIZE = 4;
+
+            Graphics2D g = (Graphics2D) g1.create();
+
+            double dx = x2 - x1, dy = y2 - y1;
+            double angle = Math.atan2(dy, dx);
+            int len = (int) Math.sqrt(dx*dx + dy*dy);
+            AffineTransform at = AffineTransform.getTranslateInstance(x1, y1);
+            at.concatenate(AffineTransform.getRotateInstance(angle));
+            g.transform(at);
+
+            // Draw horizontal arrow starting in (0, 0)
+            g.drawLine(0, 0, len, 0);
+            g.fillPolygon(new int[]{len, len - ARR_SIZE, len - ARR_SIZE, len},
+                    new int[]{0, -ARR_SIZE, ARR_SIZE, 0}, 4);
         }
     }
 }

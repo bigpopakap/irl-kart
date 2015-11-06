@@ -24,6 +24,10 @@ public class ImmutableShape implements Shape {
         this.shape = shape;
     }
 
+    public ImmutableShape transform(AffineTransform transform) {
+        return new ImmutableShape(transform.createTransformedShape(this));
+    }
+
     @Override
     public Rectangle getBounds() {
         return shape.getBounds();

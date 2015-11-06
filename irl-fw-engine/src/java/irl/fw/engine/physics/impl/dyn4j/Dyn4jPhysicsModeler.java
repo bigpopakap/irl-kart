@@ -38,11 +38,11 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         world = new World();
         world.setGravity(World.ZERO_GRAVITY);
 
-        BodyFixture fixture = new BodyFixture(Geometry.createRectangle(0.2, 100));
+        BodyFixture fixture = new BodyFixture(Geometry.createRectangle(20, 20));
         fixture.setRestitution(1.0);
         Body wallr = new Body();
         wallr.addFixture(fixture);
-        wallr.translate(10.1, 0);
+        wallr.translate(100, 40);
         wallr.setMass(MassType.INFINITE);
         world.addBody(wallr);
 
@@ -92,12 +92,12 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         body.setUserData(newEntity);
 
         //TODO remove these lines
-        BodyFixture fixture = new BodyFixture(Geometry.createRectangle(0.5, 0.5));
+        BodyFixture fixture = new BodyFixture(Geometry.createRectangle(10, 10));
         fixture.setRestitution(1.0);
-        body.translate(5, 5);
+        body.translate(20, 20);
         body.setMass(MassType.NORMAL);
         body.addFixture(fixture);
-        body.setLinearVelocity(1, 1);
+        body.setLinearVelocity(5, 5);
 
 //        if (body.getFixtureCount() != 1) {
 //            throw new IllegalStateException("We need exactly one fixture per body");
@@ -164,6 +164,7 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
 
         EntityState state = new EntityStateBuilder()
             .shape(toShape(body.getFixture(0).getShape()))
+            .rotation(toRadAngle(body.getTransform().getRotation()))
             .center(toVector(body.getWorldCenter()))
             .velocity(toVector(body.getLinearVelocity()))
             .build();
