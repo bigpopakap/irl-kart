@@ -12,6 +12,10 @@ import java.util.Collection;
  */
 public interface World {
 
+    double getMinX();
+    double getMaxX();
+    double getMinY();
+    double getMaxY();
 
     Collection<EntityInstance> getEntities();
 

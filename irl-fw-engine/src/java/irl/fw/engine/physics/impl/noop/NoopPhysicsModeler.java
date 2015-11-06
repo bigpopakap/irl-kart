@@ -29,7 +29,7 @@ public class NoopPhysicsModeler implements PhysicsModeler {
 
     @Override
     public World getWorld() {
-        return new SimpleWorld(universe.toCollection());
+        return new SimpleWorld(universe.toCollection(), -100, 100, -100, 100);
     }
 
     @Override

@@ -14,12 +14,11 @@ import irl.fw.engine.world.SimpleWorld;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.dynamics.World;
+import org.dyn4j.geometry.AABB;
 import org.dyn4j.geometry.Geometry;
 import org.dyn4j.geometry.MassType;
 
-import java.util.Collection;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static irl.fw.engine.physics.impl.dyn4j.Dyn4jConverter.*;
@@ -52,11 +51,36 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
 
     @Override
     public irl.fw.engine.world.World getWorld() {
-        Collection<EntityInstance> entityInstances
+        Set<EntityInstance> entityInstances
             = world.getBodies().parallelStream()
                 .map(this::bodyToEntity)
-                .collect(Collectors.toList());
-        return new SimpleWorld(entityInstances);
+                .collect(Collectors.toSet());
+
+        Set<AABB> allBounds = world.getBodies().parallelStream()
+                        .map(body -> body.createAABB())
+                        .collect(Collectors.toSet());
+
+        double minX = allBounds.parallelStream()
+                .map(bound -> bound.getMinX())
+                .min(Double::compare)
+                .orElse(0.0);
+
+        double maxX = allBounds.parallelStream()
+                .map(bound -> bound.getMaxX())
+                .max(Double::compare)
+                .orElse(0.0);
+
+        double minY = allBounds.parallelStream()
+                .map(bound -> bound.getMinY())
+                .min(Double::compare)
+                .orElse(0.0);
+
+        double maxY = allBounds.parallelStream()
+                .map(bound -> bound.getMaxY())
+                .max(Double::compare)
+                .orElse(0.0);
+
+        return new SimpleWorld(entityInstances, minX, maxX, minY, maxY);
     }
 
     @Override
