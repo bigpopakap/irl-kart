@@ -1,6 +1,6 @@
 package irl.fw.engine.entity;
 
-import irl.fw.engine.entity.state.EntityState;
+import irl.fw.engine.entity.state.EntityStateUpdate;
 import rx.Observable;
 
 /**
@@ -12,7 +12,7 @@ import rx.Observable;
 public interface VirtualEntity extends Entity {
 
     @Override
-    default Observable<EntityState> updates() {
+    default Observable<EntityStateUpdate> updates() {
         return Observable.empty();
     }
 

@@ -124,12 +124,13 @@ public class Engine implements StoppableRunnable {
     public void handleEvent(EngineEvent event) {
         //TODO use command pattern instead of hardcoding a method per event
         if (event instanceof AddEntity) {
-            AddEntity addEntityEvent = (AddEntity) event;
+            AddEntity addEvent = (AddEntity) event;
             Entity newEntity = ((AddEntity) event).getEntity();
 
-            String newEntityId = phyisicsModel.add(addEntityEvent);
+            String newEntityId = phyisicsModel.add(addEvent);
+
             eventQueue.mergeIn(newEntity.updates()
-                    .map(state -> new UpdateEntity(newEntityId, state)));
+                    .map(stateUpdate -> new UpdateEntity(newEntityId, stateUpdate)));
         }
         else if (event instanceof RemoveEntity) {
             phyisicsModel.remove((RemoveEntity) event);

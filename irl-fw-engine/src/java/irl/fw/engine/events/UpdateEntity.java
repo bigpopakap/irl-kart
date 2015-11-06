@@ -1,6 +1,6 @@
 package irl.fw.engine.events;
 
-import irl.fw.engine.entity.state.EntityState;
+import irl.fw.engine.entity.state.EntityStateUpdate;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -11,19 +11,19 @@ import irl.fw.engine.entity.state.EntityState;
 public class UpdateEntity implements EngineEvent {
 
     private final String entityId;
-    private final EntityState newState;
+    private final EntityStateUpdate stateUpdates;
 
-    public UpdateEntity(String entityId, EntityState newState) {
+    public UpdateEntity(String entityId, EntityStateUpdate stateUpdates) {
         this.entityId = entityId;
-        this.newState = newState;
+        this.stateUpdates = stateUpdates;
     }
 
     public String getEntityId() {
         return entityId;
     }
 
-    public EntityState getNewState() {
-        return newState;
+    public EntityStateUpdate getStateUpdate() {
+        return stateUpdates;
     }
 
 }

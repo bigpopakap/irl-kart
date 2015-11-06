@@ -1,6 +1,7 @@
 package irl.fw.engine.entity;
 
 import irl.fw.engine.entity.state.EntityState;
+import irl.fw.engine.entity.state.EntityStateUpdate;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -28,6 +29,10 @@ public class EntityInstance {
 
     public EntityInstance setState(EntityState state) {
         return new EntityInstance(entity, state);
+    }
+
+    public EntityInstance updateState(EntityStateUpdate stateUpdates) {
+        return setState(stateUpdates.fillAndBuild(getState()));
     }
 
 }

@@ -18,9 +18,9 @@ public interface PhysicsModeler {
 
     Collection<EntityInstance> getEntities();
 
-    String add(AddEntity event);
-    void remove(RemoveEntity event);
-    void update(UpdateEntity event);
+    String add(AddEntity add);
+    void remove(RemoveEntity remove);
+    void update(UpdateEntity update);
 
     void model(CollisionResolver collisionResolver, long timeStep);
 

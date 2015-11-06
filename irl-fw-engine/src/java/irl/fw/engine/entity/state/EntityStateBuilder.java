@@ -11,9 +11,9 @@ import irl.fw.engine.geometry.Vector2D;
  */
 public class EntityStateBuilder {
 
-    private ImmutableShape shape;
-    private Vector2D center;
-    private Vector2D velocity;
+    protected ImmutableShape shape;
+    protected Vector2D center;
+    protected Vector2D velocity;
 
     public EntityStateBuilder() {
         //do nothing
@@ -38,4 +38,8 @@ public class EntityStateBuilder {
         return new EntityState(shape, center, velocity);
     }
 
+    @Override
+    public String toString() {
+        return "Builder: " + build().toString();
+    }
 }

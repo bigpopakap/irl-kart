@@ -5,6 +5,7 @@ import irl.fw.engine.entity.EntityInstance;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.collisions.CollisionResolver;
 import irl.fw.engine.entity.state.EntityStateBuilder;
+import irl.fw.engine.entity.state.EntityStateUpdate;
 import irl.fw.engine.events.AddEntity;
 import irl.fw.engine.events.RemoveEntity;
 import irl.fw.engine.events.UpdateEntity;
@@ -56,10 +57,12 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
     }
 
     @Override
-    public synchronized String add(AddEntity event) {
+    public synchronized String add(AddEntity add) {
+        Entity newEntity = add.getEntity();
+
         Body body = new Body();
         //FIXME need to set size, shape, mass, velocity and stuff
-        body.setUserData(event.getEntity());
+        body.setUserData(newEntity);
 
         //TODO remove these lines
         BodyFixture fixture = new BodyFixture(Geometry.createRectangle(0.5, 0.5));
@@ -82,26 +85,30 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
     }
 
     @Override
-    public synchronized void remove(RemoveEntity event) {
-        String id = event.getEntityId();
-        Optional<Body> foundBody = findBody(id);
+    public synchronized void remove(RemoveEntity remove) {
+        String entityId = remove.getEntityId();
+        Optional<Body> foundBody = findBody(entityId);
 
         if (foundBody.isPresent()) {
             world.removeBody(foundBody.get());
             world.setUpdateRequired(true);
         } else {
-            System.err.println("Tried to remove non-existent body: " + id);
+            System.err.println("Tried to remove non-existent body: " + entityId);
         }
     }
 
     @Override
-    public synchronized void update(UpdateEntity event) {
-        String id = event.getEntityId();
-        Optional<Body> foundBody = findBody(id);
+    public synchronized void update(UpdateEntity update) {
+        String entityId = update.getEntityId();
+        EntityStateUpdate stateUpdate = update.getStateUpdate();
+
+        Optional<Body> foundBody = findBody(entityId);
 
         if (foundBody.isPresent()) {
             Body body = foundBody.get();
-            EntityState newState = event.getNewState();
+
+            EntityInstance current = bodyToEntity(body);
+            EntityState newState = stateUpdate.fillAndBuild(current.getState());
 
             body.translateToOrigin();
             body.translate(fromVector(newState.getCenter()));
@@ -109,7 +116,7 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
 
             world.setUpdateRequired(true);
         } else {
-            System.err.println("Tried to update non-existent body: " + id);
+            System.err.println("Tried to update non-existent body: " + entityId);
         }
     }
 

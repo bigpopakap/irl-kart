@@ -1,6 +1,6 @@
 package irl.fw.engine.entity;
 
-import irl.fw.engine.entity.state.EntityState;
+import irl.fw.engine.entity.state.EntityStateUpdate;
 import rx.Observable;
 
 /**
@@ -11,6 +11,6 @@ import rx.Observable;
  */
 public interface Entity {
 
-    Observable<EntityState> updates();
+    Observable<EntityStateUpdate> updates();
 
 }

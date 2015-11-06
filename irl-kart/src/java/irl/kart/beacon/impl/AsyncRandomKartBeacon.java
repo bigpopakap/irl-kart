@@ -1,5 +1,6 @@
 package irl.kart.beacon.impl;
 
+import irl.fw.engine.entity.state.EntityStateUpdate;
 import irl.fw.engine.geometry.Vector2D;
 import irl.kart.beacon.KartBeacon;
 import irl.kart.beacon.KartUpdate;
@@ -40,8 +41,9 @@ public class AsyncRandomKartBeacon extends LoopingRunnable implements KartBeacon
         for (String externalId : externalIds) {
             KartUpdate update = new KartUpdate(
                 externalId,
-                new Vector2D(iteration, iteration),
-                new Vector2D(iteration, iteration)
+                new EntityStateUpdate()
+                    .center(new Vector2D(iteration, iteration))
+                    .velocity(new Vector2D(iteration, iteration))
             );
             iteration++;
 

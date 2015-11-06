@@ -37,14 +37,13 @@ public class Main {
         engine.getEventQueue().mergeIn(
                 world.updates()
                         .distinct(update -> update.getExternalId())
-                        .map(update -> new Kart(DEFAULT_KART_SHAPE, update.getExternalId(), world))
-                        .map(kart -> new AddEntity(
-                                kart,
+                        .map(update -> new AddEntity(
+                                new Kart(update.getExternalId(), world),
                                 new EntityStateBuilder()
-                                        .shape(null)
-                                        .center(new Vector2D(0, 0))
-                                        .velocity(new Vector2D(0, 0))
-                                        .build()
+                                    .shape(DEFAULT_KART_SHAPE)
+                                    .center(new Vector2D(0, 0))
+                                    .velocity(new Vector2D(0, 0))
+                                    .build()
                         ))
         );
 

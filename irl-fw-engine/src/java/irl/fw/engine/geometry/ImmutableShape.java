@@ -16,6 +16,10 @@ public class ImmutableShape implements Shape {
 
     private final Shape shape;
 
+    /**
+     * Make sure you don't change the input once you've
+     * passed it in here
+     */
     public ImmutableShape(Shape shape) {
         this.shape = shape;
     }

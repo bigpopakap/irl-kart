@@ -1,5 +1,6 @@
 package irl.kart.world;
 
+import irl.fw.engine.entity.state.EntityStateUpdate;
 import irl.fw.engine.geometry.Vector2D;
 import irl.kart.beacon.KartBeacon;
 import irl.kart.beacon.KartUpdate;
@@ -163,8 +164,9 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
     private KartUpdate makeKartUpdate(String kartId, int value) {
         return new KartUpdate(
             kartId,
-            new Vector2D(value, value),
-            new Vector2D(value, value)
+            new EntityStateUpdate()
+                .center(new Vector2D(value, value))
+                .velocity(new Vector2D(value, value))
         );
     }
 
