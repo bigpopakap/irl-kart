@@ -1,6 +1,6 @@
 package irl.fw.engine.entity;
 
-import irl.fw.engine.physics.EntityState;
+import irl.fw.engine.entity.state.EntityState;
 import rx.Observable;
 
 /**

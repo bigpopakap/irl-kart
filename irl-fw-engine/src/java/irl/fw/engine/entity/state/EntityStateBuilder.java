@@ -1,0 +1,41 @@
+package irl.fw.engine.entity.state;
+
+import irl.fw.engine.geometry.Vector2D;
+import org.dyn4j.geometry.Shape;
+
+/**
+ * TODO bigpopakap Javadoc this class
+ *
+ * @author bigpopakap
+ * @since 11/6/15
+ */
+public class EntityStateBuilder {
+
+    private Shape shape;
+    private Vector2D center;
+    private Vector2D velocity;
+
+    public EntityStateBuilder() {
+        //do nothing
+    }
+
+    public EntityStateBuilder shape(Shape shape) {
+        this.shape = shape;
+        return this;
+    }
+
+    public EntityStateBuilder center(Vector2D center) {
+        this.center = center;
+        return this;
+    }
+
+    public EntityStateBuilder velocity(Vector2D velocity) {
+        this.velocity = velocity;
+        return this;
+    }
+
+    public EntityState build() {
+        return new EntityState(shape, center, velocity);
+    }
+
+}

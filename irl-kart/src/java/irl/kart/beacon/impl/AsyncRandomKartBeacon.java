@@ -1,10 +1,9 @@
-package irl.fw.engine.beacon.impl;
+package irl.kart.beacon.impl;
 
-import irl.fw.engine.beacon.Beacon;
-import irl.fw.engine.beacon.BeaconUpdate;
-import irl.fw.engine.physics.EntityState;
+import irl.fw.engine.geometry.Vector2D;
+import irl.kart.beacon.KartBeacon;
+import irl.kart.beacon.KartUpdate;
 import irl.util.concurrent.LoopingRunnable;
-import org.dyn4j.geometry.Vector2;
 import rx.Observable;
 import rx.subjects.PublishSubject;
 import rx.subjects.Subject;
@@ -15,18 +14,18 @@ import rx.subjects.Subject;
  * @author bigpopakap
  * @since 11/1/15
  */
-public class AsyncRandomBeacon extends LoopingRunnable implements Beacon {
+public class AsyncRandomKartBeacon extends LoopingRunnable implements KartBeacon {
 
     private final String[] externalIds;
-    private final Subject<BeaconUpdate, BeaconUpdate> positions;
+    private final Subject<KartUpdate, KartUpdate> positions;
     private volatile int iteration = 0;
 
-    public AsyncRandomBeacon(String... externalIds) {
+    public AsyncRandomKartBeacon(String... externalIds) {
         this.externalIds = externalIds;
-        positions = PublishSubject.<BeaconUpdate>create().toSerialized();
+        positions = PublishSubject.<KartUpdate>create().toSerialized();
     }
 
-    public Observable<BeaconUpdate> updates() {
+    public Observable<KartUpdate> updates() {
         return positions;
     }
 
@@ -39,10 +38,10 @@ public class AsyncRandomBeacon extends LoopingRunnable implements Beacon {
         }
 
         for (String externalId : externalIds) {
-            BeaconUpdate update = new BeaconUpdate(
+            KartUpdate update = new KartUpdate(
                 externalId,
-                new EntityState(new Vector2(iteration, iteration),
-                                new Vector2(iteration, iteration))
+                new Vector2D(iteration, iteration),
+                new Vector2D(iteration, iteration)
             );
             iteration++;
 

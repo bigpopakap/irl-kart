@@ -1,7 +1,7 @@
 package irl.fw.engine.physics.impl.noop;
 
 import irl.fw.engine.entity.Entity;
-import irl.fw.engine.physics.EntityState;
+import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.collisions.CollisionResolver;
 import irl.fw.engine.events.AddEntity;
 import irl.fw.engine.events.RemoveEntity;

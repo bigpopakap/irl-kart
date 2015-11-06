@@ -2,19 +2,16 @@ package irl.fw.engine.physics.impl.dyn4j;
 
 import irl.fw.engine.entity.Entity;
 import irl.fw.engine.entity.EntityInstance;
-import irl.fw.engine.physics.EntityState;
+import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.collisions.CollisionResolver;
+import irl.fw.engine.entity.state.EntityStateBuilder;
 import irl.fw.engine.events.AddEntity;
 import irl.fw.engine.events.RemoveEntity;
 import irl.fw.engine.events.UpdateEntity;
 import irl.fw.engine.physics.PhysicsModeler;
-import org.dyn4j.collision.manifold.Manifold;
-import org.dyn4j.collision.narrowphase.Penetration;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
-import org.dyn4j.dynamics.CollisionListener;
 import org.dyn4j.dynamics.World;
-import org.dyn4j.dynamics.contact.ContactConstraint;
 import org.dyn4j.geometry.Geometry;
 import org.dyn4j.geometry.MassType;
 
@@ -22,6 +19,8 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static irl.fw.engine.physics.impl.dyn4j.Dyn4jConverter.*;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -41,33 +40,11 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         fixture.setRestitution(1.0);
         Body wallr = new Body();
         wallr.addFixture(fixture);
-        wallr.translate(10, 0);
+        wallr.translate(10.1, 0);
         wallr.setMass(MassType.INFINITE);
         world.addBody(wallr);
 
         world.setUpdateRequired(true);
-
-        world.addListener(new CollisionListener() {
-            @Override
-            public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2) {
-                return true;
-            }
-
-            @Override
-            public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2, Penetration penetration) {
-                return true;
-            }
-
-            @Override
-            public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2, Manifold manifold) {
-                return true;
-            }
-
-            @Override
-            public boolean collision(ContactConstraint contactConstraint) {
-                return true;
-            }
-        });
     }
 
     @Override
@@ -126,8 +103,8 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
             EntityState newState = event.getNewState();
 
             body.translateToOrigin();
-            body.translate(newState.getCenter());
-            body.setLinearVelocity(newState.getVelocity());
+            body.translate(fromVector(newState.getCenter()));
+            body.setLinearVelocity(fromVector(newState.getVelocity()));
 
             world.setUpdateRequired(true);
         } else {
@@ -150,10 +127,11 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
     private EntityInstance bodyToEntity(Body body) {
         Entity entity = (Entity) body.getUserData();
 
-        EntityState state = new EntityState(
-            body.getWorldCenter(),
-            body.getLinearVelocity()
-        );
+        EntityState state = new EntityStateBuilder()
+            .shape(body.getFixture(0).getShape())
+            .center(toVector(body.getWorldCenter()))
+            .velocity(toVector(body.getLinearVelocity()))
+            .build();
 
         return new EntityInstance(entity, state);
     }

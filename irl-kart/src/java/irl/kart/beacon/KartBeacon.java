@@ -1,4 +1,4 @@
-package irl.fw.engine.beacon;
+package irl.kart.beacon;
 
 import rx.Observable;
 
@@ -8,8 +8,8 @@ import rx.Observable;
  * @author bigpopakap
  * @since 11/1/15
  */
-public interface Beacon {
+public interface KartBeacon {
 
-    Observable<BeaconUpdate> updates();
+    Observable<KartUpdate> updates();
 
 }
