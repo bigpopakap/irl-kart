@@ -2,14 +2,15 @@ package irl.kart;
 
 import irl.fw.engine.engine.Engine;
 import irl.fw.engine.entity.state.EntityStateBuilder;
+import irl.fw.engine.geometry.ImmutableShape;
 import irl.fw.engine.geometry.Vector2D;
 import irl.kart.entities.Kart;
 import irl.kart.world.SwingWorld;
 import irl.fw.engine.events.AddEntity;
 import irl.fw.engine.engine.EngineBuilder;
 import irl.util.concurrent.ParallelRunnable;
-import org.dyn4j.geometry.Rectangle;
-import org.dyn4j.geometry.Shape;
+
+import java.awt.geom.Rectangle2D;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -28,7 +29,9 @@ public class Main {
             .renderer(world)
             .build();
 
-        final Shape DEFAULT_KART_SHAPE = new Rectangle(1.0, 2.0);
+        final ImmutableShape DEFAULT_KART_SHAPE = new ImmutableShape(
+            new Rectangle2D.Double(0.0, 0.0, 1.0, 2.0)
+        );
         //TODO this should move somewhere more generic
         //set up a process to add new entity whenever a new kart is detected
         engine.getEventQueue().mergeIn(

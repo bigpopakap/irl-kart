@@ -96,6 +96,12 @@ public class Engine implements StoppableRunnable {
 
                 @Override
                 public void onNext(TimeInterval<List<EngineEvent>> eventBatch) {
+                    /*
+                     * TODO the game loop logic should be fixed
+                     * It seems to know that there is *some* lag when there are
+                     * lots of objects in the world, but the rendering is
+                     * wayyyy more laggy than this thing thinks it is
+                     */
                     long elapsed = eventBatch.getIntervalInMilliseconds();
                     lag += elapsed;
 

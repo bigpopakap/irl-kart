@@ -21,6 +21,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static irl.fw.engine.physics.impl.dyn4j.Dyn4jConverter.*;
+import static irl.fw.engine.physics.impl.dyn4j.Dyn4jShapeConverter.*;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -128,7 +129,7 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         Entity entity = (Entity) body.getUserData();
 
         EntityState state = new EntityStateBuilder()
-            .shape(body.getFixture(0).getShape())
+            .shape(toShape(body.getFixture(0).getShape()))
             .center(toVector(body.getWorldCenter()))
             .velocity(toVector(body.getLinearVelocity()))
             .build();

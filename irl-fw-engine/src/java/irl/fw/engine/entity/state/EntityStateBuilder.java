@@ -1,7 +1,7 @@
 package irl.fw.engine.entity.state;
 
+import irl.fw.engine.geometry.ImmutableShape;
 import irl.fw.engine.geometry.Vector2D;
-import org.dyn4j.geometry.Shape;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -11,7 +11,7 @@ import org.dyn4j.geometry.Shape;
  */
 public class EntityStateBuilder {
 
-    private Shape shape;
+    private ImmutableShape shape;
     private Vector2D center;
     private Vector2D velocity;
 
@@ -19,7 +19,7 @@ public class EntityStateBuilder {
         //do nothing
     }
 
-    public EntityStateBuilder shape(Shape shape) {
+    public EntityStateBuilder shape(ImmutableShape shape) {
         this.shape = shape;
         return this;
     }
