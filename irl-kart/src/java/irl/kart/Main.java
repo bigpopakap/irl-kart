@@ -31,7 +31,7 @@ public class Main {
             .build();
 
         final ImmutableShape DEFAULT_KART_SHAPE = new ImmutableShape(
-            new Rectangle2D.Double(0.0, 0.0, 1.0, 2.0)
+            new Rectangle2D.Double(0, 0, 10, 20)
         );
         //TODO this should move somewhere more generic
         //set up a process to add new entity whenever a new kart is detected

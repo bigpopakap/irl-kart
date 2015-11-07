@@ -24,10 +24,7 @@
  */
 package irl.fw.engine.physics.impl.dyn4j;
 
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
-import java.awt.geom.Path2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.*;
 
 import irl.fw.engine.geometry.ImmutableShape;
 import org.dyn4j.geometry.*;
@@ -39,6 +36,12 @@ import org.dyn4j.geometry.*;
  * @since 3.1.5
  */
 class Dyn4jShapeConverter {
+
+    public static Convex fromShape(ImmutableShape shape) {
+        //FIXME actually return the shape
+        Rectangle2D bounds = shape.getBounds2D();
+        return new Rectangle(bounds.getWidth(), bounds.getHeight());
+    }
 
     public static ImmutableShape toShape(Shape shape) {
         //noop

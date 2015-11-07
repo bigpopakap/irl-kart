@@ -31,9 +31,17 @@ public class EntityStateUpdate {
         return this;
     }
 
+    public Optional<ImmutableShape> getShape() {
+        return shape;
+    }
+
     public EntityStateUpdate rotation(Angle rotation) {
         this.rotation = Optional.ofNullable(rotation);
         return this;
+    }
+
+    public Optional<Angle> getRotation() {
+        return rotation;
     }
 
     public EntityStateUpdate center(Vector2D center) {
@@ -41,9 +49,17 @@ public class EntityStateUpdate {
         return this;
     }
 
+    public Optional<Vector2D> getCenter() {
+        return center;
+    }
+
     public EntityStateUpdate velocity(Vector2D velocity) {
         this.velocity = Optional.ofNullable(velocity);
         return this;
+    }
+
+    public Optional<Vector2D> getVelocity() {
+        return velocity;
     }
 
     public EntityState fillAndBuild(EntityState base) {
