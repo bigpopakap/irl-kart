@@ -38,11 +38,11 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         world = new World();
         world.setGravity(World.ZERO_GRAVITY);
 
-        BodyFixture fixture = new BodyFixture(Geometry.createRectangle(20, 20));
+        BodyFixture fixture = new BodyFixture(Geometry.createRectangle(20, 100));
         fixture.setRestitution(1.0);
         Body wallr = new Body();
         wallr.addFixture(fixture);
-        wallr.translate(100, 40);
+        wallr.translate(100, 80);
         wallr.setMass(MassType.INFINITE);
         world.addBody(wallr);
 
@@ -97,11 +97,11 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         body.translate(20, 20);
         body.setMass(MassType.NORMAL);
         body.addFixture(fixture);
-        body.setLinearVelocity(5, 5);
+        body.setLinearVelocity(15, 15);
 
-//        if (body.getFixtureCount() != 1) {
-//            throw new IllegalStateException("We need exactly one fixture per body");
-//        }
+        if (body.getFixtureCount() != 1) {
+            throw new IllegalStateException("We need exactly one fixture per body");
+        }
         body.setActive(true);
         body.setAsleep(false);
 

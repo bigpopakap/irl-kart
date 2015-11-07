@@ -38,8 +38,12 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
 
     private final Subject<KeyEvent, KeyEvent> rawPositions;
     private final Pipe<KartUpdate> updates;
-    private volatile int kart1Position = 0;
-    private volatile int kart2Position = 0;
+
+    //pretending to be the "state" of the real world
+    private volatile double kart1posX = 5;
+    private volatile double kart1posY = 8;
+    private volatile double kart2velX = 0;
+    private volatile double kart2velY = 0;
 
     private volatile boolean isStopped = true;
     private JFrame frame;
@@ -133,26 +137,45 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
 
     private KartUpdate keyEventToUpdate(KeyEvent evt) {
         switch (evt.getKeyCode()) {
+            /* KART 1 */
             case KeyEvent.VK_UP:
-                return makeKartUpdate(kart1Id, ++kart1Position);
+                EntityStateUpdate stateUpdateUp = new EntityStateUpdate()
+                                .center(new Vector2D(kart1posX, ++kart1posY));
+                return new KartUpdate(kart1Id, stateUpdateUp);
             case KeyEvent.VK_DOWN:
-                return makeKartUpdate(kart1Id, --kart1Position);
+                EntityStateUpdate stateUpdateDown = new EntityStateUpdate()
+                        .center(new Vector2D(kart1posX, --kart1posY));
+                return new KartUpdate(kart1Id, stateUpdateDown);
+            case KeyEvent.VK_LEFT:
+                EntityStateUpdate stateUpdateLeft = new EntityStateUpdate()
+                        .center(new Vector2D(--kart1posX, kart1posY));
+                return new KartUpdate(kart1Id, stateUpdateLeft);
+            case KeyEvent.VK_RIGHT:
+                EntityStateUpdate stateUpdateRight = new EntityStateUpdate()
+                        .center(new Vector2D(++kart1posX, kart1posY));
+                return new KartUpdate(kart1Id, stateUpdateRight);
+
+            /* KART 2 */
             case KeyEvent.VK_W:
-                return makeKartUpdate(kart2Id, ++kart2Position);
+                EntityStateUpdate stateUpdateUp2 = new EntityStateUpdate()
+                        .velocity(new Vector2D(kart2velX, ++kart2velY));
+                return new KartUpdate(kart2Id, stateUpdateUp2);
             case KeyEvent.VK_S:
-                return makeKartUpdate(kart2Id, --kart2Position);
+                EntityStateUpdate stateUpdateDown2 = new EntityStateUpdate()
+                        .velocity(new Vector2D(kart2velX, --kart2velY));
+                return new KartUpdate(kart2Id, stateUpdateDown2);
+            case KeyEvent.VK_A:
+                EntityStateUpdate stateUpdateLeft2 = new EntityStateUpdate()
+                        .velocity(new Vector2D(--kart2velX, kart2velY));
+                return new KartUpdate(kart2Id, stateUpdateLeft2);
+            case KeyEvent.VK_D:
+                EntityStateUpdate stateUpdateRight2 = new EntityStateUpdate()
+                        .velocity(new Vector2D(++kart2velX, kart2velY));
+                return new KartUpdate(kart2Id, stateUpdateRight2);
+
             default:
                 return null;
         }
-    }
-
-    private KartUpdate makeKartUpdate(String kartId, int value) {
-        return new KartUpdate(
-            kartId,
-            new EntityStateUpdate()
-                .center(new Vector2D(value, value))
-                .velocity(new Vector2D(value, value))
-        );
     }
 
     private static class MyPanel extends JPanel {
@@ -200,7 +223,7 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
             //draw bounds around the world
             g2.setColor(Color.GREEN);
             g2.draw(new Rectangle2D.Double(world.getMinX(), world.getMinY(),
-                                            world.getWidth(), world.getHeight()));
+                    world.getWidth(), world.getHeight()));
             g2.setColor(Color.BLACK);
 
             //draw all the items in the world
@@ -208,7 +231,7 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
                 .map(entity -> entity.getState().getTransformedShape())
                     .forEach(g2::draw);
 
-            //revert backt to the original transform
+            //revert back to the original transform
             g2.setTransform(savedTrans);
         }
 
