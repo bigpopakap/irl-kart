@@ -139,38 +139,46 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
         switch (evt.getKeyCode()) {
             /* KART 1 */
             case KeyEvent.VK_UP:
+                kart1posY += 10;
                 EntityStateUpdate stateUpdateUp = new EntityStateUpdate()
-                                .center(new Vector2D(kart1posX, ++kart1posY));
+                                .center(new Vector2D(kart1posX, kart1posY));
                 return new KartUpdate(kart1Id, stateUpdateUp);
             case KeyEvent.VK_DOWN:
+                kart1posY -= 10;
                 EntityStateUpdate stateUpdateDown = new EntityStateUpdate()
-                        .center(new Vector2D(kart1posX, --kart1posY));
+                        .center(new Vector2D(kart1posX, kart1posY));
                 return new KartUpdate(kart1Id, stateUpdateDown);
             case KeyEvent.VK_LEFT:
+                kart1posX -= 10;
                 EntityStateUpdate stateUpdateLeft = new EntityStateUpdate()
-                        .center(new Vector2D(--kart1posX, kart1posY));
+                        .center(new Vector2D(kart1posX, kart1posY));
                 return new KartUpdate(kart1Id, stateUpdateLeft);
             case KeyEvent.VK_RIGHT:
+                kart1posX += 10;
                 EntityStateUpdate stateUpdateRight = new EntityStateUpdate()
-                        .center(new Vector2D(++kart1posX, kart1posY));
+                        .center(new Vector2D(kart1posX, kart1posY));
                 return new KartUpdate(kart1Id, stateUpdateRight);
 
             /* KART 2 */
             case KeyEvent.VK_W:
+                kart2velY += 10;
                 EntityStateUpdate stateUpdateUp2 = new EntityStateUpdate()
-                        .velocity(new Vector2D(kart2velX, ++kart2velY));
+                        .velocity(new Vector2D(kart2velX, kart2velY));
                 return new KartUpdate(kart2Id, stateUpdateUp2);
             case KeyEvent.VK_S:
+                kart2velY -= 10;
                 EntityStateUpdate stateUpdateDown2 = new EntityStateUpdate()
-                        .velocity(new Vector2D(kart2velX, --kart2velY));
+                        .velocity(new Vector2D(kart2velX, kart2velY));
                 return new KartUpdate(kart2Id, stateUpdateDown2);
             case KeyEvent.VK_A:
+                kart2velX -= 10;
                 EntityStateUpdate stateUpdateLeft2 = new EntityStateUpdate()
-                        .velocity(new Vector2D(--kart2velX, kart2velY));
+                        .velocity(new Vector2D(kart2velX, kart2velY));
                 return new KartUpdate(kart2Id, stateUpdateLeft2);
             case KeyEvent.VK_D:
+                kart2velX += 10;
                 EntityStateUpdate stateUpdateRight2 = new EntityStateUpdate()
-                        .velocity(new Vector2D(++kart2velX, kart2velY));
+                        .velocity(new Vector2D(kart2velX, kart2velY));
                 return new KartUpdate(kart2Id, stateUpdateRight2);
 
             default:

@@ -28,6 +28,20 @@ public class ImmutableShape implements Shape {
         return new ImmutableShape(transform.createTransformedShape(this));
     }
 
+    /**
+     * Translates the shape so its center is at the origin
+     * @return
+     */
+    public ImmutableShape translateToOrigin() {
+        Rectangle shapeBounds = getBounds();
+        AffineTransform trans = new AffineTransform();
+        trans.translate(
+            -shapeBounds.getCenterX(),
+            -shapeBounds.getCenterY()
+        );
+        return transform(trans);
+    }
+
     @Override
     public Rectangle getBounds() {
         return shape.getBounds();

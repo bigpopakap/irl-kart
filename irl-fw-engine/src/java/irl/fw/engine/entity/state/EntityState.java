@@ -4,7 +4,6 @@ import irl.fw.engine.geometry.Angle;
 import irl.fw.engine.geometry.ImmutableShape;
 import irl.fw.engine.geometry.Vector2D;
 
-import java.awt.*;
 import java.awt.geom.AffineTransform;
 
 /**
@@ -25,7 +24,7 @@ public class EntityState {
             throw new IllegalArgumentException("These fields must not be null");
         }
 
-        this.shape = shape;
+        this.shape = shape.translateToOrigin();
         this.rotation = rotation;
         this.center = center;
         this.velocity = velocity;
@@ -37,14 +36,11 @@ public class EntityState {
 
     public ImmutableShape getTransformedShape() {
         AffineTransform transform = new AffineTransform();
-        transform.rotate(getRotation().asRad());
 
         Vector2D center = getCenter();
-        Rectangle shapeBounds = getShape().getBounds();
-        transform.translate(
-            center.getX() - shapeBounds.getWidth() / 2.0,
-            center.getY() - shapeBounds.getHeight() / 2.0
-        );
+        transform.translate(center.getX(), center.getY());
+        transform.rotate(getRotation().asRad());
+
         return shape.transform(transform);
     }
 
