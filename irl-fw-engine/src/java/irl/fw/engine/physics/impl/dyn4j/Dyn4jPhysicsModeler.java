@@ -43,7 +43,8 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
 
         //TODO remove this random green shell thing
         BodyFixture shellFixture = new BodyFixture(Geometry.createCircle(5));
-        shellFixture.setRestitution(1.0);
+        shellFixture.setRestitution(1);
+        shellFixture.setFriction(0);
         Body shell = new Body();
         shell.addFixture(shellFixture);
         shell.setMass(MassType.NORMAL);
@@ -223,6 +224,7 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
 
         //TODO stuff that should be from state
         fixture.setRestitution(1.0);
+        fixture.setFriction(0.0);
     }
 
     private void updateBody(Body body, EntityStateUpdate stateUpdate) {
