@@ -24,10 +24,14 @@
  */
 package irl.fw.engine.physics.impl.dyn4j;
 
+import java.awt.*;
 import java.awt.geom.*;
 
 import irl.fw.engine.geometry.ImmutableShape;
 import org.dyn4j.geometry.*;
+import org.dyn4j.geometry.Polygon;
+import org.dyn4j.geometry.Rectangle;
+import org.dyn4j.geometry.Shape;
 
 /**
  * Graphics2D renderer for dyn4j shape types.
@@ -38,7 +42,10 @@ import org.dyn4j.geometry.*;
 class Dyn4jShapeConverter {
 
     public static Convex fromShape(ImmutableShape shape) {
-        //FIXME actually return the shape
+        if (shape == null) return null;
+
+        //FIXME this method needs to handle circles and stuff
+
         Rectangle2D bounds = shape.getBounds2D();
         return new Rectangle(bounds.getWidth(), bounds.getHeight());
     }
@@ -51,11 +58,13 @@ class Dyn4jShapeConverter {
 
         if (shape instanceof Rectangle) {
             toReturn = toRectangle((Rectangle) shape);
-        } else if (shape instanceof Circle) {
+        }else if (shape instanceof Circle) {
             toReturn = toCircle((Circle) shape);
-        } else if (shape instanceof Polygon) {
+        }
+        else if (shape instanceof Polygon) {
             toReturn = toPolygon((Polygon) shape);
-        } else if (shape instanceof Segment) {
+        }
+        else if (shape instanceof Segment) {
             toReturn = toSegment((Segment) shape);
 //        } else if (shape instanceof Capsule) {
 //            toReturn = toCapsule((Capsule) shape);

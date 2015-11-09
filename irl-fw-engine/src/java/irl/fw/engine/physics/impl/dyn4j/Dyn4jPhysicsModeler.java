@@ -12,13 +12,11 @@ import irl.fw.engine.events.UpdateEntity;
 import irl.fw.engine.geometry.ImmutableShape;
 import irl.fw.engine.physics.PhysicsModeler;
 import irl.fw.engine.world.SimpleWorld;
+import org.dyn4j.collision.AbstractCollidable;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.dynamics.World;
-import org.dyn4j.geometry.AABB;
-import org.dyn4j.geometry.Geometry;
-import org.dyn4j.geometry.MassType;
-import org.dyn4j.geometry.Vector2;
+import org.dyn4j.geometry.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -40,14 +38,65 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         world = new World();
         world.setGravity(World.ZERO_GRAVITY);
 
-        BodyFixture fixture = new BodyFixture(Geometry.createRectangle(20, 100));
-        fixture.setRestitution(1.0);
-        Body wallr = new Body();
-        wallr.addFixture(fixture);
-        wallr.translate(100, 80);
-        wallr.setMass(MassType.INFINITE);
-        world.addBody(wallr);
+        //FIXME these walls should be added by SwingWorld
+        addWalls(new Rectangle(400, 300));
 
+        //TODO remove this random green shell thing
+        BodyFixture shellFixture = new BodyFixture(Geometry.createCircle(5));
+        shellFixture.setRestitution(1.0);
+        Body shell = new Body();
+        shell.addFixture(shellFixture);
+        shell.setMass(MassType.NORMAL);
+        shell.setLinearVelocity(50, 40);
+        shell.translate(75, 75);
+        world.addBody(shell);
+        world.setUpdateRequired(true);
+    }
+
+    private void addWalls(Rectangle worldBounds) {
+        final double WALL_THICKNESS = 20;
+
+        //left wall
+        BodyFixture fixtureL = new BodyFixture(Geometry.createRectangle(WALL_THICKNESS, worldBounds.getHeight()));
+        fixtureL.setRestitution(1.0);
+        Body wallL = new Body();
+        wallL.addFixture(fixtureL);
+        wallL.setMass(MassType.INFINITE);
+        wallL.translate(WALL_THICKNESS / 2, worldBounds.getHeight() / 2);
+        world.addBody(wallL);
+        world.setUpdateRequired(true);
+
+        //right wall
+        BodyFixture fixtureR = new BodyFixture(Geometry.createRectangle(WALL_THICKNESS, worldBounds.getHeight()));
+        fixtureL.setRestitution(1.0);
+        Body wallR = new Body();
+        wallR.addFixture(fixtureR);
+        wallR.setMass(MassType.INFINITE);
+        wallR.translate(WALL_THICKNESS / 2, worldBounds.getHeight() / 2);
+        wallR.translate(worldBounds.getWidth() - WALL_THICKNESS, 0);
+        world.addBody(wallR);
+        world.setUpdateRequired(true);
+
+        //top wall
+        BodyFixture fixtureT = new BodyFixture(Geometry.createRectangle(worldBounds.getWidth() - 2*WALL_THICKNESS, WALL_THICKNESS));
+        fixtureL.setRestitution(1.0);
+        Body wallT = new Body();
+        wallT.addFixture(fixtureT);
+        wallT.setMass(MassType.INFINITE);
+        wallT.translate(worldBounds.getWidth()/2 - WALL_THICKNESS, WALL_THICKNESS / 2);
+        wallT.translate(WALL_THICKNESS, worldBounds.getHeight() - WALL_THICKNESS);
+        world.addBody(wallT);
+        world.setUpdateRequired(true);
+
+        //bottom wall
+        BodyFixture fixtureB = new BodyFixture(Geometry.createRectangle(worldBounds.getWidth() - 2*WALL_THICKNESS, WALL_THICKNESS));
+        fixtureL.setRestitution(1.0);
+        Body wallB = new Body();
+        wallB.addFixture(fixtureB);
+        wallB.setMass(MassType.INFINITE);
+        wallB.translate(worldBounds.getWidth() / 2 - WALL_THICKNESS, WALL_THICKNESS / 2);
+        wallB.translate(WALL_THICKNESS, 0);
+        world.addBody(wallB);
         world.setUpdateRequired(true);
     }
 
@@ -59,26 +108,26 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
                 .collect(Collectors.toSet());
 
         Set<AABB> allBounds = world.getBodies().parallelStream()
-                        .map(body -> body.createAABB())
+                        .map(AbstractCollidable::createAABB)
                         .collect(Collectors.toSet());
 
         double minX = allBounds.parallelStream()
-                .map(bound -> bound.getMinX())
+                .map(AABB::getMinX)
                 .min(Double::compare)
                 .orElse(0.0);
 
         double maxX = allBounds.parallelStream()
-                .map(bound -> bound.getMaxX())
+                .map(AABB::getMaxX)
                 .max(Double::compare)
                 .orElse(0.0);
 
         double minY = allBounds.parallelStream()
-                .map(bound -> bound.getMinY())
+                .map(AABB::getMinY)
                 .min(Double::compare)
                 .orElse(0.0);
 
         double maxY = allBounds.parallelStream()
-                .map(bound -> bound.getMaxY())
+                .map(AABB::getMaxY)
                 .max(Double::compare)
                 .orElse(0.0);
 
@@ -101,7 +150,8 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         updateBody(body, initState);
 
         //default settings
-        body.setMass(MassType.NORMAL);
+        body.setAutoSleepingEnabled(false); //TODO should this be for all objects?
+        body.setMass(MassType.INFINITE); //TODO this shouldn't be for all objects
         body.setActive(true);
         body.setAsleep(false);
 

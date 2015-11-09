@@ -33,7 +33,7 @@ public class Main {
         final ImmutableShape DEFAULT_KART_SHAPE = new ImmutableShape(
             new Rectangle2D.Double(0, 0, 10, 20)
         );
-        //TODO this should move somewhere more generic
+        //FIXME this should move somewhere more generic
         //set up a process to add new entity whenever a new kart is detected
         engine.getEventQueue().mergeIn(
                 world.updates()
@@ -43,7 +43,7 @@ public class Main {
                                 new EntityStateBuilder()
                                     .shape(DEFAULT_KART_SHAPE)
                                     .rotation(Angle.deg(0))
-                                    .center(new Vector2D(0, 0))
+                                    .center(new Vector2D(50, 50))
                                     .velocity(new Vector2D(0, 0))
                                     .build()
                         ))

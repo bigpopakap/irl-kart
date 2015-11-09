@@ -40,8 +40,8 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
     private final Pipe<KartUpdate> updates;
 
     //pretending to be the "state" of the real world
-    private volatile double kart1posX = 5;
-    private volatile double kart1posY = 8;
+    private volatile double kart1posX = 30;
+    private volatile double kart1posY = 50;
     private volatile double kart2velX = 0;
     private volatile double kart2velY = 0;
 
