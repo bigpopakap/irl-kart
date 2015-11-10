@@ -28,6 +28,6 @@ public class KartUpdate {
 
     @Override
     public String toString() {
-        return "Beacon update for kart: " + getExternalId();
+        return "Beacon updateEntity for kart: " + getExternalId();
     }
 }

@@ -32,7 +32,7 @@ public class ImmutableShape implements Shape {
      * Translates the shape so its center is at the origin
      * @return
      */
-    public ImmutableShape translateToOrigin() {
+    public ImmutableShape centerAtOrigin() {
         Rectangle shapeBounds = getBounds();
         AffineTransform trans = new AffineTransform();
         trans.translate(

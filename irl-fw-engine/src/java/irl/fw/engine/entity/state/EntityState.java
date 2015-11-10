@@ -24,7 +24,7 @@ public class EntityState {
             throw new IllegalArgumentException("These fields must not be null");
         }
 
-        this.shape = shape.translateToOrigin();
+        this.shape = shape.centerAtOrigin();
         this.rotation = rotation;
         this.center = center;
         this.velocity = velocity;

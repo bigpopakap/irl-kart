@@ -34,7 +34,7 @@ public class Main {
             new Rectangle2D.Double(0, 0, 10, 20)
         );
         //FIXME this should move somewhere more generic
-        //set up a process to add new entity whenever a new kart is detected
+        //set up a process to addEntity new entity whenever a new kart is detected
         engine.getEventQueue().mergeIn(
                 world.updates()
                         .distinct(update -> update.getExternalId())

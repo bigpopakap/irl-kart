@@ -33,7 +33,7 @@ public class NoopPhysicsModeler implements PhysicsModeler {
     }
 
     @Override
-    public String add(AddEntity add) {
+    public String addEntity(AddEntity add) {
         Entity newEntity = add.getEntity();
         EntityState initialState = add.getInitialState();
 
@@ -45,18 +45,18 @@ public class NoopPhysicsModeler implements PhysicsModeler {
     }
 
     @Override
-    public void remove(RemoveEntity remove) {
+    public void removeEntity(RemoveEntity remove) {
         String entityId = remove.getEntityId();
 
         if (universe.contains(entityId)) {
             universe.remove(entityId);
         } else {
-            System.err.println("Tried to remove non-existent entity: " + entityId);
+            System.err.println("Tried to removeEntity non-existent entity: " + entityId);
         }
     }
 
     @Override
-    public void update(UpdateEntity update) {
+    public void updateEntity(UpdateEntity update) {
         String entityId = update.getEntityId();
         EntityStateUpdate stateUpdate = update.getStateUpdate();
 
@@ -65,7 +65,7 @@ public class NoopPhysicsModeler implements PhysicsModeler {
             EntityInstance updated = current.updateState(stateUpdate);
             universe.update(entityId, updated);
         } else {
-            System.err.println("Tried to update non-existent entity: " + entityId
+            System.err.println("Tried to updateEntity non-existent entity: " + entityId
                     + " to new state: " + stateUpdate);
         }
     }

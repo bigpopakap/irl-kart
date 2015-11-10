@@ -127,16 +127,16 @@ public class Engine implements StoppableRunnable {
             AddEntity addEvent = (AddEntity) event;
             Entity newEntity = ((AddEntity) event).getEntity();
 
-            String newEntityId = phyisicsModel.add(addEvent);
+            String newEntityId = phyisicsModel.addEntity(addEvent);
 
             eventQueue.mergeIn(newEntity.updates()
                     .map(stateUpdate -> new UpdateEntity(newEntityId, stateUpdate)));
         }
         else if (event instanceof RemoveEntity) {
-            phyisicsModel.remove((RemoveEntity) event);
+            phyisicsModel.removeEntity((RemoveEntity) event);
         }
         else if (event instanceof UpdateEntity) {
-            phyisicsModel.update((UpdateEntity) event);
+            phyisicsModel.updateEntity((UpdateEntity) event);
         }
         else {
             System.err.println("Unhandled or unexpected event: " + event.getName());

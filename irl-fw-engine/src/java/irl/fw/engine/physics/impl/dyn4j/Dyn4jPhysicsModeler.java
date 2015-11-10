@@ -134,7 +134,7 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
     }
 
     @Override
-    public synchronized String add(AddEntity add) {
+    public synchronized String addEntity(AddEntity add) {
         Entity newEntity = add.getEntity();
         EntityState initState = add.getInitialState();
         ImmutableShape shape = initState.getShape();
@@ -154,7 +154,7 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         body.setActive(true);
         body.setAsleep(false);
 
-        //add the body
+        //addEntity the body
         world.addBody(body);
         world.setUpdateRequired(true);
 
@@ -162,7 +162,7 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
     }
 
     @Override
-    public synchronized void remove(RemoveEntity remove) {
+    public synchronized void removeEntity(RemoveEntity remove) {
         String entityId = remove.getEntityId();
         Optional<Body> foundBody = findBody(entityId);
 
@@ -170,12 +170,12 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
             world.removeBody(foundBody.get());
             world.setUpdateRequired(true);
         } else {
-            System.err.println("Tried to remove non-existent body: " + entityId);
+            System.err.println("Tried to removeEntity non-existent body: " + entityId);
         }
     }
 
     @Override
-    public synchronized void update(UpdateEntity update) {
+    public synchronized void updateEntity(UpdateEntity update) {
         String entityId = update.getEntityId();
         EntityStateUpdate stateUpdate = update.getStateUpdate();
 
@@ -188,7 +188,7 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
 
             world.setUpdateRequired(true);
         } else {
-            System.err.println("Tried to update non-existent body: " + entityId);
+            System.err.println("Tried to updateEntity non-existent body: " + entityId);
         }
     }
 
@@ -231,7 +231,7 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
             throw new IllegalStateException("We need exactly one fixture per body");
         }
 
-        //TODO update the shape
+        //TODO updateEntity the shape
         if (stateUpdate.getCenter().isPresent()) {
             body.translateToOrigin();
             body.translate(fromVector(stateUpdate.getCenter().get()));
