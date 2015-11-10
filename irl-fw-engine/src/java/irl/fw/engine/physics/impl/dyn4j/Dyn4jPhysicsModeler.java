@@ -38,10 +38,8 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         world = new World();
         world.setGravity(World.ZERO_GRAVITY);
 
-        //FIXME these walls should be added by SwingWorld
+        //FIXME these should be added by SwingWorld
         addWalls(new Rectangle(400, 300));
-
-        //TODO remove this random green shell thing
         BodyFixture shellFixture = new BodyFixture(Geometry.createCircle(5));
         shellFixture.setRestitution(1);
         shellFixture.setFriction(0);
