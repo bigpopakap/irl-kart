@@ -24,7 +24,6 @@
  */
 package irl.fw.engine.physics.impl.dyn4j;
 
-import java.awt.*;
 import java.awt.geom.*;
 
 import irl.fw.engine.geometry.ImmutableShape;
@@ -35,7 +34,7 @@ import org.dyn4j.geometry.Shape;
 
 /**
  * Graphics2D renderer for dyn4j shape types.
- * @author William Bittle
+ * @author William Bittle, bigpopakap
  * @version 3.1.7
  * @since 3.1.5
  */
