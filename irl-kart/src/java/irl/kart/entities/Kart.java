@@ -4,6 +4,7 @@ import irl.fw.engine.entity.state.EntityStateUpdate;
 import irl.fw.engine.geometry.ImmutableShape;
 import irl.kart.beacon.KartBeacon;
 import irl.fw.engine.entity.IRLEntity;
+import irl.kart.events.kart.SpinKart;
 import irl.util.string.StringUtils;
 import rx.Observable;
 
@@ -40,6 +41,10 @@ public class Kart extends IRLEntity {
         return kartBeacon.updates()
                 .filter(update -> StringUtils.equal(kartId, update.getExternalId()))
                 .map(update -> update.getStateUpdate());
+    }
+
+    public void spin() {
+        kartBeacon.send(new SpinKart(kartId));
     }
 
 }

@@ -12,6 +12,7 @@ import irl.util.callbacks.Callback;
 import irl.util.callbacks.Callbacks;
 import irl.util.concurrent.StoppableRunnable;
 import irl.util.reactiveio.Pipe;
+import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
 import rx.schedulers.TimeInterval;
@@ -38,7 +39,9 @@ public class Engine implements StoppableRunnable {
     private final CollisionResolver collisionResolver;
     private final Renderer renderer;
 
-    Engine(PhysicsModeler phyisicsModel, CollisionResolver collisionResolver, Renderer renderer) {
+    Engine(Observable<? extends EngineEvent> extraEvents,
+            PhysicsModeler phyisicsModel, CollisionResolver collisionResolver,
+            Renderer renderer) {
         if (phyisicsModel == null || collisionResolver == null || renderer == null) {
             throw new RuntimeException("These fields cannot be null");
         }
@@ -46,8 +49,11 @@ public class Engine implements StoppableRunnable {
         this.onStop = new Callbacks();
 
         this.eventQueue = new Pipe<>();
-        this.phyisicsModel = phyisicsModel;
+        if (extraEvents != null) {
+            this.eventQueue.mergeIn(extraEvents);
+        }
 
+        this.phyisicsModel = phyisicsModel;
         this.collisionResolver = collisionResolver;
         this.renderer = renderer;
     }
@@ -68,10 +74,6 @@ public class Engine implements StoppableRunnable {
     @Override
     public String onStop(Callback callback) {
         return onStop.add(callback);
-    }
-
-    public Pipe<EngineEvent> getEventQueue() {
-        return eventQueue;
     }
 
     @Override

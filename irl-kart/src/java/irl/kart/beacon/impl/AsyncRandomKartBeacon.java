@@ -4,6 +4,7 @@ import irl.fw.engine.entity.state.EntityStateUpdate;
 import irl.fw.engine.geometry.Vector2D;
 import irl.kart.beacon.KartBeacon;
 import irl.kart.beacon.KartUpdate;
+import irl.kart.events.kart.KartEvent;
 import irl.util.concurrent.LoopingRunnable;
 import rx.Observable;
 import rx.subjects.PublishSubject;
@@ -28,6 +29,11 @@ public class AsyncRandomKartBeacon extends LoopingRunnable implements KartBeacon
 
     public Observable<KartUpdate> updates() {
         return positions;
+    }
+
+    @Override
+    public void send(KartEvent event) {
+        throw new UnsupportedOperationException("This isn't implemented yet");
     }
 
     @Override

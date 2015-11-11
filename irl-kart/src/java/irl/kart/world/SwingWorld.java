@@ -7,6 +7,8 @@ import irl.fw.engine.world.World;
 import irl.kart.beacon.KartBeacon;
 import irl.kart.beacon.KartUpdate;
 import irl.fw.engine.graphics.Renderer;
+import irl.kart.events.kart.KartEvent;
+import irl.kart.events.kart.SpinKart;
 import irl.util.callbacks.Callback;
 import irl.util.callbacks.Callbacks;
 import irl.util.concurrent.StoppableRunnable;
@@ -125,6 +127,47 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
         if (frame != null && panel != null) {
             panel.update(world);
             frame.repaint();
+        }
+    }
+
+    @Override
+    public void send(KartEvent event) {
+        if (event instanceof SpinKart) {
+            String kartToSpin = ((SpinKart) event).getKartId();
+
+            int keyToPress_lr;
+            int keyToPress_back;
+            if (kartToSpin.equals(kart1Id)) {
+                keyToPress_lr = (Math.random() < 0.5) ? KeyEvent.VK_LEFT : KeyEvent.VK_RIGHT;
+                keyToPress_back = KeyEvent.VK_DOWN;
+            } else if (kartToSpin.equals(kart2Id)) {
+                keyToPress_lr = (Math.random() < 0.5) ? KeyEvent.VK_A : KeyEvent.VK_D;
+                keyToPress_back = KeyEvent.VK_S;
+            } else {
+                return; //do nothing
+            }
+
+            new Thread(() -> {
+                Robot robot;
+                try {
+                    robot = new Robot();
+                } catch (AWTException e) {
+                    e.printStackTrace();
+                    return;
+                }
+
+                robot.setAutoDelay(10);
+                for (int i = 0; i < 20; i++) {
+                    robot.keyPress(keyToPress_lr);
+                    robot.keyRelease(keyToPress_lr);
+                    if (i < 5) {
+                        robot.keyPress(keyToPress_back);
+                        robot.keyRelease(keyToPress_back);
+                    }
+                }
+            }).start();
+        } else {
+            System.err.println("Unhandled or unexpected event: " + event.getName());
         }
     }
 
