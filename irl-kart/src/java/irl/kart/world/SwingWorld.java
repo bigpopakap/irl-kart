@@ -1,6 +1,7 @@
 package irl.kart.world;
 
 import irl.fw.engine.entity.state.EntityStateUpdate;
+import irl.fw.engine.geometry.Angle;
 import irl.fw.engine.geometry.Vector2D;
 import irl.fw.engine.world.World;
 import irl.kart.beacon.KartBeacon;
@@ -31,6 +32,9 @@ import java.awt.geom.Rectangle2D;
  */
 public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
 
+    private static final int WINDOW_WIDTH = 800;
+    private static final int WINDOW_HEIGHT = 600;
+
     private final String kart1Id;
     private final String kart2Id;
 
@@ -40,10 +44,14 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
     private final Pipe<KartUpdate> updates;
 
     //pretending to be the "state" of the real world
-    private volatile double kart1posX = 30;
-    private volatile double kart1posY = 50;
-    private volatile double kart2velX = 0;
-    private volatile double kart2velY = 0;
+    private static final double MAX_SPEED = 90;
+    private static final double MIN_SPEED = -45;
+    private static final double SPEED_INCR = 20;
+    private static final double ROT_INCR = 15;
+    private volatile double kart1rot = 0;
+    private volatile double kart1speed = 0;
+    private volatile double kart2rot = 180;
+    private volatile double kart2speed = 0;
 
     private volatile boolean isStopped = true;
     private JFrame frame;
@@ -98,25 +106,10 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
         });
 
         panel.setFocusable(true);
-        panel.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                //do nothing
-            }
+        panel.addKeyListener(new MyKeyListener());
 
-            @Override
-            public void keyPressed(KeyEvent e) {
-                rawPositions.onNext(e);
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                //do nothing
-            }
-        });
-
-        frame.setSize(800, 400);
-        panel.setSize(800, 400);
+        frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        panel.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         frame.setVisible(true);
         panel.setVisible(true);
         panel.requestFocusInWindow();
@@ -137,49 +130,53 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
 
     private KartUpdate keyEventToUpdate(KeyEvent evt) {
         switch (evt.getKeyCode()) {
-            /* KART 1 */
+            /* KART 1 speed */
             case KeyEvent.VK_UP:
-                kart1posY += 10;
-                EntityStateUpdate stateUpdateUp = new EntityStateUpdate()
-                                .center(new Vector2D(kart1posX, kart1posY));
-                return new KartUpdate(kart1Id, stateUpdateUp);
+                kart1speed = Math.min(MAX_SPEED, kart1speed + SPEED_INCR);
+                EntityStateUpdate update1speedUp = new EntityStateUpdate()
+                        .velocity(new Vector2D(0, kart1speed).rotate(Angle.deg(kart1rot)));
+                return new KartUpdate(kart1Id, update1speedUp);
             case KeyEvent.VK_DOWN:
-                kart1posY -= 10;
-                EntityStateUpdate stateUpdateDown = new EntityStateUpdate()
-                        .center(new Vector2D(kart1posX, kart1posY));
-                return new KartUpdate(kart1Id, stateUpdateDown);
-            case KeyEvent.VK_LEFT:
-                kart1posX -= 10;
-                EntityStateUpdate stateUpdateLeft = new EntityStateUpdate()
-                        .center(new Vector2D(kart1posX, kart1posY));
-                return new KartUpdate(kart1Id, stateUpdateLeft);
-            case KeyEvent.VK_RIGHT:
-                kart1posX += 10;
-                EntityStateUpdate stateUpdateRight = new EntityStateUpdate()
-                        .center(new Vector2D(kart1posX, kart1posY));
-                return new KartUpdate(kart1Id, stateUpdateRight);
+                kart1speed = Math.max(MIN_SPEED, kart1speed - SPEED_INCR);
+                EntityStateUpdate update1speedDown = new EntityStateUpdate()
+                        .velocity(new Vector2D(0, kart1speed).rotate(Angle.deg(kart1rot)));
+                return new KartUpdate(kart1Id, update1speedDown);
 
-            /* KART 2 */
+            /* KART 1 rotation */
+            case KeyEvent.VK_LEFT:
+                kart1rot += ROT_INCR;
+                EntityStateUpdate stateUpdateRight = new EntityStateUpdate()
+                        .rotation(Angle.deg(kart1rot));
+                return new KartUpdate(kart1Id, stateUpdateRight);
+            case KeyEvent.VK_RIGHT:
+                kart1rot -= ROT_INCR;
+                EntityStateUpdate stateUpdateLeft = new EntityStateUpdate()
+                        .rotation(Angle.deg(kart1rot));
+                return new KartUpdate(kart1Id, stateUpdateLeft);
+
+            /* KART 2 speed */
             case KeyEvent.VK_W:
-                kart2velY += 10;
-                EntityStateUpdate stateUpdateUp2 = new EntityStateUpdate()
-                        .velocity(new Vector2D(kart2velX, kart2velY));
-                return new KartUpdate(kart2Id, stateUpdateUp2);
+                kart2speed = Math.min(MAX_SPEED, kart2speed + SPEED_INCR);
+                EntityStateUpdate update2speedUp = new EntityStateUpdate()
+                        .velocity(new Vector2D(0, kart2speed).rotate(Angle.deg(kart2rot)));
+                return new KartUpdate(kart2Id, update2speedUp);
             case KeyEvent.VK_S:
-                kart2velY -= 10;
-                EntityStateUpdate stateUpdateDown2 = new EntityStateUpdate()
-                        .velocity(new Vector2D(kart2velX, kart2velY));
-                return new KartUpdate(kart2Id, stateUpdateDown2);
+                kart2speed = Math.max(MAX_SPEED, kart2speed - SPEED_INCR);
+                EntityStateUpdate update2speedDown = new EntityStateUpdate()
+                        .velocity(new Vector2D(0, kart2speed).rotate(Angle.deg(kart2rot)));
+                return new KartUpdate(kart2Id, update2speedDown);
+
+            /* KART 2 rotation */
             case KeyEvent.VK_A:
-                kart2velX -= 10;
-                EntityStateUpdate stateUpdateLeft2 = new EntityStateUpdate()
-                        .velocity(new Vector2D(kart2velX, kart2velY));
-                return new KartUpdate(kart2Id, stateUpdateLeft2);
+                kart2rot += ROT_INCR;
+                EntityStateUpdate stateUpdate2Right = new EntityStateUpdate()
+                        .rotation(Angle.deg(kart2rot));
+                return new KartUpdate(kart2Id, stateUpdate2Right);
             case KeyEvent.VK_D:
-                kart2velX += 10;
-                EntityStateUpdate stateUpdateRight2 = new EntityStateUpdate()
-                        .velocity(new Vector2D(kart2velX, kart2velY));
-                return new KartUpdate(kart2Id, stateUpdateRight2);
+                kart2rot -= ROT_INCR;
+                EntityStateUpdate stateUpdate2Left = new EntityStateUpdate()
+                        .rotation(Angle.deg(kart2rot));
+                return new KartUpdate(kart2Id, stateUpdate2Left);
 
             default:
                 return null;
@@ -190,7 +187,7 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
 
         public static final long serialVersionUID = 1L;
 
-        private World world;
+        private volatile World world;
 
         public synchronized void update(World world) {
             this.world = world;
@@ -199,6 +196,8 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
         @Override
         public synchronized void paint(Graphics g) {
             super.paint(g);
+
+            if (world == null) return;
 
             Graphics2D g2 = (Graphics2D) g;
             AffineTransform savedTrans = g2.getTransform();
@@ -261,4 +260,37 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
                     new int[]{0, -ARR_SIZE, ARR_SIZE, 0}, 4);
         }
     }
+
+    private class MyKeyListener implements KeyListener {
+
+        private final Subject<KeyEvent, KeyEvent> keyPresses;
+        private final Subject<KeyEvent, KeyEvent> keyReleases;
+
+        public MyKeyListener() {
+            keyPresses = PublishSubject.<KeyEvent>create().toSerialized();
+            keyReleases = PublishSubject.<KeyEvent>create().toSerialized();
+
+            keyPresses
+                .takeUntil(keyReleases)
+                .repeat()
+                .subscribe(rawPositions);
+        }
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+            //do nothing
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            keyPresses.onNext(e);
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            keyReleases.onNext(e);
+        }
+
+    }
+
 }

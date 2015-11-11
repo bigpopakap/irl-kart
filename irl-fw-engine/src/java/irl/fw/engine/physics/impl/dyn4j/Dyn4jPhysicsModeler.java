@@ -105,7 +105,8 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
 
         if (foundBody.isPresent()) {
             Body body = foundBody.get();
-            updateBody(body, stateUpdate);
+            Entity entity = (Entity) body.getUserData();
+            updateBody(body, entity, stateUpdate);
             world.setUpdateRequired(true);
         } else {
             System.err.println("Tried to updateEntity non-existent body: " + entityId);
@@ -133,11 +134,13 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         BodyFixture fixture = body.getFixture(0);
 
         if (state.getRotation().isPresent()) {
-            body.rotate(state.getRotation().get().asRad());
+            double rotDiff = state.getRotation().get().asRad() -
+                            body.getTransform().getRotation();
+            body.rotateAboutCenter(rotDiff);
         }
 
         if (state.getShape().isPresent()) {
-            //TODO update the shape
+            //TODO change the shape
         }
 
         if (state.getCenter().isPresent()) {
@@ -166,25 +169,6 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         return world.getBodies().stream()
                 .filter(body -> body.getId().equals(UUID.fromString(entityId)))
                 .findFirst();
-    }
-
-    private void updateBody(Body body, EntityStateUpdate stateUpdate) {
-        //make sure there's only one fixture
-        if (body.getFixtureCount() != 1) {
-            throw new IllegalStateException("We need exactly one fixture per body");
-        }
-
-        //TODO updateEntity the shape
-        if (stateUpdate.getCenter().isPresent()) {
-            body.translateToOrigin();
-            body.translate(fromVector(stateUpdate.getCenter().get()));
-            //TODO account for the size of the shape
-        }
-        if (stateUpdate.getVelocity().isPresent()) {
-            body.setLinearVelocity(fromVector(stateUpdate.getVelocity().get()));
-        }
-        //TODO set the rotation
-        //TODO set the restitution
     }
 
     private EntityInstance bodyToEntity(Body body) {

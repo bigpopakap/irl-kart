@@ -33,6 +33,28 @@ public class Vector2D {
         return point.getY();
     }
 
+    public Vector2D add(Vector2D other) {
+        return new Vector2D(getX() + other.getX(),
+                            getY() + other.getY());
+    }
+
+    public Vector2D subtract(Vector2D other) {
+        return new Vector2D(getX() - other.getX(),
+                            getY() - other.getY());
+    }
+
+    public Vector2D rotate(Angle angle) {
+        double rads = angle.asRad();
+
+        double cos = Math.cos(rads);
+        double sin = Math.sin(rads);
+
+        return new Vector2D(
+            getX()*cos - getY()*sin,
+            getY()*cos + getX()*sin
+        );
+    }
+
     @Override
     public String toString() {
         return String.format("(%s, %s)", getX(), getY());

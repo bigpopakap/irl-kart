@@ -7,7 +7,7 @@ import irl.fw.engine.entity.IRLEntity;
 import irl.util.string.StringUtils;
 import rx.Observable;
 
-import java.awt.geom.Rectangle2D;
+import java.awt.*;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -18,7 +18,11 @@ import java.awt.geom.Rectangle2D;
 public class Kart extends IRLEntity {
 
     public static final ImmutableShape SHAPE = new ImmutableShape(
-        new Rectangle2D.Double(0, 0, 10, 20)
+        new Polygon(
+            new int[] { 10, 10,  5,  0, 0},
+            new int[] {  0, 15, 20, 15, 0},
+            5
+        )
     );
 
     private final String kartId;
