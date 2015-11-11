@@ -5,6 +5,7 @@ import irl.fw.engine.entity.state.EntityStateBuilder;
 import irl.fw.engine.geometry.Angle;
 import irl.fw.engine.geometry.ImmutableShape;
 import irl.fw.engine.geometry.Vector2D;
+import irl.kart.collisions.KartCollisionResolver;
 import irl.kart.entities.Kart;
 import irl.kart.entities.Shell;
 import irl.kart.entities.Wall;
@@ -38,6 +39,7 @@ public class Main {
 
         //create the engine
         Engine engine = new EngineBuilder()
+            .collisions(new KartCollisionResolver())
             .renderer(world)
             .build();
 
