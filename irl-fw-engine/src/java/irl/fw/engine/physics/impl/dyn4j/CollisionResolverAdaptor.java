@@ -8,7 +8,7 @@ import org.dyn4j.collision.narrowphase.Penetration;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.dynamics.CollisionListener;
-import org.dyn4j.dynamics.contact.ContactConstraint;
+import org.dyn4j.dynamics.contact.*;
 
 import static irl.fw.engine.physics.impl.dyn4j.Dyn4jEntityConverter.*;
 
@@ -18,7 +18,7 @@ import static irl.fw.engine.physics.impl.dyn4j.Dyn4jEntityConverter.*;
  * @author bigpopakap
  * @since 11/11/15
  */
-class CollisionResolverAdaptor implements CollisionListener {
+class CollisionResolverAdaptor implements CollisionListener, ContactListener {
 
     private final CollisionResolver resolver;
 
@@ -48,14 +48,45 @@ class CollisionResolverAdaptor implements CollisionListener {
 
     @Override
     public boolean collision(ContactConstraint contactConstraint) {
-        EntityInstance entity1 = toEntity(contactConstraint.getBody1());
-        EntityInstance entity2 = toEntity(contactConstraint.getBody2());
+        //do nothing
+        return true;
+    }
+
+    @Override
+    public void sensed(ContactPoint point) {
+        //do nothing
+    }
+
+    @Override
+    public boolean begin(ContactPoint point) {
+        //do nothing
+        return true;
+    }
+
+    @Override
+    public void end(ContactPoint point) {
+        EntityInstance entity1 = toEntity(point.getBody1());
+        EntityInstance entity2 = toEntity(point.getBody2());
 
         EntityCollision event = new EntityCollision(entity1, entity2);
 
         resolver.onCollision(event);
+    }
 
+    @Override
+    public boolean persist(PersistedContactPoint point) {
+        //do nothing
         return true;
     }
 
+    @Override
+    public boolean preSolve(ContactPoint point) {
+        //do nothing
+        return true;
+    }
+
+    @Override
+    public void postSolve(SolvedContactPoint point) {
+        //do nothing
+    }
 }

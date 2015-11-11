@@ -31,12 +31,6 @@ public class KartCollisionResolver implements CollisionResolver {
     @Override
     public void onCollision(EntityCollision collision) {
         if (collision.isBetween(Kart.class, Shell.class)) {
-            EntityInstance kart = collision.getType(Kart.class);
-            EntityInstance shell = collision.getType(Shell.class);
-
-            System.out.println(String.format("1) Collision between %s and %s", kart.getEntity(), shell.getEntity()));
-            System.out.println(String.format("2) Collision between %s and %s", collision.getEntity1().getEntity(), collision.getEntity2().getEntity()));
-
             eventQueue.mergeIn(Main.addShells(1));
         }
     }
