@@ -14,6 +14,7 @@ import java.awt.geom.Ellipse2D;
 public class Shell extends VirtualEntity {
 
     public static final ImmutableShape SHAPE = new ImmutableShape(
+        ImmutableShape.Type.ELLIPSE,
         new Ellipse2D.Double(0, 0, 10, 10)
     );
 

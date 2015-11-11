@@ -14,18 +14,32 @@ import java.awt.geom.Rectangle2D;
  */
 public class ImmutableShape implements Shape {
 
+    public enum Type {
+        RECTANGLE, ELLIPSE, SEGMENT, POLYGON
+    }
+
+    private final Type type;
     private final Shape shape;
 
     /**
      * Make sure you don't change the input once you've
      * passed it in here
      */
-    public ImmutableShape(Shape shape) {
+    public ImmutableShape(Type type, Shape shape) {
+        if (type == null) {
+            throw new IllegalArgumentException("The shape must have a type");
+        }
+
+        this.type = type;
         this.shape = shape;
     }
 
+    public Type getType() {
+        return type;
+    }
+
     public ImmutableShape transform(AffineTransform transform) {
-        return new ImmutableShape(transform.createTransformedShape(this));
+        return new ImmutableShape(getType(), transform.createTransformedShape(this));
     }
 
     /**

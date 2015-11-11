@@ -25,6 +25,7 @@
 package irl.fw.engine.physics.impl.dyn4j;
 
 import java.awt.geom.*;
+import java.util.ArrayList;
 
 import irl.fw.engine.geometry.ImmutableShape;
 import org.dyn4j.geometry.*;
@@ -43,10 +44,34 @@ class Dyn4jShapeConverter {
     public static Convex fromShape(ImmutableShape shape) {
         if (shape == null) return null;
 
-        //FIXME this method needs to handle circles and stuff
-
         Rectangle2D bounds = shape.getBounds2D();
-        return new Rectangle(bounds.getWidth(), bounds.getHeight());
+
+        switch (shape.getType()) {
+            case RECTANGLE:
+                return new Rectangle(bounds.getWidth(), bounds.getHeight());
+            case ELLIPSE:
+                return new Ellipse(bounds.getWidth(), bounds.getHeight());
+            case POLYGON:
+                return fromPolygon(shape);
+            default:
+                throw new UnsupportedOperationException("This type isn't supported: " + shape.getType());
+        }
+    }
+
+    private static Polygon fromPolygon(ImmutableShape shape) {
+        PathIterator iter = shape.getPathIterator(null);
+
+        ArrayList<Vector2> vertices = new ArrayList<>();
+
+        double[] currentVertex = new double[6];
+        while (!iter.isDone()) {
+            if (iter.currentSegment(currentVertex) != PathIterator.SEG_CLOSE) {
+                vertices.add(new Vector2(currentVertex[0], currentVertex[1]));
+            }
+            iter.next();
+        }
+
+        return new Polygon(vertices.toArray(new Vector2[vertices.size()]));
     }
 
     public static ImmutableShape toShape(Shape shape) {
@@ -54,21 +79,25 @@ class Dyn4jShapeConverter {
         if (shape == null) return null;
 
         java.awt.Shape toReturn = null;
+        ImmutableShape.Type type = null;
 
         if (shape instanceof Rectangle) {
+            type = ImmutableShape.Type.RECTANGLE;
             toReturn = toRectangle((Rectangle) shape);
-        }else if (shape instanceof Circle) {
-            toReturn = toCircle((Circle) shape);
+        }
+        else if (shape instanceof Ellipse) {
+            type = ImmutableShape.Type.ELLIPSE;
+            toReturn = toEllipse((Ellipse) shape);
         }
         else if (shape instanceof Polygon) {
+            type = ImmutableShape.Type.POLYGON;
             toReturn = toPolygon((Polygon) shape);
         }
         else if (shape instanceof Segment) {
+            type = ImmutableShape.Type.SEGMENT;
             toReturn = toSegment((Segment) shape);
 //        } else if (shape instanceof Capsule) {
 //            toReturn = toCapsule((Capsule) shape);
-//        } else if (shape instanceof Ellipse) {
-//            toReturn = toEllipse((Ellipse) shape);
 //        } else if (shape instanceof Slice) {
 //            toReturn = toSlice((Slice) shape);
 //        } else if (shape instanceof HalfEllipse) {
@@ -79,7 +108,7 @@ class Dyn4jShapeConverter {
             // unknown shape
             throw new UnsupportedOperationException("Unknown shape cannot be converted: " + shape.getClass());
         } else {
-            return new ImmutableShape(toReturn);
+            return new ImmutableShape(type, toReturn);
         }
     }
 
@@ -91,16 +120,10 @@ class Dyn4jShapeConverter {
         );
     }
 
-    public static java.awt.Shape toCircle(Circle circle) {
-        double radius = circle.getRadius();
-        Vector2 center = circle.getCenter();
-
-        double radius2 = 2.0 * radius;
+    public static java.awt.Shape toEllipse(Ellipse ellipse) {
         return new Ellipse2D.Double(
-                (center.x - radius),
-                (center.y - radius),
-                radius2,
-                radius2);
+            0, 0, ellipse.getWidth(), ellipse.getHeight()
+        );
     }
 
     public static java.awt.Shape toPolygon(Polygon polygon) {
@@ -177,35 +200,6 @@ class Dyn4jShapeConverter {
 //        g.setColor(getOutlineColor(color));
 //        // draw the shape
 //        g.draw(path);
-//
-//        // re-instate the old transform
-//        g.setTransform(oTransform);
-//    }
-
-//    public static java.awt.Shape toEllipse(Ellipse ellipse) {
-//        // get the local rotation and translation
-//        double rotation = ellipse.getRotation();
-//        Vector2 center = ellipse.getCenter();
-//
-//        // save the old transform
-//        AffineTransform oTransform = g.getTransform();
-//        g.translate(center.x * scale, center.y * scale);
-//        g.rotate(rotation);
-//
-//        double width = ellipse.getWidth();
-//        double height = ellipse.getHeight();
-//        Ellipse2D.Double c = new Ellipse2D.Double(
-//                (-width * 0.5) * scale,
-//                (-height * 0.5) * scale,
-//                width * scale,
-//                height * scale);
-//
-//        // fill the shape
-//        g.setColor(color);
-//        g.fill(c);
-//        // draw the outline
-//        g.setColor(getOutlineColor(color));
-//        g.draw(c);
 //
 //        // re-instate the old transform
 //        g.setTransform(oTransform);

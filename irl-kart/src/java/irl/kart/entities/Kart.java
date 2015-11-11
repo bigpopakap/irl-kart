@@ -18,6 +18,7 @@ import java.awt.*;
 public class Kart extends IRLEntity {
 
     public static final ImmutableShape SHAPE = new ImmutableShape(
+        ImmutableShape.Type.POLYGON,
         new Polygon(
             new int[] { 10, 10,  5,  0, 0},
             new int[] {  0, 15, 20, 15, 0},
