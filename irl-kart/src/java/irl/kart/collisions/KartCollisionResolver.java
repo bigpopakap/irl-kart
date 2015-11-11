@@ -1,7 +1,9 @@
 package irl.kart.collisions;
 
 import irl.fw.engine.collisions.CollisionResolver;
+import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.events.EntityCollision;
+import irl.util.reactiveio.Pipe;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -11,6 +13,11 @@ import irl.fw.engine.events.EntityCollision;
  */
 public class KartCollisionResolver implements CollisionResolver {
 
+    private final Pipe<EngineEvent> eventQueue;
+
+    public KartCollisionResolver(Pipe<EngineEvent> eventQueue) {
+        this.eventQueue = eventQueue;
+    }
 
     @Override
     public boolean onBeforeCollision(EntityCollision collision) {

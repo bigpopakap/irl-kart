@@ -2,6 +2,7 @@ package irl.kart;
 
 import irl.fw.engine.engine.Engine;
 import irl.fw.engine.entity.state.EntityStateBuilder;
+import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.geometry.Angle;
 import irl.fw.engine.geometry.ImmutableShape;
 import irl.fw.engine.geometry.Vector2D;
@@ -13,6 +14,7 @@ import irl.kart.world.SwingWorld;
 import irl.fw.engine.events.AddEntity;
 import irl.fw.engine.engine.EngineBuilder;
 import irl.util.concurrent.ParallelRunnable;
+import irl.util.reactiveio.Pipe;
 import rx.Observable;
 
 import java.awt.geom.Rectangle2D;
@@ -34,12 +36,16 @@ public class Main {
     private static final int NUM_SHELLS = 1;
 
     public static void main(String[] args) throws Exception {
+        //create an event queue for kart events
+        Pipe<EngineEvent> kartEventQueue = new Pipe<>();
+
         //create the beacon and renderer
         SwingWorld world = new SwingWorld("kart1", "kart2");
 
         //create the engine
         Engine engine = new EngineBuilder()
-            .collisions(new KartCollisionResolver())
+            .extraEvents(kartEventQueue.get())
+            .collisions(new KartCollisionResolver(kartEventQueue))
             .renderer(world)
             .build();
 
@@ -50,16 +56,16 @@ public class Main {
         runAll.run();
 
         //add the walls
-        engine.getEventQueue().mergeIn(
+        kartEventQueue.mergeIn(
             addWalls(new Rectangle2D.Double(0, 0, WORLD_WIDTH, WORLD_HEIGHT))
         );
 
         //add an initial green shell
-        engine.getEventQueue().mergeIn(addShells(NUM_SHELLS));
+        kartEventQueue.mergeIn(addShells(NUM_SHELLS));
 
         //FIXME this should move somewhere more generic
         //set up a process to addEntity new entity whenever a new kart is detected
-        engine.getEventQueue().mergeIn(
+        kartEventQueue.mergeIn(
             world.updates()
                 .distinct(update -> update.getExternalId())
                 .map(update -> new AddEntity(
