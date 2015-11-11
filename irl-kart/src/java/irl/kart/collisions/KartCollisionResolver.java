@@ -1,12 +1,10 @@
 package irl.kart.collisions;
 
 import irl.fw.engine.collisions.CollisionResolver;
-import irl.fw.engine.events.EngineEvent;
+import irl.fw.engine.entity.EntityInstance;
 import irl.fw.engine.events.EntityCollision;
-import irl.kart.Main;
 import irl.kart.entities.Kart;
 import irl.kart.entities.Shell;
-import irl.util.reactiveio.Pipe;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -16,10 +14,8 @@ import irl.util.reactiveio.Pipe;
  */
 public class KartCollisionResolver implements CollisionResolver {
 
-    private final Pipe<EngineEvent> eventQueue;
-
-    public KartCollisionResolver(Pipe<EngineEvent> eventQueue) {
-        this.eventQueue = eventQueue;
+    public KartCollisionResolver() {
+        //do nothing
     }
 
     @Override
@@ -30,7 +26,9 @@ public class KartCollisionResolver implements CollisionResolver {
     @Override
     public void onCollision(EntityCollision collision) {
         if (collision.isBetween(Kart.class, Shell.class)) {
-            eventQueue.mergeIn(Main.addShells(1));
+            EntityInstance kartInst = collision.getType(Kart.class);
+            Kart kart = (Kart) kartInst.getEntity();
+            kart.spin();
         }
     }
 

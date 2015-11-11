@@ -1,5 +1,6 @@
 package irl.kart.beacon;
 
+import irl.kart.events.kart.KartEvent;
 import rx.Observable;
 
 /**
@@ -11,5 +12,6 @@ import rx.Observable;
 public interface KartBeacon {
 
     Observable<KartUpdate> updates();
+    void send(KartEvent event);
 
 }

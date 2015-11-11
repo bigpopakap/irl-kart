@@ -45,7 +45,7 @@ public class Main {
         //create the engine
         Engine engine = new EngineBuilder()
             .extraEvents(kartEventQueue.get())
-            .collisions(new KartCollisionResolver(kartEventQueue))
+            .collisions(new KartCollisionResolver())
             .renderer(world)
             .build();
 
