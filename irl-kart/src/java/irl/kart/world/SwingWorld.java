@@ -32,8 +32,8 @@ import java.awt.geom.Rectangle2D;
  */
 public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
 
-    private static final int WINDOW_WIDTH = 800;
-    private static final int WINDOW_HEIGHT = 600;
+    private static final int WINDOW_WIDTH = 1000;
+    private static final int WINDOW_HEIGHT = 800;
 
     private final String kart1Id;
     private final String kart2Id;

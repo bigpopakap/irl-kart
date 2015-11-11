@@ -25,12 +25,12 @@ import java.awt.geom.Rectangle2D;
 //TODO it's time to put this stuff into its own class
 public class Main {
 
-    private static final double WORLD_WIDTH = 600;
-    private static final double WORLD_HEIGHT = 450;
+    private static final double WORLD_WIDTH = 1000;
+    private static final double WORLD_HEIGHT = 500;
 
     private static final double WALL_THICKNESS = 20;
 
-    private static final int NUM_SHELLS = 20;
+    private static final int NUM_SHELLS = 40;
 
     public static void main(String[] args) throws Exception {
         //create the beacon and renderer
