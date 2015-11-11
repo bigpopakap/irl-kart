@@ -44,8 +44,8 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
     private final Pipe<KartUpdate> updates;
 
     //pretending to be the "state" of the real world
-    private static final double MAX_SPEED = 90;
-    private static final double MIN_SPEED = -45;
+    private static final double MAX_SPEED = 120;
+    private static final double MIN_SPEED = -60;
     private static final double SPEED_INCR = 20;
     private static final double ROT_INCR = 15;
     private volatile double kart1rot = 0;

@@ -49,7 +49,7 @@ public class Main {
 
         //add the walls
         engine.getEventQueue().mergeIn(
-                addWalls(new Rectangle2D.Double(0, 0, WORLD_WIDTH, WORLD_HEIGHT))
+            addWalls(new Rectangle2D.Double(0, 0, WORLD_WIDTH, WORLD_HEIGHT))
         );
 
         //add an initial green shell
