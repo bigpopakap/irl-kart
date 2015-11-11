@@ -4,7 +4,6 @@ import irl.fw.engine.entity.Entity;
 import irl.fw.engine.entity.EntityInstance;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.collisions.CollisionResolver;
-import irl.fw.engine.entity.state.EntityStateBuilder;
 import irl.fw.engine.entity.state.EntityStateUpdate;
 import irl.fw.engine.events.AddEntity;
 import irl.fw.engine.events.RemoveEntity;
@@ -12,9 +11,7 @@ import irl.fw.engine.events.UpdateEntity;
 import irl.fw.engine.physics.PhysicsModeler;
 import irl.fw.engine.world.SimpleWorld;
 import org.dyn4j.collision.AbstractCollidable;
-import org.dyn4j.dynamics.Body;
-import org.dyn4j.dynamics.BodyFixture;
-import org.dyn4j.dynamics.World;
+import org.dyn4j.dynamics.*;
 import org.dyn4j.geometry.*;
 
 import java.util.*;
@@ -42,7 +39,7 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
     public irl.fw.engine.world.World getWorld() {
         Set<EntityInstance> entityInstances
             = world.getBodies().parallelStream()
-                .map(this::bodyToEntity)
+                .map(Dyn4jEntityConverter::toEntity)
                 .collect(Collectors.toSet());
 
         Set<AABB> allBounds = world.getBodies().parallelStream()
@@ -116,6 +113,10 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
     @Override
     public synchronized void model(CollisionResolver collisionResolver, long timeStep) {
         double timeStepInSeconds = timeStep / 1000.0;
+
+        world.removeAllListeners(); //TODO don't be so heavy-handed
+        world.addListener(new CollisionResolverAdaptor(collisionResolver));
+
         world.update(timeStepInSeconds);
     }
 
@@ -169,19 +170,6 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         return world.getBodies().stream()
                 .filter(body -> body.getId().equals(UUID.fromString(entityId)))
                 .findFirst();
-    }
-
-    private EntityInstance bodyToEntity(Body body) {
-        Entity entity = (Entity) body.getUserData();
-
-        EntityState state = new EntityStateBuilder()
-            .shape(toShape(body.getFixture(0).getShape()))
-            .rotation(toRadAngle(body.getTransform().getRotation()))
-            .center(toVector(body.getWorldCenter()))
-            .velocity(toVector(body.getLinearVelocity()))
-            .build();
-
-        return new EntityInstance(entity, state);
     }
 
 }

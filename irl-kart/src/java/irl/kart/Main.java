@@ -30,7 +30,7 @@ public class Main {
 
     private static final double WALL_THICKNESS = 20;
 
-    private static final int NUM_SHELLS = 40;
+    private static final int NUM_SHELLS = 1;
 
     public static void main(String[] args) throws Exception {
         //create the beacon and renderer

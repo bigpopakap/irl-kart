@@ -2,10 +2,6 @@ package irl.fw.engine.collisions.impl;
 
 import irl.fw.engine.collisions.CollisionResolver;
 import irl.fw.engine.events.EntityCollision;
-import irl.fw.engine.events.EngineEvent;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -16,8 +12,13 @@ import java.util.List;
 public class NoopCollisionResolver implements CollisionResolver {
 
     @Override
-    public List<EngineEvent> onCollision(EntityCollision collision) {
-        return Collections.emptyList();
+    public boolean onBeforeCollision(EntityCollision collision) {
+        return true; //let the collision happen
+    }
+
+    @Override
+    public void onCollision(EntityCollision collision) {
+        //do nothing
     }
 
 }
