@@ -50,7 +50,7 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
     private static final double ROT_INCR = 15;
     private volatile double kart1rot = 0;
     private volatile double kart1speed = 0;
-    private volatile double kart2rot = 180;
+    private volatile double kart2rot = 0;
     private volatile double kart2speed = 0;
 
     private volatile boolean isStopped = true;
@@ -161,7 +161,7 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
                         .velocity(new Vector2D(0, kart2speed).rotate(Angle.deg(kart2rot)));
                 return new KartUpdate(kart2Id, update2speedUp);
             case KeyEvent.VK_S:
-                kart2speed = Math.max(MAX_SPEED, kart2speed - SPEED_INCR);
+                kart2speed = Math.max(MIN_SPEED, kart2speed - SPEED_INCR);
                 EntityStateUpdate update2speedDown = new EntityStateUpdate()
                         .velocity(new Vector2D(0, kart2speed).rotate(Angle.deg(kart2rot)));
                 return new KartUpdate(kart2Id, update2speedDown);
