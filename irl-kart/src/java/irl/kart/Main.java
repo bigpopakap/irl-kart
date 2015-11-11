@@ -33,7 +33,7 @@ public class Main {
 
     private static final double WALL_THICKNESS = 20;
 
-    private static final int NUM_SHELLS = 1;
+    private static final int NUM_SHELLS = 20;
 
     public static void main(String[] args) throws Exception {
         //create an event queue for kart events

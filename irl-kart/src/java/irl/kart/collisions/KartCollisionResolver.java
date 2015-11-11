@@ -1,7 +1,6 @@
 package irl.kart.collisions;
 
 import irl.fw.engine.collisions.CollisionResolver;
-import irl.fw.engine.entity.EntityInstance;
 import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.events.EntityCollision;
 import irl.kart.Main;
