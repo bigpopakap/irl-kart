@@ -80,7 +80,7 @@ public class Main {
         );
     }
 
-    private static Observable<AddEntity> addShells(int numShells) {
+    public static Observable<AddEntity> addShells(int numShells) {
         AddEntity[] events = new AddEntity[numShells];
 
         for (int i = 0; i < numShells; i++) {
