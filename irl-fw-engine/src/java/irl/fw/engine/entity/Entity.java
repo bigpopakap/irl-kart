@@ -11,6 +11,7 @@ import rx.Observable;
  */
 public interface Entity {
 
+    boolean isVirtual();
     Observable<EntityStateUpdate> updates();
 
 }

@@ -56,6 +56,10 @@ public class EntityState {
         return velocity;
     }
 
+    public EntityStateUpdate toStateUpdate() {
+        return new EntityStateUpdate(this);
+    }
+
     @Override
     public String toString() {
         return String.format("[center:%s vel:%s]",

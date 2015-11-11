@@ -26,6 +26,13 @@ public class EntityStateUpdate {
         velocity = Optional.empty();
     }
 
+    public EntityStateUpdate(EntityState stateToCopy) {
+        shape(stateToCopy.getShape());
+        rotation(stateToCopy.getRotation());
+        center(stateToCopy.getCenter());
+        velocity(stateToCopy.getVelocity());
+    }
+
     public EntityStateUpdate shape(ImmutableShape shape) {
         this.shape = Optional.ofNullable(shape);
         return this;

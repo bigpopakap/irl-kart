@@ -1,10 +1,13 @@
 package irl.kart.entities;
 
 import irl.fw.engine.entity.state.EntityStateUpdate;
+import irl.fw.engine.geometry.ImmutableShape;
 import irl.kart.beacon.KartBeacon;
 import irl.fw.engine.entity.IRLEntity;
 import irl.util.string.StringUtils;
 import rx.Observable;
+
+import java.awt.geom.Rectangle2D;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -12,7 +15,11 @@ import rx.Observable;
  * @author bigpopakap
  * @since 11/1/15
  */
-public class Kart implements IRLEntity {
+public class Kart extends IRLEntity {
+
+    public static final ImmutableShape SHAPE = new ImmutableShape(
+        new Rectangle2D.Double(0, 0, 10, 20)
+    );
 
     private final String kartId;
     private final KartBeacon kartBeacon;

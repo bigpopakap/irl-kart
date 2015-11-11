@@ -9,10 +9,15 @@ import rx.Observable;
  * @author bigpopakap
  * @since 10/29/15
  */
-public interface VirtualEntity extends Entity {
+public abstract class VirtualEntity implements Entity {
 
     @Override
-    default Observable<EntityStateUpdate> updates() {
+    public final boolean isVirtual() {
+        return true;
+    }
+
+    @Override
+    public final Observable<EntityStateUpdate> updates() {
         return Observable.empty();
     }
 

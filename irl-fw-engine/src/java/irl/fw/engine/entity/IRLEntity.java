@@ -6,6 +6,10 @@ package irl.fw.engine.entity;
  * @author bigpopakap
  * @since 10/29/15
  */
-public interface IRLEntity extends Entity {
+public abstract class IRLEntity implements Entity {
 
+    @Override
+    public final boolean isVirtual() {
+        return false;
+    }
 }
