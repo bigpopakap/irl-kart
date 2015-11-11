@@ -134,23 +134,27 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
             case KeyEvent.VK_UP:
                 kart1speed = Math.min(MAX_SPEED, kart1speed + SPEED_INCR);
                 EntityStateUpdate update1speedUp = new EntityStateUpdate()
-                        .velocity(new Vector2D(0, kart1speed).rotate(Angle.deg(kart1rot)));
+                        .velocity(new Vector2D(0, kart1speed).rotate(Angle.deg(kart1rot)))
+                        .rotation(Angle.deg(kart1rot));
                 return new KartUpdate(kart1Id, update1speedUp);
             case KeyEvent.VK_DOWN:
                 kart1speed = Math.max(MIN_SPEED, kart1speed - SPEED_INCR);
                 EntityStateUpdate update1speedDown = new EntityStateUpdate()
-                        .velocity(new Vector2D(0, kart1speed).rotate(Angle.deg(kart1rot)));
+                        .velocity(new Vector2D(0, kart1speed).rotate(Angle.deg(kart1rot)))
+                        .rotation(Angle.deg(kart1rot));
                 return new KartUpdate(kart1Id, update1speedDown);
 
             /* KART 1 rotation */
             case KeyEvent.VK_LEFT:
                 kart1rot += ROT_INCR;
                 EntityStateUpdate stateUpdateRight = new EntityStateUpdate()
+                        .velocity(new Vector2D(0, kart1speed).rotate(Angle.deg(kart1rot)))
                         .rotation(Angle.deg(kart1rot));
                 return new KartUpdate(kart1Id, stateUpdateRight);
             case KeyEvent.VK_RIGHT:
                 kart1rot -= ROT_INCR;
                 EntityStateUpdate stateUpdateLeft = new EntityStateUpdate()
+                        .velocity(new Vector2D(0, kart1speed).rotate(Angle.deg(kart1rot)))
                         .rotation(Angle.deg(kart1rot));
                 return new KartUpdate(kart1Id, stateUpdateLeft);
 
@@ -158,23 +162,27 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
             case KeyEvent.VK_W:
                 kart2speed = Math.min(MAX_SPEED, kart2speed + SPEED_INCR);
                 EntityStateUpdate update2speedUp = new EntityStateUpdate()
-                        .velocity(new Vector2D(0, kart2speed).rotate(Angle.deg(kart2rot)));
+                        .velocity(new Vector2D(0, kart2speed).rotate(Angle.deg(kart2rot)))
+                        .rotation(Angle.deg(kart2rot));
                 return new KartUpdate(kart2Id, update2speedUp);
             case KeyEvent.VK_S:
                 kart2speed = Math.max(MIN_SPEED, kart2speed - SPEED_INCR);
                 EntityStateUpdate update2speedDown = new EntityStateUpdate()
-                        .velocity(new Vector2D(0, kart2speed).rotate(Angle.deg(kart2rot)));
+                        .velocity(new Vector2D(0, kart2speed).rotate(Angle.deg(kart2rot)))
+                        .rotation(Angle.deg(kart2rot));
                 return new KartUpdate(kart2Id, update2speedDown);
 
             /* KART 2 rotation */
             case KeyEvent.VK_A:
                 kart2rot += ROT_INCR;
                 EntityStateUpdate stateUpdate2Right = new EntityStateUpdate()
+                        .velocity(new Vector2D(0, kart2speed).rotate(Angle.deg(kart2rot)))
                         .rotation(Angle.deg(kart2rot));
                 return new KartUpdate(kart2Id, stateUpdate2Right);
             case KeyEvent.VK_D:
                 kart2rot -= ROT_INCR;
                 EntityStateUpdate stateUpdate2Left = new EntityStateUpdate()
+                        .velocity(new Vector2D(0, kart2speed).rotate(Angle.deg(kart2rot)))
                         .rotation(Angle.deg(kart2rot));
                 return new KartUpdate(kart2Id, stateUpdate2Left);
 
