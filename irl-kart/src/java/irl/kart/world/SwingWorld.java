@@ -197,7 +197,7 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
         }
 
         @Override
-        public void paint(Graphics g) {
+        public synchronized void paint(Graphics g) {
             super.paint(g);
 
             Graphics2D g2 = (Graphics2D) g;
