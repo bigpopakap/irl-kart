@@ -1,8 +1,7 @@
 package irl.kart.entities;
 
 import irl.fw.engine.entity.IRLEntity;
-import irl.fw.engine.entity.state.EntityStateUpdate;
-import rx.Observable;
+import irl.fw.engine.entity.state.EntityState;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -12,10 +11,8 @@ import rx.Observable;
  */
 public class Wall extends IRLEntity {
 
-    @Override
-    public Observable<EntityStateUpdate> updates() {
-        //walls don't change positions
-        return Observable.empty();
+    public Wall(String engineId, EntityState initState) {
+        super(engineId, initState);
     }
 
 }

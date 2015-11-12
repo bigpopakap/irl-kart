@@ -1,7 +1,6 @@
 package irl.fw.engine.events;
 
 import irl.fw.engine.entity.Entity;
-import irl.fw.engine.entity.EntityInstance;
 
 import java.util.function.Supplier;
 
@@ -13,31 +12,31 @@ import java.util.function.Supplier;
  */
 public class EntityCollision implements EngineEvent {
 
-    private final EntityInstance entity1;
-    private final EntityInstance entity2;
+    private final Entity entity1;
+    private final Entity entity2;
 
-    public EntityCollision(EntityInstance entity1, EntityInstance entity2) {
+    public EntityCollision(Entity entity1, Entity entity2) {
         this.entity1 = entity1;
         this.entity2 = entity2;
     }
 
-    public EntityInstance getEntity1() {
+    public Entity getEntity1() {
         return entity1;
     }
 
-    public EntityInstance getEntity2() {
+    public Entity getEntity2() {
         return entity2;
     }
 
     public boolean isBetween(Class<? extends Entity> type1, Class<? extends Entity> type2) {
-        Entity actual1 = getEntity1().getEntity();
-        Entity actual2 = getEntity2().getEntity();
+        Entity actual1 = getEntity1();
+        Entity actual2 = getEntity2();
 
         return (type1.isInstance(actual1) && type2.isInstance(actual2))
             || (type1.isInstance(actual2) && type2.isInstance(actual1));
     }
 
-    public EntityInstance getType(Class<? extends Entity> type) {
+    public <T extends Entity> T getType(Class<T> type) {
         return getTypeOrFallback(type, () -> {
             throw new UnsupportedOperationException(
                 "Unclear which to return. Both entities are of type " + type
@@ -45,33 +44,45 @@ public class EntityCollision implements EngineEvent {
         });
     }
 
-    public EntityInstance getTypeOrFirst(Class<? extends Entity> type) {
-        return getTypeOrFallback(type, () -> this.getEntity1());
+    public <T extends Entity> T getTypeOrFirst(Class<T> type) {
+        return getTypeOrFallback(type, () -> {
+            @SuppressWarnings("unchecked")
+            T toReturn = (T) this.getEntity1();
+            return toReturn;
+        });
     }
 
-    public EntityInstance getTypeOrSecond(Class<? extends Entity> type) {
-        return getTypeOrFallback(type, () -> this.getEntity2());
+    public <T extends Entity> T getTypeOrSecond(Class<T> type) {
+        return getTypeOrFallback(type, () -> {
+            @SuppressWarnings("unchecked")
+            T toReturn = (T) this.getEntity2();
+            return toReturn;
+        });
     }
 
-    private EntityInstance getTypeOrFallback(Class<? extends Entity> type, Supplier<EntityInstance> fallback) {
-        EntityInstance actual1 = getEntity1();
-        EntityInstance actual2 = getEntity2();
+    private <T extends Entity> T getTypeOrFallback(Class<T> type, Supplier<T> fallback) {
+        Entity actual1 = getEntity1();
+        Entity actual2 = getEntity2();
 
-        if (!type.isInstance(actual1.getEntity()) && !type.isInstance(actual2.getEntity())) {
+        if (!type.isInstance(actual1) && !type.isInstance(actual2)) {
             //neither are instances of that type
             throw new UnsupportedOperationException("Neither entities are of type " + type);
         }
-        else if (type.isInstance(actual1.getEntity()) && type.isInstance(actual2.getEntity())) {
+        else if (type.isInstance(actual1) && type.isInstance(actual2)) {
             //both are instances of that type
             return fallback.get();
         }
-        else if (type.isInstance(actual1.getEntity())) {
+        else if (type.isInstance(actual1)) {
             //only the first is of that type
-            return getEntity1();
+            @SuppressWarnings("unchecked")
+            T toReturn = (T) this.getEntity1();
+            return toReturn;
         }
-        else if (type.isInstance(actual2.getEntity())) {
+        else if (type.isInstance(actual2)) {
             //only the second is of that type
-            return getEntity2();
+            @SuppressWarnings("unchecked")
+            T toReturn = (T) this.getEntity2();
+            return toReturn;
         } else {
             throw new IllegalStateException("All cases should have been covered and we shouldn't be here");
         }

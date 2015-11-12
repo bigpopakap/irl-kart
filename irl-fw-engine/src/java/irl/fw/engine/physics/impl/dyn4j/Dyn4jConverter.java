@@ -4,6 +4,8 @@ import irl.fw.engine.geometry.Angle;
 import irl.fw.engine.geometry.Vector2D;
 import org.dyn4j.geometry.Vector2;
 
+import java.util.UUID;
+
 /**
  * TODO bigpopakap Javadoc this class
  *
@@ -11,6 +13,10 @@ import org.dyn4j.geometry.Vector2;
  * @since 11/6/15
  */
 class Dyn4jConverter {
+
+    public static UUID fromId(String id) {
+        return UUID.fromString(id);
+    }
 
     public static Vector2 fromVector(Vector2D vector) {
         return new Vector2(vector.getX(), vector.getY());

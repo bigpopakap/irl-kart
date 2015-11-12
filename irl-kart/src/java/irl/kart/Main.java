@@ -33,7 +33,7 @@ public class Main {
 
         //start the engine and world
         ParallelRunnable runAll = new ParallelRunnable(
-            true, world, engine
+            true, engine, world
         );
         runAll.run();
     }

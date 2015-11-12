@@ -1,6 +1,6 @@
 package irl.fw.engine.world;
 
-import irl.fw.engine.entity.EntityInstance;
+import irl.fw.engine.entity.Entity;
 
 import java.util.Collection;
 
@@ -25,6 +25,6 @@ public interface World {
         return getMaxY() - getMinY();
     }
 
-    Collection<EntityInstance> getEntities();
+    Collection<Entity> getEntities();
 
 }

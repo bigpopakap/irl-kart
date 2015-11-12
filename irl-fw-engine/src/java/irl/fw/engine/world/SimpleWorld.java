@@ -1,6 +1,6 @@
 package irl.fw.engine.world;
 
-import irl.fw.engine.entity.EntityInstance;
+import irl.fw.engine.entity.Entity;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -13,10 +13,10 @@ import java.util.Collections;
  */
 public class SimpleWorld implements World {
 
-    private final Collection<EntityInstance> entities;
+    private final Collection<Entity> entities;
     private final double minX, maxX, minY, maxY;
 
-    public SimpleWorld(Collection<EntityInstance> entities,
+    public SimpleWorld(Collection<Entity> entities,
                        double minX, double maxX,
                        double minY, double maxY) {
         this.entities = Collections.unmodifiableCollection(entities);
@@ -27,7 +27,7 @@ public class SimpleWorld implements World {
     }
 
     @Override
-    public Collection<EntityInstance> getEntities() {
+    public Collection<Entity> getEntities() {
         return entities;
     }
 

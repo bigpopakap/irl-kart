@@ -1,5 +1,4 @@
 package irl.kart.world;
-
 import irl.fw.engine.entity.state.EntityStateBuilder;
 import irl.fw.engine.entity.state.EntityStateUpdate;
 import irl.fw.engine.events.AddEntity;
@@ -150,52 +149,52 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
         return Observable.from(new AddEntity[] {
 
                 //left wall
-                new AddEntity(
-                        new Wall(),
-                        new EntityStateBuilder()
-                                .shape(new ImmutableShape(ImmutableShape.Type.RECTANGLE,
-                                        new Rectangle2D.Double(0, 0, WALL_THICKNESS, worldBounds.getHeight())))
-                                .rotation(Angle.deg(0))
-                                .center(new Vector2D(WALL_THICKNESS / 2, worldBounds.getHeight() / 2))
-                                .velocity(new Vector2D(0, 0))
-                                .build()
-                ),
+                new AddEntity(engineId -> new Wall(
+                    engineId,
+                    new EntityStateBuilder()
+                            .shape(new ImmutableShape(ImmutableShape.Type.RECTANGLE,
+                                    new Rectangle2D.Double(0, 0, WALL_THICKNESS, worldBounds.getHeight())))
+                            .rotation(Angle.deg(0))
+                            .center(new Vector2D(WALL_THICKNESS / 2, worldBounds.getHeight() / 2))
+                            .velocity(new Vector2D(0, 0))
+                            .build()
+                )),
 
                 //right wall
-                new AddEntity(
-                        new Wall(),
-                        new EntityStateBuilder()
-                                .shape(new ImmutableShape(ImmutableShape.Type.RECTANGLE,
-                                        new Rectangle2D.Double(0, 0, WALL_THICKNESS, worldBounds.getHeight())))
-                                .rotation(Angle.deg(0))
-                                .center(new Vector2D(worldBounds.getWidth() - WALL_THICKNESS / 2, worldBounds.getHeight() / 2))
-                                .velocity(new Vector2D(0, 0))
-                                .build()
-                ),
+                new AddEntity(engineId -> new Wall(
+                    engineId,
+                    new EntityStateBuilder()
+                            .shape(new ImmutableShape(ImmutableShape.Type.RECTANGLE,
+                                    new Rectangle2D.Double(0, 0, WALL_THICKNESS, worldBounds.getHeight())))
+                            .rotation(Angle.deg(0))
+                            .center(new Vector2D(worldBounds.getWidth() - WALL_THICKNESS / 2, worldBounds.getHeight() / 2))
+                            .velocity(new Vector2D(0, 0))
+                            .build()
+                )),
 
                 //top wall
-                new AddEntity(
-                        new Wall(),
-                        new EntityStateBuilder()
-                                .shape(new ImmutableShape(ImmutableShape.Type.RECTANGLE,
-                                        new Rectangle2D.Double(0, 0, WALL_THICKNESS, worldBounds.getWidth())))
-                                .rotation(Angle.deg(90))
-                                .center(new Vector2D(worldBounds.getWidth()/2, worldBounds.getHeight() - WALL_THICKNESS/2))
-                                .velocity(new Vector2D(0, 0))
-                                .build()
-                ),
+                new AddEntity(engineId -> new Wall(
+                    engineId,
+                    new EntityStateBuilder()
+                            .shape(new ImmutableShape(ImmutableShape.Type.RECTANGLE,
+                                    new Rectangle2D.Double(0, 0, WALL_THICKNESS, worldBounds.getWidth())))
+                            .rotation(Angle.deg(90))
+                            .center(new Vector2D(worldBounds.getWidth()/2, worldBounds.getHeight() - WALL_THICKNESS/2))
+                            .velocity(new Vector2D(0, 0))
+                            .build()
+                )),
 
                 //bottom wall
-                new AddEntity(
-                        new Wall(),
-                        new EntityStateBuilder()
-                                .shape(new ImmutableShape(ImmutableShape.Type.RECTANGLE,
-                                        new Rectangle2D.Double(0, 0, WALL_THICKNESS, worldBounds.getWidth())))
-                                .rotation(Angle.deg(90))
-                                .center(new Vector2D(worldBounds.getWidth()/2, WALL_THICKNESS/2))
-                                .velocity(new Vector2D(0, 0))
-                                .build()
-                ),
+                new AddEntity(engineId -> new Wall(
+                    engineId,
+                    new EntityStateBuilder()
+                            .shape(new ImmutableShape(ImmutableShape.Type.RECTANGLE,
+                                    new Rectangle2D.Double(0, 0, WALL_THICKNESS, worldBounds.getWidth())))
+                            .rotation(Angle.deg(90))
+                            .center(new Vector2D(worldBounds.getWidth()/2, WALL_THICKNESS/2))
+                            .velocity(new Vector2D(0, 0))
+                            .build()
+                ))
 
         });
     }
@@ -204,15 +203,16 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
         return stream()
             .ofType(KartStateUpdate.class)
             .distinct(update -> update.getKartId())
-            .map(update -> new AddEntity(
-                new Kart(update.getKartId(), this, eventQueue),
+            .map(update -> new AddEntity(engineId -> new Kart(
+                engineId,
                 new EntityStateBuilder()
-                    .shape(Kart.SHAPE)
-                    .rotation(Angle.deg(0))
-                    .center(new Vector2D(WORLD_WIDTH/2, WORLD_HEIGHT/2))
-                    .velocity(new Vector2D(0, 0))
-                    .build()
-            ));
+                        .shape(Kart.SHAPE)
+                        .rotation(Angle.deg(0))
+                        .center(new Vector2D(WORLD_WIDTH/2, WORLD_HEIGHT/2))
+                        .velocity(new Vector2D(0, 0))
+                        .build(),
+                update.getKartId(), this, eventQueue
+            )));
     }
 
     @Override

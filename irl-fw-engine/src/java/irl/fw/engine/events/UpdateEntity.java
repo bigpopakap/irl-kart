@@ -13,9 +13,9 @@ public class UpdateEntity implements EngineEvent {
     private final String entityId;
     private final EntityStateUpdate stateUpdates;
 
-    public UpdateEntity(String entityId, EntityStateUpdate stateUpdates) {
+    public UpdateEntity(String entityId, EntityStateUpdate stateUpdate) {
         this.entityId = entityId;
-        this.stateUpdates = stateUpdates;
+        this.stateUpdates = stateUpdate;
     }
 
     public String getEntityId() {

@@ -1,7 +1,6 @@
 package irl.kart.collisions;
 
 import irl.fw.engine.collisions.CollisionResolver;
-import irl.fw.engine.entity.EntityInstance;
 import irl.fw.engine.events.EntityCollision;
 import irl.kart.entities.Kart;
 import irl.kart.entities.Shell;
@@ -26,8 +25,7 @@ public class KartCollisionResolver implements CollisionResolver {
     @Override
     public void onCollision(EntityCollision collision) {
         if (collision.isBetween(Kart.class, Shell.class)) {
-            EntityInstance kartInst = collision.getType(Kart.class);
-            Kart kart = (Kart) kartInst.getEntity();
+            Kart kart = collision.getType(Kart.class);
             kart.spin();
         }
     }

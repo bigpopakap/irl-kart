@@ -16,7 +16,7 @@ public interface PhysicsModeler {
 
     World getWorld();
 
-    String addEntity(AddEntity add);
+    void addEntity(AddEntity add);
     void removeEntity(RemoveEntity remove);
     void updateEntity(UpdateEntity update);
 

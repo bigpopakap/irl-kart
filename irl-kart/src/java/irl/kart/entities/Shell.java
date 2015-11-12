@@ -1,6 +1,7 @@
 package irl.kart.entities;
 
 import irl.fw.engine.entity.VirtualEntity;
+import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.geometry.ImmutableShape;
 
 import java.awt.geom.Ellipse2D;
@@ -23,7 +24,8 @@ public class Shell extends VirtualEntity {
 
     private final String sourceKartId;
 
-    public Shell(String sourceKartId) {
+    public Shell(String engineId, EntityState initState, String sourceKartId) {
+        super(engineId, initState);
         this.sourceKartId = sourceKartId;
     }
 
