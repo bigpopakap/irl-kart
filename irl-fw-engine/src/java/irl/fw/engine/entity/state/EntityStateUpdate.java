@@ -68,13 +68,17 @@ public class EntityStateUpdate {
         return this;
     }
 
+    public Optional<Vector2D> getVelocity() {
+        return velocity;
+    }
+
     public EntityStateUpdate angularVelocity(Angle angularVelocity) {
         this.angularVelocity = Optional.ofNullable(angularVelocity);
         return this;
     }
 
-    public Optional<Vector2D> getVelocity() {
-        return velocity;
+    public Optional<Angle> getAngularVelocity() {
+        return angularVelocity;
     }
 
     public EntityState fillAndBuild(EntityState base) {

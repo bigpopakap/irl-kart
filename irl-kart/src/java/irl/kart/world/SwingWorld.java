@@ -375,10 +375,19 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
             //draw all the items in the world
             world.getEntities().stream()
                 .map(entity -> entity.getState().getTransformedShape())
-                    .forEach(g2::draw);
+                    .forEach(shape -> draw(g2, shape));
 
             //revert back to the original transform
             g2.setTransform(savedTrans);
+        }
+
+        private void draw(Graphics2D g2, ImmutableShape shape) {
+            g2.draw(shape);
+
+            //add a line so we can see the rotation of a circle
+//            if (shape.getType() == ImmutableShape.Type.ELLIPSE) {
+//
+//            }
         }
 
         private void drawArrow(Graphics g1, int x1, int y1, int x2, int y2) {

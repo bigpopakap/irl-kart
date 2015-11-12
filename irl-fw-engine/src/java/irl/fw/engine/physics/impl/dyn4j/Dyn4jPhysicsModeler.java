@@ -159,6 +159,10 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
             body.setLinearVelocity(fromVector(state.getVelocity().get()));
         }
 
+        if (state.getAngularVelocity().isPresent()) {
+            body.setAngularVelocity(state.getAngularVelocity().get().asRad());
+        }
+
         //default settings
         if (entity.isVirtual()) {
             body.setAutoSleepingEnabled(false);
