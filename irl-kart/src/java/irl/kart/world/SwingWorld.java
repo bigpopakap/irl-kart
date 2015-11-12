@@ -9,7 +9,8 @@ import irl.fw.engine.geometry.Vector2D;
 import irl.fw.engine.world.World;
 import irl.kart.beacon.KartBeacon;
 import irl.kart.beacon.KartBeaconEvent;
-import irl.kart.events.beacon.FireWeapon;
+import irl.kart.entities.items.ItemBoxPedestal;
+import irl.kart.events.beacon.UseItem;
 import irl.kart.events.beacon.KartStateUpdate;
 import irl.fw.engine.graphics.Renderer;
 import irl.kart.entities.Kart;
@@ -107,8 +108,10 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
         isStopped = false;
 
         //add walls and add karts when they are first seen
-        eventQueue.mergeIn(addWalls(new Rectangle2D.Double(0, 0, WORLD_WIDTH, WORLD_HEIGHT)));
-        eventQueue.mergeIn(newKarts());
+        final Rectangle2D worldBounds = new Rectangle2D.Double(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
+        eventQueue.mergeIn(addWalls(worldBounds));
+        eventQueue.mergeIn(addItemBoxes(worldBounds));
+        eventQueue.mergeIn(addNewKarts());
 
         this.frame = new JFrame();
         this.panel = new MyPanel();
@@ -193,7 +196,55 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
         });
     }
 
-    private Observable<AddEntity> newKarts() {
+    private Observable<AddEntity> addItemBoxes(Rectangle2D worldBounds) {
+        final double INSET = 4*WALL_THICKNESS;
+
+        return Observable.from(new AddEntity[] {
+
+            //top left
+            new AddEntity(engineId -> new ItemBoxPedestal(
+                engineId,
+                new EntityStateBuilder().defaults()
+                        .center(new Vector2D(INSET, worldBounds.getHeight() - INSET))
+                        .shape(ItemBoxPedestal.SHAPE)
+                        .build(),
+                eventQueue
+            )),
+
+            //top right
+            new AddEntity(engineId -> new ItemBoxPedestal(
+                engineId,
+                new EntityStateBuilder().defaults()
+                        .center(new Vector2D(worldBounds.getWidth() - INSET, worldBounds.getHeight() - INSET))
+                        .shape(ItemBoxPedestal.SHAPE)
+                        .build(),
+                eventQueue
+            )),
+
+            //bottom left
+            new AddEntity(engineId -> new ItemBoxPedestal(
+                engineId,
+                new EntityStateBuilder().defaults()
+                        .center(new Vector2D(INSET, INSET))
+                        .shape(ItemBoxPedestal.SHAPE)
+                        .build(),
+                eventQueue
+            )),
+
+            //bottom right
+            new AddEntity(engineId -> new ItemBoxPedestal(
+                engineId,
+                new EntityStateBuilder().defaults()
+                        .center(new Vector2D(worldBounds.getWidth() - INSET, INSET))
+                        .shape(ItemBoxPedestal.SHAPE)
+                        .build(),
+                eventQueue
+            ))
+
+        });
+    }
+
+    private Observable<AddEntity> addNewKarts() {
         return stream()
             .ofType(KartStateUpdate.class)
             .distinct(update -> update.getKartId())
@@ -283,7 +334,7 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
 
             /* KART 1 fire weapon */
             case KeyEvent.VK_ENTER:
-                return new FireWeapon(kart1Id);
+                return new UseItem(kart1Id);
 
             /* KART 2 speed */
             case KeyEvent.VK_W:
@@ -315,7 +366,7 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
 
             /* KART 2 fire weapon */
             case KeyEvent.VK_SPACE:
-                return new FireWeapon(kart2Id);
+                return new UseItem(kart2Id);
 
             default:
                 return null;
@@ -383,11 +434,6 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
 
         private void draw(Graphics2D g2, ImmutableShape shape) {
             g2.draw(shape);
-
-            //add a line so we can see the rotation of a circle
-//            if (shape.getType() == ImmutableShape.Type.ELLIPSE) {
-//
-//            }
         }
 
         private void drawArrow(Graphics g1, int x1, int y1, int x2, int y2) {

@@ -17,7 +17,11 @@ public class Callbacks implements Callback {
     }
 
     public String add(Callback callback) {
-        return callbacks.add(callback);
+        if (callback != null) {
+            return callbacks.add(callback);
+        } else {
+            return null;
+        }
     }
 
     public void remove(String callbackId) {

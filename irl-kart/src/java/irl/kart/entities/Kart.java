@@ -2,21 +2,20 @@ package irl.kart.entities;
 
 import irl.fw.engine.entity.EntityId;
 import irl.fw.engine.entity.state.EntityState;
-import irl.fw.engine.entity.state.EntityStateBuilder;
-import irl.fw.engine.events.AddEntity;
 import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.events.UpdateEntity;
 import irl.fw.engine.geometry.ImmutableShape;
-import irl.fw.engine.geometry.Vector2D;
 import irl.kart.beacon.KartBeacon;
 import irl.fw.engine.entity.IRLEntity;
-import irl.kart.events.beacon.FireWeapon;
+import irl.kart.entities.items.Item;
 import irl.kart.events.beacon.KartStateUpdate;
+import irl.kart.events.beacon.UseItem;
 import irl.kart.events.kart.SpinKart;
 import irl.util.reactiveio.Pipe;
 import irl.util.string.StringUtils;
 
 import java.awt.*;
+import java.util.Optional;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -45,6 +44,8 @@ public class Kart extends IRLEntity {
     private final KartBeacon kartBeacon;
     private final Pipe<EngineEvent> eventQueue;
 
+    private Optional<Item> item = Optional.empty();
+
     public Kart(EntityId engineId, EntityState initState,
                 String kartId, KartBeacon kartBeacon,
                 Pipe<EngineEvent> eventQueue) {
@@ -63,14 +64,11 @@ public class Kart extends IRLEntity {
                 .map(update -> new UpdateEntity(getEngineId(), update.getStateUpdate()))
         );
 
-        //merge in fire-weapon events
-        this.eventQueue.mergeIn(
-            this.kartBeacon.stream()
-                    .ofType(FireWeapon.class)
-                    .filter(fireWeapon -> StringUtils.equal(getKartId(), fireWeapon.getKartId()))
-                    .map(fireWeapon -> this.fire())
-                    .filter(addEntity -> addEntity != null)
-        );
+        //merge in uses of items
+        kartBeacon.stream()
+            .ofType(UseItem.class)
+            .filter(update -> StringUtils.equal(getKartId(), update.getKartId()))
+            .subscribe(update -> this.useItem());
     }
 
     public String getKartId() {
@@ -81,26 +79,21 @@ public class Kart extends IRLEntity {
         kartBeacon.send(new SpinKart(getKartId()));
     }
 
-    private AddEntity fire() {
-        EntityState kartState = getState();
-        Vector2D kartCenter = kartState.getCenter();
+    public void takeItem(Item item) {
+        if (!this.item.isPresent()) {
+            this.item = Optional.of(item);
+        }
+    }
 
-        Vector2D shellVelocity = new Vector2D(0, Shell.SPEED).rotate(kartState.getRotation());
-        Vector2D shellCenter = kartCenter.add(
-            shellVelocity.scaleTo(KART_LENGTH + 0.25*Shell.SIZE)
-        );
+    public void clearItem() {
+        this.item = Optional.empty();
+    }
 
-        return new AddEntity(engineId -> new Shell(
-            engineId,
-            new EntityStateBuilder().defaults()
-                    .shape(Shell.SHAPE)
-                    .center(shellCenter)
-                    .velocity(shellVelocity)
-                    .angularVelocity(Shell.ROTATIONAL_SPEED)
-                    .build(),
-            getKartId(),
-            eventQueue
-        ));
+    public void useItem() {
+        if (item.isPresent()) {
+            item.get().use(this);
+            clearItem();
+        }
     }
 
 }

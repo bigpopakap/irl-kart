@@ -28,7 +28,14 @@ public class EntityCollision implements EngineEvent {
         return entity2;
     }
 
-    public boolean isBetween(Class<? extends Entity> type1, Class<? extends Entity> type2) {
+    public boolean isWith(Class<? extends Entity> type) {
+        Entity actual1 = getEntity1();
+        Entity actual2 = getEntity2();
+
+        return type.isInstance(actual1) || type.isInstance(actual2);
+    }
+
+    public boolean isWith(Class<? extends Entity> type1, Class<? extends Entity> type2) {
         Entity actual1 = getEntity1();
         Entity actual2 = getEntity2();
 

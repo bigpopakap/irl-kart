@@ -8,9 +8,9 @@ import irl.kart.beacon.KartBeaconEvent;
  * @author bigpopakap
  * @since 11/11/15
  */
-public class FireWeapon extends KartBeaconEvent {
+public class UseItem extends KartBeaconEvent {
 
-    public FireWeapon(String kartId) {
+    public UseItem(String kartId) {
         super(kartId);
     }
 

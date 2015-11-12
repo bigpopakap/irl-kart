@@ -12,13 +12,9 @@ import irl.fw.engine.events.EntityCollision;
 public class NoopCollisionResolver implements CollisionResolver {
 
     @Override
-    public boolean onBeforeCollision(EntityCollision collision) {
-        return true; //let the collision happen
-    }
-
-    @Override
-    public void onCollision(EntityCollision collision) {
-        //do nothing
+    public boolean onCollision(EntityCollision collision) {
+        //do nothing. let all collisions go through
+        return true;
     }
 
 }
