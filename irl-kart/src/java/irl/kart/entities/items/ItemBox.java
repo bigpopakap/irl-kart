@@ -19,6 +19,7 @@ import java.util.ArrayList;
  */
 public class ItemBox extends VirtualEntity {
 
+    public static final Angle INIT_ROT = Angle.deg(45);
     public static final Angle ROTATION_SPEED = Angle.rad(-Math.PI);
     public static final ImmutableShape SHAPE = new ImmutableShape(
         ImmutableShape.Type.RECTANGLE,

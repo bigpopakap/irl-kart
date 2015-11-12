@@ -9,6 +9,7 @@ import irl.fw.engine.geometry.Vector2D;
 import irl.fw.engine.world.World;
 import irl.kart.beacon.KartBeacon;
 import irl.kart.beacon.KartBeaconEvent;
+import irl.kart.entities.items.ItemBox;
 import irl.kart.events.beacon.FireWeapon;
 import irl.kart.events.beacon.KartStateUpdate;
 import irl.fw.engine.graphics.Renderer;
@@ -196,8 +197,58 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
     }
 
     private Observable<AddEntity> addItemBoxes(Rectangle2D worldBounds) {
+        final double INSET = 4*WALL_THICKNESS;
+
         return Observable.from(new AddEntity[] {
-            //TODO
+
+            //top left
+            new AddEntity(engineId -> new ItemBox(
+                engineId,
+                new EntityStateBuilder().defaults()
+                        .center(new Vector2D(INSET, worldBounds.getHeight() - INSET))
+                        .shape(ItemBox.SHAPE)
+                        .rotation(ItemBox.INIT_ROT)
+                        .angularVelocity(ItemBox.ROTATION_SPEED)
+                        .build(),
+                eventQueue
+            )),
+
+            //top right
+            new AddEntity(engineId -> new ItemBox(
+                engineId,
+                new EntityStateBuilder().defaults()
+                        .center(new Vector2D(worldBounds.getWidth() - INSET, worldBounds.getHeight() - INSET))
+                        .shape(ItemBox.SHAPE)
+                        .rotation(ItemBox.INIT_ROT)
+                        .angularVelocity(ItemBox.ROTATION_SPEED)
+                        .build(),
+                eventQueue
+            )),
+
+            //bottom left
+            new AddEntity(engineId -> new ItemBox(
+                engineId,
+                new EntityStateBuilder().defaults()
+                        .center(new Vector2D(INSET, INSET))
+                        .shape(ItemBox.SHAPE)
+                        .rotation(ItemBox.INIT_ROT)
+                        .angularVelocity(ItemBox.ROTATION_SPEED)
+                        .build(),
+                eventQueue
+            )),
+
+            //bottom right
+            new AddEntity(engineId -> new ItemBox(
+                engineId,
+                new EntityStateBuilder().defaults()
+                        .center(new Vector2D(worldBounds.getWidth() - INSET, INSET))
+                        .shape(ItemBox.SHAPE)
+                        .rotation(ItemBox.INIT_ROT)
+                        .angularVelocity(ItemBox.ROTATION_SPEED)
+                        .build(),
+                eventQueue
+            ))
+
         });
     }
 

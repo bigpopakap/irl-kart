@@ -7,8 +7,6 @@ import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.events.RemoveEntity;
 import irl.fw.engine.geometry.Angle;
 import irl.fw.engine.geometry.ImmutableShape;
-import irl.kart.entities.Kart;
-import irl.kart.entities.items.Item;
 import irl.util.reactiveio.Pipe;
 
 import java.awt.geom.Ellipse2D;
