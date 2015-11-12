@@ -11,6 +11,8 @@ import java.awt.geom.Point2D;
  */
 public class Vector2D {
 
+    public static final Vector2D ZERO = new Vector2D(0, 0);
+
     private final Point2D point;
 
     public Vector2D(Point2D point) {
@@ -33,6 +35,10 @@ public class Vector2D {
         return point.getY();
     }
 
+    public double getMagnitude() {
+        return Math.sqrt(getX()*getX() + getY()*getY());
+    }
+
     public Vector2D add(Vector2D other) {
         return new Vector2D(getX() + other.getX(),
                             getY() + other.getY());
@@ -41,6 +47,14 @@ public class Vector2D {
     public Vector2D subtract(Vector2D other) {
         return new Vector2D(getX() - other.getX(),
                             getY() - other.getY());
+    }
+
+    public Vector2D multiply(double scalar) {
+        return new Vector2D(scalar * getX(), scalar * getY());
+    }
+
+    public Vector2D scaleTo(double magnitude) {
+        return multiply(magnitude / getMagnitude());
     }
 
     public Vector2D rotate(Angle angle) {

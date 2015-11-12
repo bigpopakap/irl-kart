@@ -1,9 +1,8 @@
 package irl.fw.engine.physics.impl.noop;
 
 import irl.fw.engine.entity.Entity;
-import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.collisions.CollisionResolver;
-import irl.fw.engine.entity.EntityInstance;
+import irl.fw.engine.entity.EntityId;
 import irl.fw.engine.entity.state.EntityStateUpdate;
 import irl.fw.engine.events.AddEntity;
 import irl.fw.engine.events.RemoveEntity;
@@ -21,7 +20,7 @@ import irl.util.universe.Universe;
  */
 public class NoopPhysicsModeler implements PhysicsModeler {
 
-    private final Universe<EntityInstance> universe;
+    private final Universe<Entity> universe;
 
     public NoopPhysicsModeler() {
         universe = new Universe<>();
@@ -33,23 +32,16 @@ public class NoopPhysicsModeler implements PhysicsModeler {
     }
 
     @Override
-    public String addEntity(AddEntity add) {
-        Entity newEntity = add.getEntity();
-        EntityState initialState = add.getInitialState();
-
-        EntityInstance entityInstance = new EntityInstance(
-            newEntity,
-            initialState
-        );
-        return universe.add(entityInstance);
+    public void addEntity(AddEntity add) {
+        universe.add(add.getEntityFactory());
     }
 
     @Override
     public void removeEntity(RemoveEntity remove) {
-        String entityId = remove.getEntityId();
+        EntityId entityId = remove.getEntityId();
 
-        if (universe.contains(entityId)) {
-            universe.remove(entityId);
+        if (universe.contains(entityId.toString())) {
+            universe.remove(entityId.toString());
         } else {
             System.err.println("Tried to removeEntity non-existent entity: " + entityId);
         }
@@ -57,13 +49,13 @@ public class NoopPhysicsModeler implements PhysicsModeler {
 
     @Override
     public void updateEntity(UpdateEntity update) {
-        String entityId = update.getEntityId();
+        EntityId entityId = update.getEntityId();
         EntityStateUpdate stateUpdate = update.getStateUpdate();
 
-        if (universe.contains(entityId)) {
-            EntityInstance current = universe.get(entityId);
-            EntityInstance updated = current.updateState(stateUpdate);
-            universe.update(entityId, updated);
+        if (universe.contains(entityId.toString())) {
+            Entity entity = universe.get(entityId.toString());
+            entity.updateState(stateUpdate);
+            universe.update(entityId.toString(), entity);
         } else {
             System.err.println("Tried to updateEntity non-existent entity: " + entityId
                     + " to new state: " + stateUpdate);

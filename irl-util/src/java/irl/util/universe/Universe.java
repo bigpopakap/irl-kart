@@ -18,10 +18,14 @@ public class Universe<T> {
         this.universe = new ConcurrentHashMap<>();
     }
 
-    public String add(T value) {
+    public String add(UniverseElementFactory<? extends T> factory) {
         String id = generateId();
-        universe.put(id, value);
+        universe.put(id, factory.create(id));
         return id;
+    }
+
+    public String add(T value) {
+        return add(new DefaultElementFactory<>(value));
     }
 
     public boolean contains(String id) {

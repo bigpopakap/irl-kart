@@ -1,5 +1,7 @@
 package irl.fw.engine.events;
 
+import irl.fw.engine.entity.EntityId;
+
 /**
  * TODO bigpopakap Javadoc this class
  *
@@ -8,13 +10,13 @@ package irl.fw.engine.events;
  */
 public class RemoveEntity implements EngineEvent {
 
-    private final String entityId;
+    private final EntityId entityId;
 
-    public RemoveEntity(String entityId) {
+    public RemoveEntity(EntityId entityId) {
         this.entityId = entityId;
     }
 
-    public String getEntityId() {
+    public EntityId getEntityId() {
         return entityId;
     }
 

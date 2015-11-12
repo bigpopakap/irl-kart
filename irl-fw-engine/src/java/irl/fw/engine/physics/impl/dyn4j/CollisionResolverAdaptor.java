@@ -1,7 +1,7 @@
 package irl.fw.engine.physics.impl.dyn4j;
 
 import irl.fw.engine.collisions.CollisionResolver;
-import irl.fw.engine.entity.EntityInstance;
+import irl.fw.engine.entity.Entity;
 import irl.fw.engine.events.EntityCollision;
 import org.dyn4j.collision.manifold.Manifold;
 import org.dyn4j.collision.narrowphase.Penetration;
@@ -9,8 +9,6 @@ import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.dynamics.CollisionListener;
 import org.dyn4j.dynamics.contact.*;
-
-import static irl.fw.engine.physics.impl.dyn4j.Dyn4jEntityConverter.*;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -38,8 +36,8 @@ class CollisionResolverAdaptor implements CollisionListener, ContactListener {
 
     @Override
     public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2, Manifold manifold) {
-        EntityInstance entity1 = toEntity(body1);
-        EntityInstance entity2 = toEntity(body2);
+        Entity entity1 = (Entity) body1.getUserData();
+        Entity entity2 = (Entity) body2.getUserData();
 
         EntityCollision event = new EntityCollision(entity1, entity2);
 
@@ -59,18 +57,19 @@ class CollisionResolverAdaptor implements CollisionListener, ContactListener {
 
     @Override
     public boolean begin(ContactPoint point) {
-        //do nothing
+        Entity entity1 = (Entity) point.getBody1().getUserData();
+        Entity entity2 = (Entity) point.getBody2().getUserData();
+
+        EntityCollision event = new EntityCollision(entity1, entity2);
+
+        resolver.onCollision(event);
+
         return true;
     }
 
     @Override
     public void end(ContactPoint point) {
-        EntityInstance entity1 = toEntity(point.getBody1());
-        EntityInstance entity2 = toEntity(point.getBody2());
-
-        EntityCollision event = new EntityCollision(entity1, entity2);
-
-        resolver.onCollision(event);
+        //do nothing
     }
 
     @Override

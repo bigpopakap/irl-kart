@@ -11,7 +11,7 @@ import rx.Observable;
  */
 public interface KartBeacon {
 
-    Observable<KartUpdate> updates();
+    Observable<KartBeaconEvent> stream();
     void send(KartEvent event);
 
 }

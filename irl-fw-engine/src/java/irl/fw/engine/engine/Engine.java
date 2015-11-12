@@ -1,6 +1,5 @@
 package irl.fw.engine.engine;
 
-import irl.fw.engine.entity.Entity;
 import irl.fw.engine.graphics.Renderer;
 import irl.fw.engine.collisions.CollisionResolver;
 import irl.fw.engine.events.AddEntity;
@@ -126,13 +125,7 @@ public class Engine implements StoppableRunnable {
     public void handleEvent(EngineEvent event) {
         //TODO use command pattern instead of hardcoding a method per event
         if (event instanceof AddEntity) {
-            AddEntity addEvent = (AddEntity) event;
-            Entity newEntity = ((AddEntity) event).getEntity();
-
-            String newEntityId = phyisicsModel.addEntity(addEvent);
-
-            eventQueue.mergeIn(newEntity.updates()
-                    .map(stateUpdate -> new UpdateEntity(newEntityId, stateUpdate)));
+            phyisicsModel.addEntity((AddEntity) event);
         }
         else if (event instanceof RemoveEntity) {
             phyisicsModel.removeEntity((RemoveEntity) event);

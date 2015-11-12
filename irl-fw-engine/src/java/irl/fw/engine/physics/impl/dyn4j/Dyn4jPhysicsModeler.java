@@ -1,9 +1,11 @@
 package irl.fw.engine.physics.impl.dyn4j;
 
 import irl.fw.engine.entity.Entity;
-import irl.fw.engine.entity.EntityInstance;
+import irl.fw.engine.entity.EntityFactory;
+import irl.fw.engine.entity.EntityId;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.collisions.CollisionResolver;
+import irl.fw.engine.entity.state.EntityStateBuilder;
 import irl.fw.engine.entity.state.EntityStateUpdate;
 import irl.fw.engine.events.AddEntity;
 import irl.fw.engine.events.RemoveEntity;
@@ -37,9 +39,9 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
 
     @Override
     public irl.fw.engine.world.World getWorld() {
-        Set<EntityInstance> entityInstances
+        Set<Entity> entityInstances
             = world.getBodies().parallelStream()
-                .map(Dyn4jEntityConverter::toEntity)
+                .map(body -> (Entity) body.getUserData())
                 .collect(Collectors.toSet());
 
         Set<AABB> allBounds = world.getBodies().parallelStream()
@@ -70,19 +72,15 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
     }
 
     @Override
-    public synchronized String addEntity(AddEntity add) {
-        Body body = createBody(add.getEntity(), add.getInitialState());
-
-        //addEntity the body
+    public synchronized void addEntity(AddEntity add) {
+        Body body = createBody(add.getEntityFactory());
         world.addBody(body);
         world.setUpdateRequired(true);
-
-        return body.getId().toString();
     }
 
     @Override
     public synchronized void removeEntity(RemoveEntity remove) {
-        String entityId = remove.getEntityId();
+        EntityId entityId = remove.getEntityId();
         Optional<Body> foundBody = findBody(entityId);
 
         if (foundBody.isPresent()) {
@@ -95,7 +93,7 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
 
     @Override
     public synchronized void updateEntity(UpdateEntity update) {
-        String entityId = update.getEntityId();
+        EntityId entityId = update.getEntityId();
         EntityStateUpdate stateUpdate = update.getStateUpdate();
 
         Optional<Body> foundBody = findBody(entityId);
@@ -118,16 +116,24 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         world.addListener(new CollisionResolverAdaptor(collisionResolver));
 
         world.update(timeStepInSeconds);
+
+        //update all the associated entity states
+        world.getBodies().parallelStream()
+                .forEach(body -> updateEntityData(body));
     }
 
-    private Body createBody(Entity entity, EntityState state) {
+    private Body createBody(EntityFactory<? extends Entity> entityFactory) {
         Body body = new Body();
+
+        Entity entity = entityFactory.create(body.getId().toString());
+        EntityState state = entity.getState();
         body.setUserData(entity);
 
         BodyFixture fixture = new BodyFixture(fromShape(state.getShape()));
         body.addFixture(fixture);
 
         updateBody(body, entity, state.toStateUpdate());
+
         return body;
     }
 
@@ -153,9 +159,14 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
             body.setLinearVelocity(fromVector(state.getVelocity().get()));
         }
 
+        if (state.getAngularVelocity().isPresent()) {
+            body.setAngularVelocity(state.getAngularVelocity().get().asRad());
+        }
+
         //default settings
         if (entity.isVirtual()) {
             body.setAutoSleepingEnabled(false);
+            //TODO should shells have fixed angular velocity?
             body.setMass(MassType.NORMAL);
         } else {
             body.setMass(MassType.INFINITE);
@@ -166,9 +177,21 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         body.setAsleep(false);
     }
 
-    private Optional<Body> findBody(String entityId) {
+    private void updateEntityData(Body body) {
+        Entity entity = (Entity) body.getUserData();
+
+        entity.setState(new EntityStateBuilder()
+                .shape(toShape(body.getFixture(0).getShape()))
+                .rotation(toRadAngle(body.getTransform().getRotation()))
+                .center(toVector(body.getWorldCenter()))
+                .velocity(toVector(body.getLinearVelocity()))
+                .angularVelocity(toRadAngle(body.getAngularVelocity()))
+                .build());
+    }
+
+    private Optional<Body> findBody(EntityId entityId) {
         return world.getBodies().stream()
-                .filter(body -> body.getId().equals(UUID.fromString(entityId)))
+                .filter(body -> body.getId().equals(fromId(entityId)))
                 .findFirst();
     }
 

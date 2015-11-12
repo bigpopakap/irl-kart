@@ -16,9 +16,19 @@ public class EntityStateBuilder {
     private Angle rotation;
     private Vector2D center;
     private Vector2D velocity;
+    private Angle angularVelocity;
 
     public EntityStateBuilder() {
-        //do nothing
+        //set no defaults here
+    }
+
+    public EntityStateBuilder defaults() {
+        shape(null); //required
+        rotation(Angle.ZERO);
+        center(null); //required
+        velocity(Vector2D.ZERO);
+        angularVelocity(Angle.ZERO);
+        return this;
     }
 
     public EntityStateBuilder shape(ImmutableShape shape) {
@@ -41,8 +51,14 @@ public class EntityStateBuilder {
         return this;
     }
 
+    public EntityStateBuilder angularVelocity(Angle angularVelocity) {
+        this.angularVelocity = angularVelocity;
+        return this;
+    }
+
     public EntityState build() {
-        return new EntityState(shape, rotation, center, velocity);
+        return new EntityState(shape, rotation, center, velocity,
+                            angularVelocity);
     }
 
     @Override

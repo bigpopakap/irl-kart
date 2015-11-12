@@ -18,12 +18,14 @@ public class EntityStateUpdate {
     private Optional<Angle> rotation;
     private Optional<Vector2D> center;
     private Optional<Vector2D> velocity;
+    private Optional<Angle> angularVelocity;
 
     public EntityStateUpdate() {
         shape = Optional.empty();
         rotation = Optional.empty();
         center = Optional.empty();
         velocity = Optional.empty();
+        angularVelocity = Optional.empty();
     }
 
     public EntityStateUpdate(EntityState stateToCopy) {
@@ -31,6 +33,7 @@ public class EntityStateUpdate {
         rotation(stateToCopy.getRotation());
         center(stateToCopy.getCenter());
         velocity(stateToCopy.getVelocity());
+        angularVelocity(stateToCopy.getAngularVelocity());
     }
 
     public EntityStateUpdate shape(ImmutableShape shape) {
@@ -69,12 +72,22 @@ public class EntityStateUpdate {
         return velocity;
     }
 
+    public EntityStateUpdate angularVelocity(Angle angularVelocity) {
+        this.angularVelocity = Optional.ofNullable(angularVelocity);
+        return this;
+    }
+
+    public Optional<Angle> getAngularVelocity() {
+        return angularVelocity;
+    }
+
     public EntityState fillAndBuild(EntityState base) {
         return new EntityState(
-            shape.isPresent() ? shape.get() : base.getShape(),
-            rotation.isPresent() ? rotation.get() : base.getRotation(),
-            center.isPresent() ? center.get() : base.getCenter(),
-            velocity.isPresent() ? velocity.get() : base.getVelocity()
+            shape.orElse(base.getShape()),
+            rotation.orElse(base.getRotation()),
+            center.orElse(base.getCenter()),
+            velocity.orElse(base.getVelocity()),
+            angularVelocity.orElse(base.getAngularVelocity())
         );
     }
 

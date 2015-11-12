@@ -1,7 +1,7 @@
 package irl.fw.engine.entity;
 
+import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.entity.state.EntityStateUpdate;
-import rx.Observable;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -9,9 +9,32 @@ import rx.Observable;
  * @author bigpopakap
  * @since 10/29/15
  */
-public interface Entity {
+public abstract class Entity {
 
-    boolean isVirtual();
-    Observable<EntityStateUpdate> updates();
+    private final EntityId engineId;
+    private volatile EntityState state;
+
+    public Entity(EntityId engineId, EntityState initState) {
+        this.engineId = engineId;
+        setState(initState);
+    }
+
+    public abstract boolean isVirtual();
+
+    public EntityId getEngineId() {
+        return engineId;
+    }
+
+    public EntityState getState() {
+        return state;
+    }
+
+    public synchronized void setState(EntityState state) {
+        this.state = state;
+    }
+
+    public synchronized void updateState(EntityStateUpdate stateUpdates) {
+        setState(stateUpdates.fillAndBuild(getState()));
+    }
 
 }

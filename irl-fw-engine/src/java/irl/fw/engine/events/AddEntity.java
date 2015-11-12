@@ -1,7 +1,7 @@
 package irl.fw.engine.events;
 
 import irl.fw.engine.entity.Entity;
-import irl.fw.engine.entity.state.EntityState;
+import irl.fw.engine.entity.EntityFactory;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -11,20 +11,14 @@ import irl.fw.engine.entity.state.EntityState;
  */
 public class AddEntity implements EngineEvent {
 
-    private final Entity entity;
-    private final EntityState initialState;
+    private final EntityFactory<? extends Entity> entityFactory;
 
-    public AddEntity(Entity entity, EntityState initialState) {
-        this.entity = entity;
-        this.initialState = initialState;
+    public AddEntity(EntityFactory<? extends Entity> entityFactory) {
+        this.entityFactory = entityFactory;
     }
 
-    public Entity getEntity() {
-        return entity;
-    }
-
-    public EntityState getInitialState() {
-        return initialState;
+    public EntityFactory<? extends Entity> getEntityFactory() {
+        return entityFactory;
     }
 
 }

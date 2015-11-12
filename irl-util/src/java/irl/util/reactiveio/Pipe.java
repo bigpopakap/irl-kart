@@ -2,7 +2,7 @@ package irl.util.reactiveio;
 
 import rx.Observable;
 import rx.Observer;
-import rx.subjects.PublishSubject;
+import rx.subjects.ReplaySubject;
 import rx.subjects.Subject;
 
 /**
@@ -16,7 +16,8 @@ public class Pipe<T> {
     private final Subject<T, T> pipe;
 
     public Pipe() {
-        pipe = PublishSubject.<T>create().toSerialized();
+        //FIXME don't use an unbounced replay subject... that will take up memory
+        pipe = ReplaySubject.<T>create().toSerialized();
 
         //make sure the pipe never completes
         mergeIn(Observable.<T>never());
