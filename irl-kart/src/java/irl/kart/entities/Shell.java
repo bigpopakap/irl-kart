@@ -2,7 +2,10 @@ package irl.kart.entities;
 
 import irl.fw.engine.entity.VirtualEntity;
 import irl.fw.engine.entity.state.EntityState;
+import irl.fw.engine.events.EngineEvent;
+import irl.fw.engine.events.RemoveEntity;
 import irl.fw.engine.geometry.ImmutableShape;
+import irl.util.reactiveio.Pipe;
 
 import java.awt.geom.Ellipse2D;
 
@@ -23,14 +26,22 @@ public class Shell extends VirtualEntity {
     );
 
     private final String sourceKartId;
+    private final Pipe<EngineEvent> eventQueue;
 
-    public Shell(String engineId, EntityState initState, String sourceKartId) {
+    public Shell(String engineId, EntityState initState,
+                 String sourceKartId,
+                 Pipe<EngineEvent> eventQueue) {
         super(engineId, initState);
         this.sourceKartId = sourceKartId;
+        this.eventQueue = eventQueue;
     }
 
     public String getSourceKartId() {
         return sourceKartId;
+    }
+
+    public void remove() {
+        this.eventQueue.mergeIn(new RemoveEntity(getEngineId()));
     }
 
 }

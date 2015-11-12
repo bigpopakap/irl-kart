@@ -26,7 +26,10 @@ public class KartCollisionResolver implements CollisionResolver {
     public void onCollision(EntityCollision collision) {
         if (collision.isBetween(Kart.class, Shell.class)) {
             Kart kart = collision.getType(Kart.class);
+            Shell shell = collision.getType(Shell.class);
+
             kart.spin();
+            shell.remove();
         }
     }
 

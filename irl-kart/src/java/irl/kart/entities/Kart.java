@@ -98,7 +98,8 @@ public class Kart extends IRLEntity {
                     .center(shellCenter)
                     .velocity(shellVelocity)
                     .build(),
-            getKartId()
+            getKartId(),
+            eventQueue
         ));
     }
 
