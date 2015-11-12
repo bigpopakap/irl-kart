@@ -80,7 +80,9 @@ public class Kart extends IRLEntity {
     }
 
     public void takeItem(Item item) {
-        this.item = Optional.ofNullable(item);
+        if (!this.item.isPresent()) {
+            this.item = Optional.of(item);
+        }
     }
 
     public void clearItem() {

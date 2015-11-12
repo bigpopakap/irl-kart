@@ -4,7 +4,6 @@ import irl.fw.engine.collisions.CollisionResolver;
 import irl.fw.engine.events.EntityCollision;
 import irl.kart.entities.Kart;
 import irl.kart.entities.Shell;
-import irl.kart.entities.items.Item;
 import irl.kart.entities.items.ItemBox;
 import irl.kart.entities.items.ItemBoxPedestal;
 

@@ -9,7 +9,6 @@ import irl.fw.engine.geometry.Vector2D;
 import irl.fw.engine.world.World;
 import irl.kart.beacon.KartBeacon;
 import irl.kart.beacon.KartBeaconEvent;
-import irl.kart.entities.items.ItemBox;
 import irl.kart.entities.items.ItemBoxPedestal;
 import irl.kart.events.beacon.UseItem;
 import irl.kart.events.beacon.KartStateUpdate;
@@ -207,7 +206,7 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
                 engineId,
                 new EntityStateBuilder().defaults()
                         .center(new Vector2D(INSET, worldBounds.getHeight() - INSET))
-                        .shape(ItemBox.SHAPE)
+                        .shape(ItemBoxPedestal.SHAPE)
                         .build(),
                 eventQueue
             )),
@@ -217,7 +216,7 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
                 engineId,
                 new EntityStateBuilder().defaults()
                         .center(new Vector2D(worldBounds.getWidth() - INSET, worldBounds.getHeight() - INSET))
-                        .shape(ItemBox.SHAPE)
+                        .shape(ItemBoxPedestal.SHAPE)
                         .build(),
                 eventQueue
             )),
@@ -227,7 +226,7 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
                 engineId,
                 new EntityStateBuilder().defaults()
                         .center(new Vector2D(INSET, INSET))
-                        .shape(ItemBox.SHAPE)
+                        .shape(ItemBoxPedestal.SHAPE)
                         .build(),
                 eventQueue
             )),
@@ -237,7 +236,7 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
                 engineId,
                 new EntityStateBuilder().defaults()
                         .center(new Vector2D(worldBounds.getWidth() - INSET, INSET))
-                        .shape(ItemBox.SHAPE)
+                        .shape(ItemBoxPedestal.SHAPE)
                         .build(),
                 eventQueue
             ))

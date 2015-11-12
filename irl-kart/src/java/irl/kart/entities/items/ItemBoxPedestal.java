@@ -6,9 +6,11 @@ import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.entity.state.EntityStateBuilder;
 import irl.fw.engine.events.AddEntity;
 import irl.fw.engine.events.EngineEvent;
+import irl.fw.engine.geometry.ImmutableShape;
 import irl.util.reactiveio.Pipe;
 import rx.Observable;
 
+import java.awt.geom.Ellipse2D;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -19,6 +21,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class ItemBoxPedestal extends VirtualEntity {
 
+    public static final ImmutableShape SHAPE = new ImmutableShape(
+        ImmutableShape.Type.ELLIPSE,
+        new Ellipse2D.Double(0, 0, 2, 2)
+    );
     private static final long ITEM_BOX_REGEN_DELAY = 2000;
 
     private final Pipe<EngineEvent> eventQueue;
