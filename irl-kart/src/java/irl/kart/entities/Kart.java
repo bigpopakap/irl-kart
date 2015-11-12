@@ -10,6 +10,8 @@ import irl.fw.engine.geometry.ImmutableShape;
 import irl.fw.engine.geometry.Vector2D;
 import irl.kart.beacon.KartBeacon;
 import irl.fw.engine.entity.IRLEntity;
+import irl.kart.events.beacon.FireWeapon;
+import irl.kart.events.beacon.KartStateUpdate;
 import irl.kart.events.kart.SpinKart;
 import irl.util.reactiveio.Pipe;
 import irl.util.string.StringUtils;
@@ -49,6 +51,13 @@ public class Kart extends IRLEntity {
         this.kartId = kartId;
         this.kartBeacon = kartBeacon;
         this.eventQueue = eventQueue;
+
+        this.eventQueue.mergeIn(
+            this.kartBeacon.stream()
+                    .ofType(FireWeapon.class)
+                    .filter(fireWeapon -> StringUtils.equal(getKartId(), fireWeapon.getKartId()))
+                    .map(fireWeapon -> this.fire(null))
+        );
     }
 
     public String getKartId() {
@@ -58,8 +67,9 @@ public class Kart extends IRLEntity {
     @Override
     public Observable<EntityStateUpdate> updates() {
         //TODO we should only report the latest position or something
-        return kartBeacon.updates()
-                .filter(update -> StringUtils.equal(getKartId(), update.getExternalId()))
+        return kartBeacon.stream()
+                .ofType(KartStateUpdate.class)
+                .filter(update -> StringUtils.equal(getKartId(), update.getKartId()))
                 .map(update -> update.getStateUpdate());
     }
 
@@ -67,17 +77,18 @@ public class Kart extends IRLEntity {
         kartBeacon.send(new SpinKart(getKartId()));
     }
 
-    public void fire(EntityState kartState) {
-        Vector2D kartCenter = kartState.getCenter();
-        Vector2D kartVelocity = kartState.getVelocity();
+    private AddEntity fire(EntityState kartState) {
+        //FIXME figure out how this flow should work
+        Vector2D kartCenter = new Vector2D(200, 200);
+        Vector2D kartVelocity = new Vector2D(60, -60);
 
         Vector2D shellCenter = kartCenter.add(
-            kartVelocity.scaleTo(KART_LENGTH + 2* Shell.SIZE)
+            kartVelocity.scaleTo(KART_LENGTH + 2*Shell.SIZE)
         );
 
         Vector2D shellVelocity = kartVelocity.scaleTo(Shell.SPEED);
 
-        eventQueue.mergeIn(new AddEntity(
+        return new AddEntity(
             new Shell(getKartId()),
             new EntityStateBuilder()
                     .shape(Shell.SHAPE)
@@ -85,7 +96,7 @@ public class Kart extends IRLEntity {
                     .center(shellCenter)
                     .velocity(shellVelocity)
                     .build()
-        ));
+        );
     }
 
 }

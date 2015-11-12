@@ -9,7 +9,9 @@ import irl.fw.engine.geometry.ImmutableShape;
 import irl.fw.engine.geometry.Vector2D;
 import irl.fw.engine.world.World;
 import irl.kart.beacon.KartBeacon;
-import irl.kart.beacon.KartUpdate;
+import irl.kart.beacon.KartBeaconEvent;
+import irl.kart.events.beacon.FireWeapon;
+import irl.kart.events.beacon.KartStateUpdate;
 import irl.fw.engine.graphics.Renderer;
 import irl.kart.entities.Kart;
 import irl.kart.entities.Wall;
@@ -55,7 +57,7 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
     private final Callbacks onStop;
 
     private final Subject<KeyEvent, KeyEvent> rawPositions;
-    private final Pipe<KartUpdate> updates;
+    private final Pipe<KartBeaconEvent> updates;
 
     //pretending to be the "state" of the real world
     private volatile double kart1rot = 0;
@@ -76,7 +78,7 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
 
         this.updates = new Pipe<>();
         this.updates.mergeIn(rawPositions
-                .map(this::keyEventToUpdate)
+                .map(this::keyEventToBeaconEvent)
                 .filter(update -> update != null));
 
         onStop = new Callbacks();
@@ -132,7 +134,7 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
     }
 
     @Override
-    public Observable<KartUpdate> updates() {
+    public Observable<KartBeaconEvent> stream() {
         return updates.get();
     }
 
@@ -199,16 +201,17 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
     }
 
     private Observable<AddEntity> newKarts() {
-        return updates()
-            .distinct(update -> update.getExternalId())
+        return stream()
+            .ofType(KartStateUpdate.class)
+            .distinct(update -> update.getKartId())
             .map(update -> new AddEntity(
-                    new Kart(update.getExternalId(), this, eventQueue),
-                    new EntityStateBuilder()
-                            .shape(Kart.SHAPE)
-                            .rotation(Angle.deg(0))
-                            .center(new Vector2D(50, 50))
-                            .velocity(new Vector2D(0, 0))
-                            .build()
+                new Kart(update.getKartId(), this, eventQueue),
+                new EntityStateBuilder()
+                    .shape(Kart.SHAPE)
+                    .rotation(Angle.deg(0))
+                    .center(new Vector2D(WORLD_WIDTH/2, WORLD_HEIGHT/2))
+                    .velocity(new Vector2D(0, 0))
+                    .build()
             ));
     }
 
@@ -253,7 +256,7 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
         }
     }
 
-    private KartUpdate keyEventToUpdate(KeyEvent evt) {
+    private KartBeaconEvent keyEventToBeaconEvent(KeyEvent evt) {
         switch (evt.getKeyCode()) {
             /* KART 1 speed */
             case KeyEvent.VK_UP:
@@ -261,13 +264,13 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
                 EntityStateUpdate update1speedUp = new EntityStateUpdate()
                         .velocity(new Vector2D(0, kart1speed).rotate(Angle.deg(kart1rot)))
                         .rotation(Angle.deg(kart1rot));
-                return new KartUpdate(kart1Id, update1speedUp);
+                return new KartStateUpdate(kart1Id, update1speedUp);
             case KeyEvent.VK_DOWN:
                 kart1speed = Math.max(Kart.MIN_SPEED, kart1speed - Kart.SPEED_INCR);
                 EntityStateUpdate update1speedDown = new EntityStateUpdate()
                         .velocity(new Vector2D(0, kart1speed).rotate(Angle.deg(kart1rot)))
                         .rotation(Angle.deg(kart1rot));
-                return new KartUpdate(kart1Id, update1speedDown);
+                return new KartStateUpdate(kart1Id, update1speedDown);
 
             /* KART 1 rotation */
             case KeyEvent.VK_LEFT:
@@ -275,13 +278,17 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
                 EntityStateUpdate stateUpdateRight = new EntityStateUpdate()
                         .velocity(new Vector2D(0, kart1speed).rotate(Angle.deg(kart1rot)))
                         .rotation(Angle.deg(kart1rot));
-                return new KartUpdate(kart1Id, stateUpdateRight);
+                return new KartStateUpdate(kart1Id, stateUpdateRight);
             case KeyEvent.VK_RIGHT:
                 kart1rot -= Kart.ROT_INCR;
                 EntityStateUpdate stateUpdateLeft = new EntityStateUpdate()
                         .velocity(new Vector2D(0, kart1speed).rotate(Angle.deg(kart1rot)))
                         .rotation(Angle.deg(kart1rot));
-                return new KartUpdate(kart1Id, stateUpdateLeft);
+                return new KartStateUpdate(kart1Id, stateUpdateLeft);
+
+            /* KART 1 fire weapon */
+            case KeyEvent.VK_ENTER:
+                return new FireWeapon(kart1Id);
 
             /* KART 2 speed */
             case KeyEvent.VK_W:
@@ -289,13 +296,13 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
                 EntityStateUpdate update2speedUp = new EntityStateUpdate()
                         .velocity(new Vector2D(0, kart2speed).rotate(Angle.deg(kart2rot)))
                         .rotation(Angle.deg(kart2rot));
-                return new KartUpdate(kart2Id, update2speedUp);
+                return new KartStateUpdate(kart2Id, update2speedUp);
             case KeyEvent.VK_S:
                 kart2speed = Math.max(Kart.MIN_SPEED, kart2speed - Kart.SPEED_INCR);
                 EntityStateUpdate update2speedDown = new EntityStateUpdate()
                         .velocity(new Vector2D(0, kart2speed).rotate(Angle.deg(kart2rot)))
                         .rotation(Angle.deg(kart2rot));
-                return new KartUpdate(kart2Id, update2speedDown);
+                return new KartStateUpdate(kart2Id, update2speedDown);
 
             /* KART 2 rotation */
             case KeyEvent.VK_A:
@@ -303,13 +310,17 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
                 EntityStateUpdate stateUpdate2Right = new EntityStateUpdate()
                         .velocity(new Vector2D(0, kart2speed).rotate(Angle.deg(kart2rot)))
                         .rotation(Angle.deg(kart2rot));
-                return new KartUpdate(kart2Id, stateUpdate2Right);
+                return new KartStateUpdate(kart2Id, stateUpdate2Right);
             case KeyEvent.VK_D:
                 kart2rot -= Kart.ROT_INCR;
                 EntityStateUpdate stateUpdate2Left = new EntityStateUpdate()
                         .velocity(new Vector2D(0, kart2speed).rotate(Angle.deg(kart2rot)))
                         .rotation(Angle.deg(kart2rot));
-                return new KartUpdate(kart2Id, stateUpdate2Left);
+                return new KartStateUpdate(kart2Id, stateUpdate2Left);
+
+            /* KART 2 fire weapon */
+            case KeyEvent.VK_SPACE:
+                return new FireWeapon(kart2Id);
 
             default:
                 return null;
