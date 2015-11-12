@@ -11,6 +11,10 @@ import irl.util.universe.UniverseElementFactory;
 public interface EntityFactory<T extends Entity> extends UniverseElementFactory<T> {
 
     @Override
-    T create(String engineId);
+    default T create(String id) {
+        return create(new EntityId(id));
+    }
+
+    T create(EntityId engineId);
 
 }

@@ -11,17 +11,17 @@ import irl.fw.engine.entity.state.EntityStateUpdate;
  */
 public abstract class Entity {
 
-    private final String engineId;
+    private final EntityId engineId;
     private volatile EntityState state;
 
-    public Entity(String engineId, EntityState initState) {
+    public Entity(EntityId engineId, EntityState initState) {
         this.engineId = engineId;
         setState(initState);
     }
 
     public abstract boolean isVirtual();
 
-    public String getEngineId() {
+    public EntityId getEngineId() {
         return engineId;
     }
 

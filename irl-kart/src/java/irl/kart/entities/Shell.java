@@ -1,5 +1,6 @@
 package irl.kart.entities;
 
+import irl.fw.engine.entity.EntityId;
 import irl.fw.engine.entity.VirtualEntity;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.events.EngineEvent;
@@ -30,7 +31,7 @@ public class Shell extends VirtualEntity {
     private final String sourceKartId;
     private final Pipe<EngineEvent> eventQueue;
 
-    public Shell(String engineId, EntityState initState,
+    public Shell(EntityId engineId, EntityState initState,
                  String sourceKartId,
                  Pipe<EngineEvent> eventQueue) {
         super(engineId, initState);

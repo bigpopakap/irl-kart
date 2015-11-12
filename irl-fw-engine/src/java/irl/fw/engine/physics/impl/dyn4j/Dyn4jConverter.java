@@ -1,5 +1,6 @@
 package irl.fw.engine.physics.impl.dyn4j;
 
+import irl.fw.engine.entity.EntityId;
 import irl.fw.engine.geometry.Angle;
 import irl.fw.engine.geometry.Vector2D;
 import org.dyn4j.geometry.Vector2;
@@ -14,8 +15,8 @@ import java.util.UUID;
  */
 class Dyn4jConverter {
 
-    public static UUID fromId(String id) {
-        return UUID.fromString(id);
+    public static UUID fromId(EntityId entitId) {
+        return UUID.fromString(entitId.toString());
     }
 
     public static Vector2 fromVector(Vector2D vector) {

@@ -2,6 +2,7 @@ package irl.fw.engine.physics.impl.dyn4j;
 
 import irl.fw.engine.entity.Entity;
 import irl.fw.engine.entity.EntityFactory;
+import irl.fw.engine.entity.EntityId;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.collisions.CollisionResolver;
 import irl.fw.engine.entity.state.EntityStateBuilder;
@@ -79,7 +80,7 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
 
     @Override
     public synchronized void removeEntity(RemoveEntity remove) {
-        String entityId = remove.getEntityId();
+        EntityId entityId = remove.getEntityId();
         Optional<Body> foundBody = findBody(entityId);
 
         if (foundBody.isPresent()) {
@@ -92,7 +93,7 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
 
     @Override
     public synchronized void updateEntity(UpdateEntity update) {
-        String entityId = update.getEntityId();
+        EntityId entityId = update.getEntityId();
         EntityStateUpdate stateUpdate = update.getStateUpdate();
 
         Optional<Body> foundBody = findBody(entityId);
@@ -183,7 +184,7 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
                 .build());
     }
 
-    private Optional<Body> findBody(String entityId) {
+    private Optional<Body> findBody(EntityId entityId) {
         return world.getBodies().stream()
                 .filter(body -> body.getId().equals(fromId(entityId)))
                 .findFirst();

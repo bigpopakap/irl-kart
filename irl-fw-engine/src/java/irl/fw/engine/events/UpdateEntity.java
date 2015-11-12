@@ -1,5 +1,6 @@
 package irl.fw.engine.events;
 
+import irl.fw.engine.entity.EntityId;
 import irl.fw.engine.entity.state.EntityStateUpdate;
 
 /**
@@ -10,15 +11,15 @@ import irl.fw.engine.entity.state.EntityStateUpdate;
  */
 public class UpdateEntity implements EngineEvent {
 
-    private final String entityId;
+    private final EntityId entityId;
     private final EntityStateUpdate stateUpdates;
 
-    public UpdateEntity(String entityId, EntityStateUpdate stateUpdate) {
+    public UpdateEntity(EntityId entityId, EntityStateUpdate stateUpdate) {
         this.entityId = entityId;
         this.stateUpdates = stateUpdate;
     }
 
-    public String getEntityId() {
+    public EntityId getEntityId() {
         return entityId;
     }
 

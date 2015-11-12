@@ -10,7 +10,7 @@ import irl.fw.engine.entity.state.EntityState;
  */
 public abstract class VirtualEntity extends Entity {
 
-    public VirtualEntity(String engineId, EntityState initState) {
+    public VirtualEntity(EntityId engineId, EntityState initState) {
         super(engineId, initState);
     }
 

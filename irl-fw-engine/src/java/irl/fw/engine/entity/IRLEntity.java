@@ -10,7 +10,7 @@ import irl.fw.engine.entity.state.EntityState;
  */
 public abstract class IRLEntity extends Entity {
 
-    public IRLEntity(String engineId, EntityState initState) {
+    public IRLEntity(EntityId engineId, EntityState initState) {
         super(engineId, initState);
     }
 

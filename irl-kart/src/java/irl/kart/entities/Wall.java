@@ -1,5 +1,6 @@
 package irl.kart.entities;
 
+import irl.fw.engine.entity.EntityId;
 import irl.fw.engine.entity.IRLEntity;
 import irl.fw.engine.entity.state.EntityState;
 
@@ -11,7 +12,7 @@ import irl.fw.engine.entity.state.EntityState;
  */
 public class Wall extends IRLEntity {
 
-    public Wall(String engineId, EntityState initState) {
+    public Wall(EntityId engineId, EntityState initState) {
         super(engineId, initState);
     }
 
