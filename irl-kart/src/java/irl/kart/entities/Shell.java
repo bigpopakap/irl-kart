@@ -13,9 +13,21 @@ import java.awt.geom.Ellipse2D;
  */
 public class Shell extends VirtualEntity {
 
+    public static final int SIZE = 10;
+    public static final double SPEED = Kart.MAX_SPEED + 10;
     public static final ImmutableShape SHAPE = new ImmutableShape(
         ImmutableShape.Type.ELLIPSE,
-        new Ellipse2D.Double(0, 0, 10, 10)
+        new Ellipse2D.Double(0, 0, SIZE, SIZE)
     );
+
+    private final String sourceKartId;
+
+    public Shell(String sourceKartId) {
+        this.sourceKartId = sourceKartId;
+    }
+
+    public String getSourceKartId() {
+        return sourceKartId;
+    }
 
 }
