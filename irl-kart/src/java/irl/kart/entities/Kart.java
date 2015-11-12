@@ -5,7 +5,6 @@ import irl.fw.engine.entity.state.EntityStateBuilder;
 import irl.fw.engine.events.AddEntity;
 import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.events.UpdateEntity;
-import irl.fw.engine.geometry.Angle;
 import irl.fw.engine.geometry.ImmutableShape;
 import irl.fw.engine.geometry.Vector2D;
 import irl.kart.beacon.KartBeacon;
@@ -92,11 +91,11 @@ public class Kart extends IRLEntity {
 
         return new AddEntity(engineId -> new Shell(
             engineId,
-            new EntityStateBuilder()
+            new EntityStateBuilder().defaults()
                     .shape(Shell.SHAPE)
-                    .rotation(Angle.deg(0))
                     .center(shellCenter)
                     .velocity(shellVelocity)
+                    .angularVelocity(Shell.ROTATIONAL_SPEED)
                     .build(),
             getKartId(),
             eventQueue

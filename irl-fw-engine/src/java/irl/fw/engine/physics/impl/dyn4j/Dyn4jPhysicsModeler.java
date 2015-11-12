@@ -179,6 +179,7 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
                 .rotation(toRadAngle(body.getTransform().getRotation()))
                 .center(toVector(body.getWorldCenter()))
                 .velocity(toVector(body.getLinearVelocity()))
+                .angularVelocity(toRadAngle(body.getAngularVelocity()))
                 .build());
     }
 

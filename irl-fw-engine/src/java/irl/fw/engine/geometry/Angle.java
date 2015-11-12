@@ -8,6 +8,8 @@ package irl.fw.engine.geometry;
  */
 public class Angle {
 
+    public static final Angle ZERO = Angle.rad(0);
+
     private enum Type {
         RADIANS, DEGREES;
     }

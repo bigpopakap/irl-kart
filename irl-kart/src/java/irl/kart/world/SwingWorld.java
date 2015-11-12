@@ -151,48 +151,42 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
                 //left wall
                 new AddEntity(engineId -> new Wall(
                     engineId,
-                    new EntityStateBuilder()
+                    new EntityStateBuilder().defaults()
                             .shape(new ImmutableShape(ImmutableShape.Type.RECTANGLE,
                                     new Rectangle2D.Double(0, 0, WALL_THICKNESS, worldBounds.getHeight())))
-                            .rotation(Angle.deg(0))
                             .center(new Vector2D(WALL_THICKNESS / 2, worldBounds.getHeight() / 2))
-                            .velocity(new Vector2D(0, 0))
                             .build()
                 )),
 
                 //right wall
                 new AddEntity(engineId -> new Wall(
                     engineId,
-                    new EntityStateBuilder()
+                    new EntityStateBuilder().defaults()
                             .shape(new ImmutableShape(ImmutableShape.Type.RECTANGLE,
                                     new Rectangle2D.Double(0, 0, WALL_THICKNESS, worldBounds.getHeight())))
-                            .rotation(Angle.deg(0))
                             .center(new Vector2D(worldBounds.getWidth() - WALL_THICKNESS / 2, worldBounds.getHeight() / 2))
-                            .velocity(new Vector2D(0, 0))
                             .build()
                 )),
 
                 //top wall
                 new AddEntity(engineId -> new Wall(
                     engineId,
-                    new EntityStateBuilder()
+                    new EntityStateBuilder().defaults()
                             .shape(new ImmutableShape(ImmutableShape.Type.RECTANGLE,
                                     new Rectangle2D.Double(0, 0, WALL_THICKNESS, worldBounds.getWidth())))
                             .rotation(Angle.deg(90))
                             .center(new Vector2D(worldBounds.getWidth()/2, worldBounds.getHeight() - WALL_THICKNESS/2))
-                            .velocity(new Vector2D(0, 0))
                             .build()
                 )),
 
                 //bottom wall
                 new AddEntity(engineId -> new Wall(
                     engineId,
-                    new EntityStateBuilder()
+                    new EntityStateBuilder().defaults()
                             .shape(new ImmutableShape(ImmutableShape.Type.RECTANGLE,
                                     new Rectangle2D.Double(0, 0, WALL_THICKNESS, worldBounds.getWidth())))
                             .rotation(Angle.deg(90))
                             .center(new Vector2D(worldBounds.getWidth()/2, WALL_THICKNESS/2))
-                            .velocity(new Vector2D(0, 0))
                             .build()
                 ))
 
@@ -210,6 +204,7 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
                         .rotation(Angle.deg(0))
                         .center(new Vector2D(WORLD_WIDTH/2, WORLD_HEIGHT/2))
                         .velocity(new Vector2D(0, 0))
+                        .angularVelocity(Angle.deg(0))
                         .build(),
                 update.getKartId(), this, eventQueue
             )));
