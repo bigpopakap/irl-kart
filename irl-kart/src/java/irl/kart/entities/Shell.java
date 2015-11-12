@@ -14,7 +14,8 @@ import java.awt.geom.Ellipse2D;
 public class Shell extends VirtualEntity {
 
     public static final int SIZE = 10;
-    public static final double SPEED = Kart.MAX_SPEED + 10;
+    //FIXME this doesn't seem to actually go much faster than a kart
+    public static final double SPEED = Kart.MAX_SPEED * 2;
     public static final ImmutableShape SHAPE = new ImmutableShape(
         ImmutableShape.Type.ELLIPSE,
         new Ellipse2D.Double(0, 0, SIZE, SIZE)
