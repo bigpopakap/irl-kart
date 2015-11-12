@@ -12,7 +12,7 @@ import irl.fw.engine.entity.state.EntityStateUpdate;
 public abstract class Entity {
 
     private final String engineId;
-    private EntityState state;
+    private volatile EntityState state;
 
     public Entity(String engineId, EntityState initState) {
         this.engineId = engineId;
@@ -29,11 +29,11 @@ public abstract class Entity {
         return state;
     }
 
-    public void setState(EntityState state) {
+    public synchronized void setState(EntityState state) {
         this.state = state;
     }
 
-    public void updateState(EntityStateUpdate stateUpdates) {
+    public synchronized void updateState(EntityStateUpdate stateUpdates) {
         setState(stateUpdates.fillAndBuild(getState()));
     }
 

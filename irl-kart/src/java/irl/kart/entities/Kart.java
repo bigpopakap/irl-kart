@@ -84,13 +84,11 @@ public class Kart extends IRLEntity {
     private AddEntity fire() {
         EntityState kartState = getState();
         Vector2D kartCenter = kartState.getCenter();
-        Vector2D kartVelocity = kartState.getVelocity();
 
+        Vector2D shellVelocity = new Vector2D(0, Shell.SPEED).rotate(kartState.getRotation());
         Vector2D shellCenter = kartCenter.add(
-            kartVelocity.scaleTo(KART_LENGTH + Shell.SIZE)
+            shellVelocity.scaleTo(KART_LENGTH + 0.25*Shell.SIZE)
         );
-
-        Vector2D shellVelocity = kartVelocity.scaleTo(Shell.SPEED);
 
         return new AddEntity(engineId -> new Shell(
             engineId,

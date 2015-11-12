@@ -132,6 +132,7 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         body.addFixture(fixture);
 
         updateBody(body, entity, state.toStateUpdate());
+
         return body;
     }
 
