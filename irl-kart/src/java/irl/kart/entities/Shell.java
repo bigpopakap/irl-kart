@@ -2,9 +2,10 @@ package irl.kart.entities;
 
 import irl.fw.engine.entity.EntityId;
 import irl.fw.engine.entity.VirtualEntity;
+import irl.fw.engine.entity.actions.EntityRemover;
+import irl.fw.engine.entity.actions.RemovableEntity;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.events.EngineEvent;
-import irl.fw.engine.events.RemoveEntity;
 import irl.fw.engine.geometry.Angle;
 import irl.fw.engine.geometry.ImmutableShape;
 import irl.util.reactiveio.Pipe;
@@ -17,7 +18,7 @@ import java.awt.geom.Ellipse2D;
  * @author bigpopakap
  * @since 11/10/15
  */
-public class Shell extends VirtualEntity {
+public class Shell extends VirtualEntity implements RemovableEntity {
 
     public static final int SIZE = 15;
     //FIXME this doesn't seem to actually go much faster than a kart
@@ -29,22 +30,23 @@ public class Shell extends VirtualEntity {
     );
 
     private final String sourceKartId;
-    private final Pipe<EngineEvent> eventQueue;
+    private final EntityRemover remover;
 
     public Shell(EntityId engineId, EntityState initState,
                  String sourceKartId,
                  Pipe<EngineEvent> eventQueue) {
         super(engineId, initState);
         this.sourceKartId = sourceKartId;
-        this.eventQueue = eventQueue;
+        this.remover = new EntityRemover(this, eventQueue);
     }
 
     public String getSourceKartId() {
         return sourceKartId;
     }
 
+    @Override
     public void remove() {
-        this.eventQueue.mergeIn(new RemoveEntity(getEngineId()));
+        remover.remove();
     }
 
 }

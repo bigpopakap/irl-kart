@@ -14,6 +14,9 @@ public abstract class VirtualEntity extends Entity {
         super(engineId, initState);
     }
 
+//    TODO add this method
+//    public abstract boolean isInteractable();
+
     @Override
     public final boolean isVirtual() {
         return true;
