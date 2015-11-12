@@ -107,8 +107,10 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
         isStopped = false;
 
         //add walls and add karts when they are first seen
-        eventQueue.mergeIn(addWalls(new Rectangle2D.Double(0, 0, WORLD_WIDTH, WORLD_HEIGHT)));
-        eventQueue.mergeIn(newKarts());
+        final Rectangle2D worldBounds = new Rectangle2D.Double(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
+        eventQueue.mergeIn(addWalls(worldBounds));
+        eventQueue.mergeIn(addItemBoxes(worldBounds));
+        eventQueue.mergeIn(addNewKarts());
 
         this.frame = new JFrame();
         this.panel = new MyPanel();
@@ -193,7 +195,13 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
         });
     }
 
-    private Observable<AddEntity> newKarts() {
+    private Observable<AddEntity> addItemBoxes(Rectangle2D worldBounds) {
+        return Observable.from(new AddEntity[] {
+            //TODO
+        });
+    }
+
+    private Observable<AddEntity> addNewKarts() {
         return stream()
             .ofType(KartStateUpdate.class)
             .distinct(update -> update.getKartId())
@@ -383,11 +391,6 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
 
         private void draw(Graphics2D g2, ImmutableShape shape) {
             g2.draw(shape);
-
-            //add a line so we can see the rotation of a circle
-//            if (shape.getType() == ImmutableShape.Type.ELLIPSE) {
-//
-//            }
         }
 
         private void drawArrow(Graphics g1, int x1, int y1, int x2, int y2) {
