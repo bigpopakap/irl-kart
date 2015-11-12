@@ -36,12 +36,7 @@ class CollisionResolverAdaptor implements CollisionListener, ContactListener {
 
     @Override
     public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2, Manifold manifold) {
-        Entity entity1 = (Entity) body1.getUserData();
-        Entity entity2 = (Entity) body2.getUserData();
-
-        EntityCollision event = new EntityCollision(entity1, entity2);
-
-        return resolver.onBeforeCollision(event);
+        return true;
     }
 
     @Override
@@ -62,9 +57,7 @@ class CollisionResolverAdaptor implements CollisionListener, ContactListener {
 
         EntityCollision event = new EntityCollision(entity1, entity2);
 
-        resolver.onCollision(event);
-
-        return true;
+        return resolver.onCollision(event);
     }
 
     @Override

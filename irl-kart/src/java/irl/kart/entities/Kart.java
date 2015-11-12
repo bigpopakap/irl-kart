@@ -9,6 +9,7 @@ import irl.kart.beacon.KartBeacon;
 import irl.fw.engine.entity.IRLEntity;
 import irl.kart.entities.items.Item;
 import irl.kart.events.beacon.KartStateUpdate;
+import irl.kart.events.beacon.UseItem;
 import irl.kart.events.kart.SpinKart;
 import irl.util.reactiveio.Pipe;
 import irl.util.string.StringUtils;
@@ -62,6 +63,12 @@ public class Kart extends IRLEntity {
                 .filter(update -> StringUtils.equal(getKartId(), update.getKartId()))
                 .map(update -> new UpdateEntity(getEngineId(), update.getStateUpdate()))
         );
+
+        //merge in uses of items
+        kartBeacon.stream()
+            .ofType(UseItem.class)
+            .filter(update -> StringUtils.equal(getKartId(), update.getKartId()))
+            .subscribe(update -> this.useItem());
     }
 
     public String getKartId() {

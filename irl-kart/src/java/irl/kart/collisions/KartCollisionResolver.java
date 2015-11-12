@@ -4,6 +4,8 @@ import irl.fw.engine.collisions.CollisionResolver;
 import irl.fw.engine.events.EntityCollision;
 import irl.kart.entities.Kart;
 import irl.kart.entities.Shell;
+import irl.kart.entities.items.Item;
+import irl.kart.entities.items.ItemBox;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -18,25 +20,38 @@ public class KartCollisionResolver implements CollisionResolver {
     }
 
     @Override
-    public boolean onBeforeCollision(EntityCollision collision) {
-        return true;
-    }
-
-    @Override
-    public void onCollision(EntityCollision collision) {
-        if (collision.isBetween(Kart.class, Shell.class)) {
+    public boolean onCollision(EntityCollision collision) {
+        //TODO this needs to be made more scalable
+        if (collision.isWith(Kart.class, Shell.class)) {
             Kart kart = collision.getType(Kart.class);
             Shell shell = collision.getType(Shell.class);
 
             kart.spin();
             shell.remove();
+            return false;
         }
-        else if (collision.isBetween(Shell.class, Shell.class)) {
+        else if (collision.isWith(Shell.class, Shell.class)) {
             Shell shell1 = (Shell) collision.getEntity1();
             Shell shell2 = (Shell) collision.getEntity2();
 
             shell1.remove();
             shell2.remove();
+            return false;
+        }
+        else if (collision.isWith(ItemBox.class)) {
+            if (collision.isWith(ItemBox.class, Kart.class)) {
+                ItemBox box = collision.getType(ItemBox.class);
+                Kart kart = collision.getType(Kart.class);
+
+                kart.takeItem(box.getRandomItem());
+                box.remove();
+            }
+
+            //item boxes don't interact with anything else
+            return false;
+        }
+        else {
+            return true;
         }
     }
 

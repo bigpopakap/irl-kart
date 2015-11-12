@@ -10,7 +10,7 @@ import irl.fw.engine.world.World;
 import irl.kart.beacon.KartBeacon;
 import irl.kart.beacon.KartBeaconEvent;
 import irl.kart.entities.items.ItemBox;
-import irl.kart.events.beacon.FireWeapon;
+import irl.kart.events.beacon.UseItem;
 import irl.kart.events.beacon.KartStateUpdate;
 import irl.fw.engine.graphics.Renderer;
 import irl.kart.entities.Kart;
@@ -342,7 +342,7 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
 
             /* KART 1 fire weapon */
             case KeyEvent.VK_ENTER:
-                return new FireWeapon(kart1Id);
+                return new UseItem(kart1Id);
 
             /* KART 2 speed */
             case KeyEvent.VK_W:
@@ -374,7 +374,7 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
 
             /* KART 2 fire weapon */
             case KeyEvent.VK_SPACE:
-                return new FireWeapon(kart2Id);
+                return new UseItem(kart2Id);
 
             default:
                 return null;

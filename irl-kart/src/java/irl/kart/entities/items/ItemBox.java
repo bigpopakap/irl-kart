@@ -4,10 +4,12 @@ import irl.fw.engine.entity.EntityId;
 import irl.fw.engine.entity.VirtualEntity;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.events.EngineEvent;
+import irl.fw.engine.events.RemoveEntity;
 import irl.fw.engine.geometry.Angle;
 import irl.fw.engine.geometry.ImmutableShape;
 import irl.util.reactiveio.Pipe;
 
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
@@ -27,18 +29,24 @@ public class ItemBox extends VirtualEntity {
     );
 
     private final ArrayList<Item> availableItems;
+    private final Pipe<EngineEvent> eventQueue;
 
     public ItemBox(EntityId engineId, EntityState initState,
                    Pipe<EngineEvent> eventQueue) {
         super(engineId, initState);
 
         availableItems = new ArrayList<>();
-        availableItems.add(new ShellItem(eventQueue));
+        this.eventQueue = eventQueue;
+        availableItems.add(new ShellItem(this.eventQueue));
     }
 
     public Item getRandomItem() {
         int randIndex = (int) (availableItems.size() * Math.random());
         return availableItems.get(randIndex);
+    }
+
+    public void remove() {
+        this.eventQueue.mergeIn(new RemoveEntity(getEngineId()));
     }
 
 }
