@@ -166,6 +166,7 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         //default settings
         if (entity.isVirtual()) {
             body.setAutoSleepingEnabled(false);
+            //TODO should shells have fixed angular velocity?
             body.setMass(MassType.NORMAL);
         } else {
             body.setMass(MassType.INFINITE);

@@ -25,7 +25,7 @@ public class Shell extends VirtualEntity {
     public static final Angle ROTATIONAL_SPEED = Angle.rad(8 * Math.PI);
     public static final ImmutableShape SHAPE = new ImmutableShape(
         ImmutableShape.Type.ELLIPSE,
-        new Ellipse2D.Double(0, 0, SIZE, 3*SIZE/4)
+        new Ellipse2D.Double(0, 0, SIZE, 7*SIZE/8)
     );
 
     private final String sourceKartId;
