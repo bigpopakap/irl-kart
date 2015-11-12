@@ -10,6 +10,7 @@ import irl.fw.engine.world.World;
 import irl.kart.beacon.KartBeacon;
 import irl.kart.beacon.KartBeaconEvent;
 import irl.kart.entities.items.ItemBox;
+import irl.kart.entities.items.ItemBoxPedestal;
 import irl.kart.events.beacon.UseItem;
 import irl.kart.events.beacon.KartStateUpdate;
 import irl.fw.engine.graphics.Renderer;
@@ -202,49 +203,41 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
         return Observable.from(new AddEntity[] {
 
             //top left
-            new AddEntity(engineId -> new ItemBox(
+            new AddEntity(engineId -> new ItemBoxPedestal(
                 engineId,
                 new EntityStateBuilder().defaults()
                         .center(new Vector2D(INSET, worldBounds.getHeight() - INSET))
                         .shape(ItemBox.SHAPE)
-                        .rotation(ItemBox.INIT_ROT)
-                        .angularVelocity(ItemBox.ROTATION_SPEED)
                         .build(),
                 eventQueue
             )),
 
             //top right
-            new AddEntity(engineId -> new ItemBox(
+            new AddEntity(engineId -> new ItemBoxPedestal(
                 engineId,
                 new EntityStateBuilder().defaults()
                         .center(new Vector2D(worldBounds.getWidth() - INSET, worldBounds.getHeight() - INSET))
                         .shape(ItemBox.SHAPE)
-                        .rotation(ItemBox.INIT_ROT)
-                        .angularVelocity(ItemBox.ROTATION_SPEED)
                         .build(),
                 eventQueue
             )),
 
             //bottom left
-            new AddEntity(engineId -> new ItemBox(
+            new AddEntity(engineId -> new ItemBoxPedestal(
                 engineId,
                 new EntityStateBuilder().defaults()
                         .center(new Vector2D(INSET, INSET))
                         .shape(ItemBox.SHAPE)
-                        .rotation(ItemBox.INIT_ROT)
-                        .angularVelocity(ItemBox.ROTATION_SPEED)
                         .build(),
                 eventQueue
             )),
 
             //bottom right
-            new AddEntity(engineId -> new ItemBox(
+            new AddEntity(engineId -> new ItemBoxPedestal(
                 engineId,
                 new EntityStateBuilder().defaults()
                         .center(new Vector2D(worldBounds.getWidth() - INSET, INSET))
                         .shape(ItemBox.SHAPE)
-                        .rotation(ItemBox.INIT_ROT)
-                        .angularVelocity(ItemBox.ROTATION_SPEED)
                         .build(),
                 eventQueue
             ))

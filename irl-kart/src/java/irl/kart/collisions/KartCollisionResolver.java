@@ -6,6 +6,7 @@ import irl.kart.entities.Kart;
 import irl.kart.entities.Shell;
 import irl.kart.entities.items.Item;
 import irl.kart.entities.items.ItemBox;
+import irl.kart.entities.items.ItemBoxPedestal;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -49,6 +50,9 @@ public class KartCollisionResolver implements CollisionResolver {
 
             //item boxes don't interact with anything else
             return false;
+        }
+        else if (collision.isWith(ItemBoxPedestal.class)) {
+            return false; //these never interact
         }
         else {
             return true;
