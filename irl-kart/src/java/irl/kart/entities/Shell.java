@@ -27,7 +27,7 @@ public class Shell extends VirtualEntity {
         ImmutableShape.Type.ELLIPSE,
         new Ellipse2D.Double(0, 0, SIZE, 7*SIZE/8)
     );
-g
+
     private final String sourceKartId;
     private final Pipe<EngineEvent> eventQueue;
 
