@@ -31,6 +31,13 @@ public class KartCollisionResolver implements CollisionResolver {
             kart.spin();
             shell.remove();
         }
+        else if (collision.isBetween(Shell.class, Shell.class)) {
+            Shell shell1 = (Shell) collision.getEntity1();
+            Shell shell2 = (Shell) collision.getEntity2();
+
+            shell1.remove();
+            shell2.remove();
+        }
     }
 
 }

@@ -57,18 +57,19 @@ class CollisionResolverAdaptor implements CollisionListener, ContactListener {
 
     @Override
     public boolean begin(ContactPoint point) {
-        //do nothing
-        return true;
-    }
-
-    @Override
-    public void end(ContactPoint point) {
         Entity entity1 = (Entity) point.getBody1().getUserData();
         Entity entity2 = (Entity) point.getBody2().getUserData();
 
         EntityCollision event = new EntityCollision(entity1, entity2);
 
         resolver.onCollision(event);
+
+        return true;
+    }
+
+    @Override
+    public void end(ContactPoint point) {
+        //do nothing
     }
 
     @Override
