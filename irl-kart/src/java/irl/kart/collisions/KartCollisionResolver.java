@@ -40,8 +40,8 @@ public class KartCollisionResolver implements CollisionResolver {
             return false;
         }
         else if (collision.isWith(Shell.class, Shell.class)) {
-            Shell shell1 = (Shell) collision.getEntity1();
-            Shell shell2 = (Shell) collision.getEntity2();
+            Shell shell1 = collision.getTypeOrFirst(Shell.class);
+            Shell shell2 = collision.getTypeOrSecond(Shell.class);
 
             shell1.remove();
             shell2.remove();
