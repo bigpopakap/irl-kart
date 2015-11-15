@@ -54,12 +54,16 @@ class SwingKart {
         boolean isStateUpdate;
         switch (input) {
             case LEFT:
-                rotation = rotation.add(ROT_INCR);
+                rotation = speed >= 0
+                        ? rotation.add(ROT_INCR)
+                        : rotation.sub(ROT_INCR);
                 isStateUpdate = true;
                 break;
 
             case RIGHT:
-                rotation = rotation.sub(ROT_INCR);
+                rotation = speed >= 0
+                        ? rotation.sub(ROT_INCR)
+                        : rotation.add(ROT_INCR);
                 isStateUpdate = true;
                 break;
 
