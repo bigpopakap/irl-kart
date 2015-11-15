@@ -23,7 +23,8 @@ public class Shell extends VirtualEntity implements RemovableEntity {
 
     public static final int SIZE = 15;
     //FIXME this doesn't seem to actually go much faster than a kart
-    public static final double SPEED = Kart.MAX_SPEED * 3;
+    //FIXME this should also be calculated on-the-fly based on the Kart's speed
+    public static final double SPEED = 300;
     public static final Angle ROTATIONAL_SPEED = Angle.rad(8 * Math.PI);
     public static final ImmutableShape SHAPE = new ImmutableShape(
         ImmutableShape.Type.ELLIPSE,
