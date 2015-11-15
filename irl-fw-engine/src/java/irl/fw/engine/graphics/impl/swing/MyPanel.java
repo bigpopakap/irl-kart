@@ -1,4 +1,4 @@
-package irl.kart.renderer;
+package irl.fw.engine.graphics.impl.swing;
 
 import irl.fw.engine.geometry.ImmutableShape;
 import irl.fw.engine.world.World;

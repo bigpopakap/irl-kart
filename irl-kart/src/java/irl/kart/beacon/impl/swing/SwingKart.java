@@ -1,4 +1,4 @@
-package irl.kart.beacon.impl;
+package irl.kart.beacon.impl.swing;
 
 import irl.fw.engine.entity.state.EntityStateUpdate;
 import irl.fw.engine.geometry.Angle;

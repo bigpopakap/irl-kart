@@ -1,4 +1,4 @@
-package irl.kart.beacon.impl;
+package irl.kart.beacon.impl.swing;
 
 import rx.Observable;
 import rx.subjects.PublishSubject;

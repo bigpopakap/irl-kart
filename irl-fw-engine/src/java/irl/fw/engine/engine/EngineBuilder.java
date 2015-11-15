@@ -4,7 +4,7 @@ import irl.fw.engine.collisions.CollisionResolver;
 import irl.fw.engine.collisions.impl.NoopCollisionResolver;
 import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.graphics.Renderer;
-import irl.fw.engine.graphics.impl.NoopRenderer;
+import irl.fw.engine.graphics.impl.noop.NoopRenderer;
 import irl.fw.engine.physics.PhysicsModeler;
 import irl.fw.engine.physics.impl.dyn4j.Dyn4jPhysicsModeler;
 import rx.Observable;

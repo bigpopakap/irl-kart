@@ -1,4 +1,4 @@
-package irl.fw.engine.graphics.impl;
+package irl.fw.engine.graphics.impl.noop;
 
 import irl.fw.engine.graphics.Renderer;
 import irl.fw.engine.world.World;
