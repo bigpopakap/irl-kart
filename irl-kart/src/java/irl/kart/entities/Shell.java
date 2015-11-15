@@ -9,7 +9,7 @@ import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.geometry.Angle;
 import irl.fw.engine.geometry.ImmutableShape;
-import irl.util.reactiveio.Pipe;
+import irl.util.reactiveio.EventQueue;
 
 import java.awt.geom.Ellipse2D;
 
@@ -36,7 +36,7 @@ public class Shell extends VirtualEntity implements RemovableEntity {
 
     public Shell(EntityConfig entityConfig, EntityState initState,
                  EntityId sourceKartId,
-                 Pipe<EngineEvent> eventQueue) {
+                 EventQueue<EngineEvent> eventQueue) {
         super(entityConfig, initState);
         this.sourceKartId = sourceKartId;
         this.remover = new RemovableEntityAdaptor(this, eventQueue);

@@ -9,7 +9,7 @@ import irl.fw.engine.geometry.Vector2D;
 import irl.kart.entities.Kart;
 import irl.kart.entities.Shell;
 import irl.kart.entities.items.actions.itemuser.ItemUser;
-import irl.util.reactiveio.Pipe;
+import irl.util.reactiveio.EventQueue;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -19,9 +19,9 @@ import irl.util.reactiveio.Pipe;
  */
 public class ShellItem implements Item {
 
-    private final Pipe<EngineEvent> eventQueue;
+    private final EventQueue<EngineEvent> eventQueue;
 
-    public ShellItem(Pipe<EngineEvent> eventQueue) {
+    public ShellItem(EventQueue<EngineEvent> eventQueue) {
         this.eventQueue = eventQueue;
     }
 

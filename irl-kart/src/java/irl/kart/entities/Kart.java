@@ -13,7 +13,7 @@ import irl.kart.entities.items.actions.itemuser.ItemUserAdaptor;
 import irl.kart.events.beacon.KartStateUpdate;
 import irl.kart.events.beacon.UseItem;
 import irl.kart.events.kart.SpinKart;
-import irl.util.reactiveio.Pipe;
+import irl.util.reactiveio.EventQueue;
 import irl.util.string.StringUtils;
 
 import java.awt.*;
@@ -40,12 +40,12 @@ public class Kart extends IRLEntity implements ItemUser {
 
     private final String kartId;
     private final KartBeacon kartBeacon;
-    private final Pipe<EngineEvent> eventQueue;
+    private final EventQueue<EngineEvent> eventQueue;
     private final ItemUserAdaptor<Kart> itemUser;
 
     public Kart(EntityConfig entityConfig, EntityState initState,
                 String kartId, KartBeacon kartBeacon,
-                Pipe<EngineEvent> eventQueue) {
+                EventQueue<EngineEvent> eventQueue) {
         super(entityConfig, initState);
 
         this.kartId = kartId;

@@ -11,11 +11,11 @@ import rx.subjects.Subject;
  * @author bigpopakap
  * @since 11/2/15
  */
-public class Pipe<T> {
+public class EventQueue<T> {
 
     private final Subject<T, T> pipe;
 
-    public Pipe() {
+    public EventQueue() {
         pipe = PublishSubject.<T>create().toSerialized();
 
         //make sure the pipe never completes

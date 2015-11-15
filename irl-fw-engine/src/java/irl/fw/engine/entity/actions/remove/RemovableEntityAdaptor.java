@@ -5,7 +5,7 @@ import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.events.RemoveEntity;
 import irl.util.callbacks.Callback;
 import irl.util.callbacks.Callbacks;
-import irl.util.reactiveio.Pipe;
+import irl.util.reactiveio.EventQueue;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -16,15 +16,15 @@ import irl.util.reactiveio.Pipe;
 public class RemovableEntityAdaptor implements RemovableEntity {
 
     private final Entity entity;
-    private final Pipe<EngineEvent> eventQueue;
+    private final EventQueue<EngineEvent> eventQueue;
     private final Callbacks onRemove;
     private boolean hasQueuedRemove = false;
 
-    public RemovableEntityAdaptor(Entity entity, Pipe<EngineEvent> eventQueue) {
+    public RemovableEntityAdaptor(Entity entity, EventQueue<EngineEvent> eventQueue) {
         this(entity, eventQueue, null);
     }
 
-    public RemovableEntityAdaptor(Entity entity, Pipe<EngineEvent> eventQueue,
+    public RemovableEntityAdaptor(Entity entity, EventQueue<EngineEvent> eventQueue,
                                   Callback onRemove) {
         this.entity = entity;
         this.eventQueue = eventQueue;

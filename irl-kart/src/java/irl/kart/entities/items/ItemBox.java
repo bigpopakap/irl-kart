@@ -9,7 +9,7 @@ import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.geometry.Angle;
 import irl.fw.engine.geometry.ImmutableShape;
 import irl.util.callbacks.Callback;
-import irl.util.reactiveio.Pipe;
+import irl.util.reactiveio.EventQueue;
 
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -30,16 +30,16 @@ public class ItemBox extends VirtualEntity implements RemovableEntity {
     );
 
     private final ArrayList<Item> availableItems;
-    private final Pipe<EngineEvent> eventQueue;
+    private final EventQueue<EngineEvent> eventQueue;
     private final RemovableEntityAdaptor remover;
 
     public ItemBox(EntityConfig entityConfig, EntityState initState,
-                   Pipe<EngineEvent> eventQueue) {
+                   EventQueue<EngineEvent> eventQueue) {
         this(entityConfig, initState, eventQueue, null);
     }
 
     public ItemBox(EntityConfig entityConfig, EntityState initState,
-                   Pipe<EngineEvent> eventQueue, Callback onRemove) {
+                   EventQueue<EngineEvent> eventQueue, Callback onRemove) {
         super(entityConfig, initState);
 
         availableItems = new ArrayList<>();

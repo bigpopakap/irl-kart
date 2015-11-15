@@ -11,7 +11,7 @@ import irl.kart.entities.Kart;
 import irl.kart.entities.Wall;
 import irl.kart.entities.items.ItemBoxPedestal;
 import irl.kart.events.beacon.KartStateUpdate;
-import irl.util.reactiveio.Pipe;
+import irl.util.reactiveio.EventQueue;
 import rx.Observable;
 
 import java.awt.geom.Rectangle2D;
@@ -30,10 +30,10 @@ public class Initializer {
 
     private static final double WALL_THICKNESS = 20;
 
-    private final Pipe<EngineEvent> eventQueue;
+    private final EventQueue<EngineEvent> eventQueue;
     private final KartBeacon beacon;
 
-    public Initializer(Pipe<EngineEvent> eventQueue, KartBeacon beacon) {
+    public Initializer(EventQueue<EngineEvent> eventQueue, KartBeacon beacon) {
         this.eventQueue = eventQueue;
         this.beacon = beacon;
     }

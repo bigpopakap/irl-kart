@@ -7,7 +7,7 @@ import irl.kart.events.kart.SpinKart;
 import irl.util.callbacks.Callback;
 import irl.util.callbacks.Callbacks;
 import irl.util.concurrent.StoppableRunnable;
-import irl.util.reactiveio.Pipe;
+import irl.util.reactiveio.EventQueue;
 import irl.util.universe.Universe;
 import rx.Observable;
 
@@ -28,7 +28,7 @@ public class SwingKartBeacon implements KartBeacon, StoppableRunnable {
 
     private final JPanel panel;
     private final SwingKeyListener keyListener;
-    private final Pipe<KartBeaconEvent> updates;
+    private final EventQueue<KartBeaconEvent> updates;
 
     private final Universe<SwingKart> karts;
 
@@ -43,7 +43,7 @@ public class SwingKartBeacon implements KartBeacon, StoppableRunnable {
         this.panel = panel;
         this.keyListener = new SwingKeyListener();
 
-        this.updates = new Pipe<>();
+        this.updates = new EventQueue<>();
         this.updates.mergeIn(keyListener.getKeys()
                 .map(this::keyEventToBeaconEvent)
                 .filter(update -> update != null));

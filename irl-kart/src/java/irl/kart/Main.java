@@ -8,7 +8,7 @@ import irl.fw.engine.engine.EngineBuilder;
 import irl.kart.engine.Initializer;
 import irl.kart.renderer.SwingRenderer;
 import irl.util.concurrent.ParallelRunnable;
-import irl.util.reactiveio.Pipe;
+import irl.util.reactiveio.EventQueue;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -20,7 +20,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         //create an event queue for kart events
-        Pipe<EngineEvent> kartEventQueue = new Pipe<>();
+        EventQueue<EngineEvent> kartEventQueue = new EventQueue<>();
 
         //create the beacon and renderer
         SwingRenderer renderer = new SwingRenderer();

@@ -10,7 +10,7 @@ import irl.fw.engine.physics.PhysicsModeler;
 import irl.util.callbacks.Callback;
 import irl.util.callbacks.Callbacks;
 import irl.util.concurrent.StoppableRunnable;
-import irl.util.reactiveio.Pipe;
+import irl.util.reactiveio.EventQueue;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
@@ -31,7 +31,7 @@ public class Engine implements StoppableRunnable {
 
     private final Callbacks onStop;
 
-    private final Pipe<EngineEvent> eventQueue;
+    private final EventQueue<EngineEvent> eventQueue;
     private final PhysicsModeler phyisicsModel;
     private Subscription subscription;
 
@@ -47,7 +47,7 @@ public class Engine implements StoppableRunnable {
 
         this.onStop = new Callbacks();
 
-        this.eventQueue = new Pipe<>();
+        this.eventQueue = new EventQueue<>();
         if (extraEvents != null) {
             this.eventQueue.mergeIn(extraEvents);
         }
