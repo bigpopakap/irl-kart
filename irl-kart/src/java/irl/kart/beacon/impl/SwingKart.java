@@ -4,6 +4,7 @@ import irl.fw.engine.entity.state.EntityStateUpdate;
 import irl.fw.engine.geometry.Angle;
 import irl.fw.engine.geometry.Vector2D;
 import irl.kart.beacon.KartBeaconEvent;
+import irl.kart.events.beacon.HoldItem;
 import irl.kart.events.beacon.KartStateUpdate;
 import irl.kart.events.beacon.UseItem;
 
@@ -79,7 +80,7 @@ class SwingKart {
 
             case FIRE:
                 switch (keyEvent.getType()) {
-                    case KEY_DOWN: return null; //TODO
+                    case KEY_DOWN: return new HoldItem(getId());
                     case KEY_UP: return new UseItem(getId());
                 }
 
