@@ -7,9 +7,12 @@ import irl.fw.engine.events.AddEntity;
 import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.geometry.Angle;
 import irl.fw.engine.geometry.Vector2D;
+import irl.kart.entities.items.actions.holdableitem.HoldableItem;
+import irl.kart.entities.items.actions.holdableitem.HoldableItemAdaptor;
 import irl.kart.entities.weapons.Banana;
 import irl.kart.entities.Kart;
 import irl.kart.entities.items.actions.itemuser.ItemUser;
+import irl.util.callbacks.Callback;
 import irl.util.reactiveio.EventQueue;
 
 /**
@@ -18,17 +21,14 @@ import irl.util.reactiveio.EventQueue;
  * @author bigpopakap
  * @since 11/15/15
  */
-public class BananaItem implements Item {
+public class BananaItem implements HoldableItem {
 
     private final EventQueue<EngineEvent> eventQueue;
+    private final HoldableItemAdaptor holdable;
 
     public BananaItem(EventQueue<EngineEvent> eventQueue) {
         this.eventQueue = eventQueue;
-    }
-
-    @Override
-    public boolean isHoldable() {
-        return true;
+        this.holdable = new HoldableItemAdaptor();
     }
 
     @Override
@@ -54,6 +54,23 @@ public class BananaItem implements Item {
         ));
 
         eventQueue.mergeIn(addBanana);
+    }
+
+    @Override
+    public <T extends Entity & ItemUser> void doHoldItem(T user) {
+        //TODO
+        System.out.println("Banana being held");
+//        holdable.createdEntity(null);
+    }
+
+    @Override
+    public void remove() {
+        holdable.remove();
+    }
+
+    @Override
+    public String onRemove(Callback callback) {
+        return holdable.onRemove(callback);
     }
 
 }

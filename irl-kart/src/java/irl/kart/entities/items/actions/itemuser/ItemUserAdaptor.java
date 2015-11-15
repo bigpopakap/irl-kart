@@ -2,6 +2,7 @@ package irl.kart.entities.items.actions.itemuser;
 
 import irl.fw.engine.entity.Entity;
 import irl.kart.entities.items.Item;
+import irl.kart.entities.items.actions.holdableitem.HoldableItem;
 
 import java.util.Optional;
 
@@ -15,6 +16,7 @@ public class ItemUserAdaptor<T extends Entity & ItemUser> implements ItemUser {
 
     private final T user;
     private Optional<Item> item = Optional.empty();
+    private String onItemRemovedCallback = null;
 
     public ItemUserAdaptor(T user) {
         this.user = user;
@@ -32,9 +34,14 @@ public class ItemUserAdaptor<T extends Entity & ItemUser> implements ItemUser {
         if (this.item.isPresent()) {
             Item item = this.item.get();
 
-            if (item.isHoldable()) {
-                //TODO do something here
-                System.out.println("HOLD ITEM");
+            if (item instanceof HoldableItem) {
+                HoldableItem holdable = (HoldableItem) item;
+                holdable.doHoldItem(user);
+
+                if (onItemRemovedCallback != null) {
+                    //if the item gets removed, we have to know about it
+                    holdable.onRemove(() -> this.clearItem());
+                }
             } else {
                 //assume that non-holdable items should get
                 //used when the kart tries to "hold" it

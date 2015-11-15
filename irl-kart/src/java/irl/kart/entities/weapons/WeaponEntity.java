@@ -7,6 +7,7 @@ import irl.fw.engine.entity.actions.remove.RemovableEntityAdaptor;
 import irl.fw.engine.entity.factory.EntityConfig;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.events.EngineEvent;
+import irl.util.callbacks.Callback;
 import irl.util.reactiveio.EventQueue;
 
 /**
@@ -43,6 +44,11 @@ public class WeaponEntity extends VirtualEntity implements RemovableEntity {
     @Override
     public void remove() {
         remover.remove();
+    }
+
+    @Override
+    public String onRemove(Callback callback) {
+        return remover.onRemove(callback);
     }
 
 }

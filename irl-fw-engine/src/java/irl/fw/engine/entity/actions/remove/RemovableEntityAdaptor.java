@@ -21,16 +21,9 @@ public class RemovableEntityAdaptor implements RemovableEntity {
     private boolean hasQueuedRemove = false;
 
     public RemovableEntityAdaptor(Entity entity, EventQueue<EngineEvent> eventQueue) {
-        this(entity, eventQueue, null);
-    }
-
-    public RemovableEntityAdaptor(Entity entity, EventQueue<EngineEvent> eventQueue,
-                                  Callback onRemove) {
         this.entity = entity;
         this.eventQueue = eventQueue;
-
         this.onRemove = new Callbacks();
-        this.onRemove.add(onRemove);
     }
 
     @Override
@@ -40,6 +33,11 @@ public class RemovableEntityAdaptor implements RemovableEntity {
             onRemove.run();
             hasQueuedRemove = true;
         }
+    }
+
+    @Override
+    public String onRemove(Callback callback) {
+        return onRemove.add(callback);
     }
 
 }

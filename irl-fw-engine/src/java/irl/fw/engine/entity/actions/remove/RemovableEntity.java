@@ -1,5 +1,7 @@
 package irl.fw.engine.entity.actions.remove;
 
+import irl.util.callbacks.Callback;
+
 /**
  * TODO bigpopakap Javadoc this class
  *
@@ -9,5 +11,6 @@ package irl.fw.engine.entity.actions.remove;
 public interface RemovableEntity {
 
     void remove();
+    String onRemove(Callback callback);
 
 }

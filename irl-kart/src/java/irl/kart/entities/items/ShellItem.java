@@ -7,8 +7,11 @@ import irl.fw.engine.events.AddEntity;
 import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.geometry.Vector2D;
 import irl.kart.entities.Kart;
+import irl.kart.entities.items.actions.holdableitem.HoldableItem;
+import irl.kart.entities.items.actions.holdableitem.HoldableItemAdaptor;
 import irl.kart.entities.weapons.Shell;
 import irl.kart.entities.items.actions.itemuser.ItemUser;
+import irl.util.callbacks.Callback;
 import irl.util.reactiveio.EventQueue;
 
 /**
@@ -17,17 +20,14 @@ import irl.util.reactiveio.EventQueue;
  * @author bigpopakap
  * @since 11/11/15
  */
-public class ShellItem implements Item {
+public class ShellItem implements HoldableItem {
 
     private final EventQueue<EngineEvent> eventQueue;
+    private final HoldableItemAdaptor holdable;
 
     public ShellItem(EventQueue<EngineEvent> eventQueue) {
         this.eventQueue = eventQueue;
-    }
-
-    @Override
-    public boolean isHoldable() {
-        return true;
+        this.holdable = new HoldableItemAdaptor();
     }
 
     @Override
@@ -53,6 +53,23 @@ public class ShellItem implements Item {
         ));
 
         eventQueue.mergeIn(addShell);
+    }
+
+    @Override
+    public <T extends Entity & ItemUser> void doHoldItem(T user) {
+        //TODO
+        System.out.println("Shell being held");
+//        holdable.createdEntity(null);
+    }
+
+    @Override
+    public void remove() {
+        holdable.remove();
+    }
+
+    @Override
+    public String onRemove(Callback callback) {
+        return holdable.onRemove(callback);
     }
 
 }

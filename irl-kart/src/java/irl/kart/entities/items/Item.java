@@ -11,7 +11,6 @@ import irl.kart.entities.items.actions.itemuser.ItemUser;
  */
 public interface Item {
 
-    boolean isHoldable();
     <T extends Entity & ItemUser> void doUseItem(T user);
 
 }

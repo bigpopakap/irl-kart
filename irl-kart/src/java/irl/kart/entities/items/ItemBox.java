@@ -49,7 +49,8 @@ public class ItemBox extends VirtualEntity implements RemovableEntity {
         availableItems.add(new ShellItem(this.eventQueue));
         availableItems.add(new BananaItem(this.eventQueue));
 
-        this.remover = new RemovableEntityAdaptor(this, this.eventQueue, onRemove);
+        this.remover = new RemovableEntityAdaptor(this, this.eventQueue);
+        onRemove(onRemove);
     }
 
     @Override
@@ -67,6 +68,11 @@ public class ItemBox extends VirtualEntity implements RemovableEntity {
     @Override
     public void remove() {
         remover.remove();
+    }
+
+    @Override
+    public String onRemove(Callback callback) {
+        return remover.onRemove(callback);
     }
 
     private Item getRandomItem() {
