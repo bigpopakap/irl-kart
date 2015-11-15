@@ -2,6 +2,7 @@ package irl.kart.collisions;
 
 import irl.fw.engine.collisions.CollisionResolver;
 import irl.fw.engine.events.EntityCollision;
+import irl.kart.entities.Banana;
 import irl.kart.entities.Kart;
 import irl.kart.entities.Shell;
 import irl.kart.entities.items.ItemBox;
@@ -28,6 +29,14 @@ public class KartCollisionResolver implements CollisionResolver {
 
             kart.spin();
             shell.remove();
+            return false;
+        }
+        else if (collision.isWith(Kart.class, Banana.class)) {
+            Kart kart = collision.getType(Kart.class);
+            Banana banana = collision.getType(Banana.class);
+
+            kart.spin();
+            banana.remove();
             return false;
         }
         else if (collision.isWith(Shell.class, Shell.class)) {
