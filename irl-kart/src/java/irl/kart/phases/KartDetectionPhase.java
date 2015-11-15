@@ -6,6 +6,7 @@ import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.geometry.Angle;
 import irl.fw.engine.geometry.Vector2D;
 import irl.kart.beacon.KartBeacon;
+import irl.kart.beacon.KartBeaconEvent;
 import irl.kart.entities.Kart;
 import irl.kart.events.beacon.KartStateUpdate;
 import irl.util.concurrent.SynchronousRunnable;
@@ -36,7 +37,7 @@ public class KartDetectionPhase extends SynchronousRunnable {
     private Observable<AddEntity> addNewKarts() {
         return beacon.stream()
                 .ofType(KartStateUpdate.class)
-                .distinct(update -> update.getKartId())
+                .distinct(KartBeaconEvent::getKartId)
                 .map(update -> new AddEntity(entityConfig -> new Kart(
                         entityConfig,
                         new EntityStateBuilder()

@@ -9,6 +9,8 @@ package irl.fw.engine.geometry;
 public class Angle {
 
     public static final Angle ZERO = Angle.rad(0);
+    public static final Angle HALF = Angle.deg(180);
+    public static final Angle FULL = Angle.deg(360);
 
     private enum Type {
         RADIANS, DEGREES;
@@ -28,6 +30,10 @@ public class Angle {
 
     public static Angle rad(double value) {
         return new Angle(value, Type.RADIANS);
+    }
+
+    public static Angle random() {
+        return deg(Math.random() * FULL.asDeg());
     }
 
     public double asDeg() {

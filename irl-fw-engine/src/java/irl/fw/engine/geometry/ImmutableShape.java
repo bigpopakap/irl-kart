@@ -15,7 +15,7 @@ import java.awt.geom.Rectangle2D;
 public class ImmutableShape implements Shape {
 
     public enum Type {
-        RECTANGLE, ELLIPSE, SEGMENT, POLYGON
+        RECTANGLE, ELLIPSE, SEGMENT, CONVEX_POLY
     }
 
     private final Type type;
