@@ -13,12 +13,12 @@ import java.awt.event.KeyListener;
  * @author bigpopakap
  * @since 11/14/15
  */
-class MyKeyListener implements KeyListener {
+class SwingKeyListener implements KeyListener {
 
     private final Subject<KeyEvent, KeyEvent> keyPresses;
     private final Subject<KeyEvent, KeyEvent> keyReleases;
 
-    public MyKeyListener() {
+    public SwingKeyListener() {
         keyPresses = PublishSubject.<KeyEvent>create().toSerialized();
         keyReleases = PublishSubject.<KeyEvent>create().toSerialized();
     }

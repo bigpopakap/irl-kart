@@ -46,4 +46,20 @@ public class Angle {
         }
     }
 
+    public Angle add(Angle other) {
+        if (type == Type.RADIANS && other.type == Type.RADIANS) {
+            return Angle.rad(asRad() + other.asRad());
+        } else {
+            return Angle.deg(asDeg() + other.asDeg());
+        }
+    }
+
+    public Angle sub(Angle other) {
+        if (type == Type.RADIANS && other.type == Type.RADIANS) {
+            return Angle.rad(asRad() - other.asRad());
+        } else {
+            return Angle.deg(asDeg() - other.asDeg());
+        }
+    }
+
 }

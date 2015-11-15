@@ -26,11 +26,8 @@ import java.awt.*;
  */
 public class Kart extends IRLEntity implements ItemUser {
 
-    public static final double MAX_SPEED = 120;
-    public static final double MIN_SPEED = -60;
-    public static final double SPEED_INCR = 20;
-    public static final double ROT_INCR = 15;
-
+    //TODO this kart shouldn't know about its length and shape.
+    //      that should come from the beacon
     public static final int KART_LENGTH = 20;
     public static final ImmutableShape SHAPE = new ImmutableShape(
         ImmutableShape.Type.POLYGON,
