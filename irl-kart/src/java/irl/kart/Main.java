@@ -16,7 +16,6 @@ import irl.util.reactiveio.Pipe;
  * @author bigpopakap
  * @since 11/1/15
  */
-//TODO it's time to put this stuff into its own class
 public class Main {
 
     public static void main(String[] args) throws Exception {
@@ -41,6 +40,7 @@ public class Main {
         );
         runAll.run();
 
+        //initialize the objects in the world
         initializer.init();
     }
 
