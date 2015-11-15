@@ -13,7 +13,7 @@ import java.awt.event.KeyListener;
  * @author bigpopakap
  * @since 11/14/15
  */
-public class MyKeyListener implements KeyListener {
+class MyKeyListener implements KeyListener {
 
     private final Subject<KeyEvent, KeyEvent> keyPresses;
     private final Subject<KeyEvent, KeyEvent> keyReleases;

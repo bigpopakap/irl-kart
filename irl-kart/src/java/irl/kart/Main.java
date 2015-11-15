@@ -36,7 +36,6 @@ public class Main {
             .build();
 
         //start the engine and world
-        //FIXME race condition here... engine needs to start first
         ParallelRunnable runAll = new ParallelRunnable(
             true, engine, renderer, beacon
         );

@@ -2,7 +2,6 @@ package irl.kart.renderer;
 
 import irl.fw.engine.graphics.Renderer;
 import irl.fw.engine.world.World;
-import irl.kart.beacon.impl.MyKeyListener;
 import irl.util.callbacks.Callback;
 import irl.util.callbacks.Callbacks;
 import irl.util.concurrent.StoppableRunnable;
@@ -44,8 +43,6 @@ public class SwingRenderer implements Renderer, StoppableRunnable {
         });
 
         panel.setFocusable(true);
-        panel.addKeyListener(new MyKeyListener());
-
         frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         panel.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     }
