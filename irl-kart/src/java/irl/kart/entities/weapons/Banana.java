@@ -1,9 +1,5 @@
-package irl.kart.entities;
+package irl.kart.entities.weapons;
 
-import irl.fw.engine.entity.Entity;
-import irl.fw.engine.entity.VirtualEntity;
-import irl.fw.engine.entity.actions.remove.RemovableEntity;
-import irl.fw.engine.entity.actions.remove.RemovableEntityAdaptor;
 import irl.fw.engine.entity.factory.EntityConfig;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.events.EngineEvent;
@@ -19,7 +15,7 @@ import java.awt.*;
  * @author bigpopakap
  * @since 11/15/15
  */
-public class Banana extends VirtualEntity implements RemovableEntity {
+public class Banana extends WeaponEntity {
 
     public static final int SIZE = 10;
     private static final int WIDTH = 4;
@@ -32,32 +28,9 @@ public class Banana extends VirtualEntity implements RemovableEntity {
         )
     );
 
-    private final RemovableEntityAdaptor remover;
-
     public Banana(EntityConfig entityConfig, EntityState initState,
                   EventQueue<EngineEvent> eventQueue) {
-        super(entityConfig, initState);
-        this.remover = new RemovableEntityAdaptor(this, eventQueue);
-    }
-
-    @Override
-    public boolean collide(Entity other) {
-        if (other instanceof Kart) {
-            Kart kart = (Kart) other;
-            kart.spin();
-            remove();
-            return false;
-        } else if (other instanceof Shell || other instanceof Banana) {
-            remove();
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    @Override
-    public void remove() {
-        remover.remove();
+        super(entityConfig, initState, eventQueue);
     }
 
 }

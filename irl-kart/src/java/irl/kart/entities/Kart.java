@@ -10,6 +10,10 @@ import irl.fw.engine.entity.IRLEntity;
 import irl.kart.entities.items.Item;
 import irl.kart.entities.items.actions.itemuser.ItemUser;
 import irl.kart.entities.items.actions.itemuser.ItemUserAdaptor;
+import irl.kart.entities.weapons.Banana;
+import irl.kart.entities.weapons.Shell;
+import irl.kart.entities.weapons.WeaponEntity;
+import irl.kart.entities.weapons.WeaponTarget;
 import irl.kart.events.beacon.KartStateUpdate;
 import irl.kart.events.beacon.UseItem;
 import irl.kart.events.kart.SpinKart;
@@ -24,7 +28,7 @@ import java.awt.*;
  * @author bigpopakap
  * @since 11/1/15
  */
-public class Kart extends IRLEntity implements ItemUser {
+public class Kart extends IRLEntity implements ItemUser, WeaponTarget {
 
     //TODO this kart shouldn't know about its length and shape.
     //      that should come from the beacon
@@ -71,6 +75,18 @@ public class Kart extends IRLEntity implements ItemUser {
 
     public String getKartId() {
         return kartId;
+    }
+
+    @Override
+    public void hitBy(WeaponEntity weapon) {
+        if (weapon instanceof Shell || weapon instanceof Banana) {
+            spin();
+        } else {
+            throw new RuntimeException(
+                String.format("Kart %s was hit by weapon type %s, but doesn't know how to react to it",
+                        getKartId(), weapon.getClass())
+            );
+        }
     }
 
     public void spin() {

@@ -7,7 +7,7 @@ import irl.fw.engine.events.AddEntity;
 import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.geometry.Angle;
 import irl.fw.engine.geometry.Vector2D;
-import irl.kart.entities.Banana;
+import irl.kart.entities.weapons.Banana;
 import irl.kart.entities.Kart;
 import irl.kart.entities.items.actions.itemuser.ItemUser;
 import irl.util.reactiveio.EventQueue;
