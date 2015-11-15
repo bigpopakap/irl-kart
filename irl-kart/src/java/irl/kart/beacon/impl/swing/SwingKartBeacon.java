@@ -1,4 +1,4 @@
-package irl.kart.beacon.impl;
+package irl.kart.beacon.impl.swing;
 
 import irl.kart.beacon.KartBeacon;
 import irl.kart.beacon.KartBeaconEvent;

@@ -2,11 +2,12 @@ package irl.kart;
 
 import irl.fw.engine.engine.Engine;
 import irl.fw.engine.events.EngineEvent;
-import irl.kart.beacon.impl.SwingKartBeacon;
+import irl.fw.engine.graphics.Renderers;
+import irl.kart.beacon.impl.swing.SwingKartBeacon;
 import irl.fw.engine.engine.EngineBuilder;
 import irl.kart.phases.HardcodedCourseBuilderPhase;
 import irl.kart.phases.KartDetectionPhase;
-import irl.kart.renderer.SwingRenderer;
+import irl.fw.engine.graphics.impl.swing.SwingRenderer;
 import irl.util.concurrent.ParallelRunnable;
 import irl.util.concurrent.SequentialRunnable;
 import irl.util.reactiveio.EventQueue;
@@ -30,7 +31,7 @@ public class Main {
         //create the engine
         Engine engine = new EngineBuilder()
             .extraEvents(kartEventQueue.get())
-            .renderer(renderer)
+            .renderer(new Renderers(renderer))
             .build();
 
         //start the engine and world
