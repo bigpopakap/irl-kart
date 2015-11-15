@@ -45,6 +45,7 @@ public class ItemBox extends VirtualEntity implements RemovableEntity {
         availableItems = new ArrayList<>();
         this.eventQueue = eventQueue;
         availableItems.add(new ShellItem(this.eventQueue));
+        availableItems.add(new BananaItem(this.eventQueue));
 
         this.remover = new RemovableEntityAdaptor(this, this.eventQueue, onRemove);
     }

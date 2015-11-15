@@ -51,7 +51,7 @@ class Dyn4jShapeConverter {
                 return new Rectangle(bounds.getWidth(), bounds.getHeight());
             case ELLIPSE:
                 return new Ellipse(bounds.getWidth(), bounds.getHeight());
-            case POLYGON:
+            case CONVEX_POLY:
                 return fromPolygon(shape);
             default:
                 throw new UnsupportedOperationException("This type isn't supported: " + shape.getType());
@@ -90,7 +90,7 @@ class Dyn4jShapeConverter {
             toReturn = toEllipse((Ellipse) shape);
         }
         else if (shape instanceof Polygon) {
-            type = ImmutableShape.Type.POLYGON;
+            type = ImmutableShape.Type.CONVEX_POLY;
             toReturn = toPolygon((Polygon) shape);
         }
         else if (shape instanceof Segment) {
