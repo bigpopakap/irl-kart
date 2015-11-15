@@ -14,19 +14,32 @@ import java.util.Optional;
  */
 public class HoldableItemAdaptor<T extends RemovableEntity> {
 
-    private Optional<T> entity = Optional.empty();
+    private volatile Optional<T> entity = Optional.empty();
     private final Callbacks onRemove;
 
     public HoldableItemAdaptor() {
         this.onRemove = new Callbacks();
+        this.onRemove.add(() -> entity = Optional.empty());
     }
 
-    private void gsetCreatedEntity(T entity) {
+    public boolean isHeld() {
+        return entity.isPresent();
+    }
+
+    public T getHeldEntity() {
+        return entity.get();
+    }
+
+    public synchronized void setCreatedEntity(T entity) {
+        if (this.entity.isPresent()) {
+            throw new IllegalStateException("An item is already held");
+        }
+
         entity.onRemove(onRemove);
         this.entity = Optional.ofNullable(entity);
     }
 
-    public void remove() {
+    public synchronized void remove() {
         if (entity.isPresent()) {
             entity.get().remove();
         }
