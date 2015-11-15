@@ -1,4 +1,4 @@
-package irl.kart.world;
+package irl.kart.renderer;
 import irl.fw.engine.entity.state.EntityStateBuilder;
 import irl.fw.engine.entity.state.EntityStateUpdate;
 import irl.fw.engine.events.AddEntity;
@@ -7,7 +7,6 @@ import irl.fw.engine.geometry.Angle;
 import irl.fw.engine.geometry.ImmutableShape;
 import irl.fw.engine.geometry.Vector2D;
 import irl.fw.engine.world.World;
-import irl.kart.beacon.KartBeacon;
 import irl.kart.beacon.KartBeaconEvent;
 import irl.kart.entities.items.ItemBoxPedestal;
 import irl.kart.events.beacon.UseItem;
@@ -15,8 +14,6 @@ import irl.kart.events.beacon.KartStateUpdate;
 import irl.fw.engine.graphics.Renderer;
 import irl.kart.entities.Kart;
 import irl.kart.entities.Wall;
-import irl.kart.events.kart.KartEvent;
-import irl.kart.events.kart.SpinKart;
 import irl.util.callbacks.Callback;
 import irl.util.callbacks.Callbacks;
 import irl.util.concurrent.StoppableRunnable;
@@ -26,12 +23,10 @@ import rx.subjects.PublishSubject;
 import rx.subjects.Subject;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 
 /**
@@ -40,7 +35,7 @@ import java.awt.geom.Rectangle2D;
  * @author bigpopakap
  * @since 11/2/15
  */
-public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
+public class SwingWorld implements /* KartBeacon,*/ Renderer, StoppableRunnable {
 
     private static final double WORLD_WIDTH = 1000;
     private static final double WORLD_HEIGHT = 500;
@@ -111,7 +106,6 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
         final Rectangle2D worldBounds = new Rectangle2D.Double(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
         eventQueue.mergeIn(addWalls(worldBounds));
         eventQueue.mergeIn(addItemBoxes(worldBounds));
-        eventQueue.mergeIn(addNewKarts());
 
         this.frame = new JFrame();
         this.panel = new MyPanel();
@@ -136,15 +130,9 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
     }
 
     @Override
-    public Observable<KartBeaconEvent> stream() {
-        return updates.get();
-    }
-
-    @Override
     public void render(World world, long timeSinceLastUpdate) {
         if (frame != null && panel != null) {
             panel.update(world);
-            frame.repaint();
         }
     }
 
@@ -244,64 +232,6 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
         });
     }
 
-    private Observable<AddEntity> addNewKarts() {
-        return stream()
-            .ofType(KartStateUpdate.class)
-            .distinct(update -> update.getKartId())
-            .map(update -> new AddEntity(entityConfig -> new Kart(
-                entityConfig,
-                new EntityStateBuilder()
-                        .shape(Kart.SHAPE)
-                        .rotation(Angle.deg(0))
-                        .center(new Vector2D(WORLD_WIDTH/2, WORLD_HEIGHT/2))
-                        .velocity(new Vector2D(0, 0))
-                        .angularVelocity(Angle.deg(0))
-                        .build(),
-                update.getKartId(), this, eventQueue
-            )));
-    }
-
-    @Override
-    public void send(KartEvent event) {
-        if (event instanceof SpinKart) {
-            String kartToSpin = ((SpinKart) event).getKartId();
-
-            int keyToPress_lr;
-            int keyToPress_back;
-            if (kartToSpin.equals(kart1Id)) {
-                keyToPress_lr = (Math.random() < 0.5) ? KeyEvent.VK_LEFT : KeyEvent.VK_RIGHT;
-                keyToPress_back = KeyEvent.VK_DOWN;
-            } else if (kartToSpin.equals(kart2Id)) {
-                keyToPress_lr = (Math.random() < 0.5) ? KeyEvent.VK_A : KeyEvent.VK_D;
-                keyToPress_back = KeyEvent.VK_S;
-            } else {
-                return; //do nothing
-            }
-
-            new Thread(() -> {
-                Robot robot;
-                try {
-                    robot = new Robot();
-                } catch (AWTException e) {
-                    e.printStackTrace();
-                    return;
-                }
-
-                robot.setAutoDelay(10);
-                for (int i = 0; i < 20; i++) {
-                    robot.keyPress(keyToPress_lr);
-                    robot.keyRelease(keyToPress_lr);
-                    if (i < 5) {
-                        robot.keyPress(keyToPress_back);
-                        robot.keyRelease(keyToPress_back);
-                    }
-                }
-            }).start();
-        } else {
-            System.err.println("Unhandled or unexpected event: " + event.getName());
-        }
-    }
-
     private KartBeaconEvent keyEventToBeaconEvent(KeyEvent evt) {
         switch (evt.getKeyCode()) {
             /* KART 1 speed */
@@ -370,88 +300,6 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
 
             default:
                 return null;
-        }
-    }
-
-    private static class MyPanel extends JPanel {
-
-        public static final long serialVersionUID = 1L;
-
-        private volatile World world;
-
-        public synchronized void update(World world) {
-            this.world = world;
-        }
-
-        @Override
-        public synchronized void paint(Graphics g) {
-            super.paint(g);
-
-            if (world == null) return;
-
-            Graphics2D g2 = (Graphics2D) g;
-            AffineTransform savedTrans = g2.getTransform();
-
-            //translate so the axes are normal-people axes
-            AffineTransform transform = new AffineTransform();
-            transform.translate(0, getHeight());
-            transform.scale(1, -1);
-            {
-                final int PADDING = 10;
-                transform.translate(PADDING, PADDING);
-                transform.scale((getWidth() - 2.0*PADDING) / getWidth(),
-                                (getHeight() - 2.0*PADDING) / getHeight());
-            }
-            g2.setTransform(transform);
-
-            //draw axes
-            g2.setColor(Color.RED);
-            g2.drawRect(0, 0, getWidth(), getHeight());
-            g2.setColor(Color.BLACK);
-            drawArrow(g, 0, 0, 400, 0);
-            drawArrow(g, 0, 0, 0, 200);
-
-            //TODO transform the graphics so the world is scaled
-//            transform.translate(world.getMinX(), world.getMinY());
-//            transform.scale(getWidth() / world.getWidth(),
-//                            getHeight() / world.getHeight());
-            g2.setTransform(transform);
-
-            //draw bounds around the world
-            g2.setColor(Color.GREEN);
-            g2.draw(new Rectangle2D.Double(world.getMinX(), world.getMinY(),
-                    world.getWidth(), world.getHeight()));
-            g2.setColor(Color.BLACK);
-
-            //draw all the items in the world
-            world.getEntities().stream()
-                .map(entity -> entity.getState().getTransformedShape())
-                    .forEach(shape -> draw(g2, shape));
-
-            //revert back to the original transform
-            g2.setTransform(savedTrans);
-        }
-
-        private void draw(Graphics2D g2, ImmutableShape shape) {
-            g2.draw(shape);
-        }
-
-        private void drawArrow(Graphics g1, int x1, int y1, int x2, int y2) {
-            final int ARR_SIZE = 4;
-
-            Graphics2D g = (Graphics2D) g1.create();
-
-            double dx = x2 - x1, dy = y2 - y1;
-            double angle = Math.atan2(dy, dx);
-            int len = (int) Math.sqrt(dx*dx + dy*dy);
-            AffineTransform at = AffineTransform.getTranslateInstance(x1, y1);
-            at.concatenate(AffineTransform.getRotateInstance(angle));
-            g.transform(at);
-
-            // Draw horizontal arrow starting in (0, 0)
-            g.drawLine(0, 0, len, 0);
-            g.fillPolygon(new int[]{len, len - ARR_SIZE, len - ARR_SIZE, len},
-                    new int[]{0, -ARR_SIZE, ARR_SIZE, 0}, 4);
         }
     }
 

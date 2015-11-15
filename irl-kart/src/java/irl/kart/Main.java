@@ -3,7 +3,7 @@ package irl.kart;
 import irl.fw.engine.engine.Engine;
 import irl.fw.engine.events.EngineEvent;
 import irl.kart.collisions.KartCollisionResolver;
-import irl.kart.world.SwingWorld;
+import irl.kart.renderer.SwingWorld;
 import irl.fw.engine.engine.EngineBuilder;
 import irl.util.concurrent.ParallelRunnable;
 import irl.util.reactiveio.Pipe;
