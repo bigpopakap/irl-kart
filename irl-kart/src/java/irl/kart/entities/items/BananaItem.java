@@ -24,11 +24,11 @@ import irl.util.reactiveio.EventQueue;
 public class BananaItem implements HoldableItem {
 
     private final EventQueue<EngineEvent> eventQueue;
-    private final HoldableItemAdaptor holdable;
+    private final HoldableItemAdaptor<Banana> holdable;
 
     public BananaItem(EventQueue<EngineEvent> eventQueue) {
         this.eventQueue = eventQueue;
-        this.holdable = new HoldableItemAdaptor();
+        this.holdable = new HoldableItemAdaptor<>();
     }
 
     @Override

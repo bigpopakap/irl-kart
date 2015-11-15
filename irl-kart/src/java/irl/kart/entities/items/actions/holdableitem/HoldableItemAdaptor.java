@@ -1,6 +1,5 @@
 package irl.kart.entities.items.actions.holdableitem;
 
-import irl.fw.engine.entity.Entity;
 import irl.fw.engine.entity.actions.remove.RemovableEntity;
 import irl.util.callbacks.Callback;
 import irl.util.callbacks.Callbacks;
@@ -13,16 +12,16 @@ import java.util.Optional;
  * @author bigpopakap
  * @since 11/15/15
  */
-public class HoldableItemAdaptor<T extends Entity> {
+public class HoldableItemAdaptor<T extends RemovableEntity> {
 
-    private Optional<RemovableEntity> entity = Optional.empty();
+    private Optional<T> entity = Optional.empty();
     private final Callbacks onRemove;
 
     public HoldableItemAdaptor() {
         this.onRemove = new Callbacks();
     }
 
-    private void setCreatedEntity(RemovableEntity entity) {
+    private void gsetCreatedEntity(T entity) {
         entity.onRemove(onRemove);
         this.entity = Optional.ofNullable(entity);
     }

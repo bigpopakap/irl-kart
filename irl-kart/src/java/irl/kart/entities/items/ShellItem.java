@@ -23,11 +23,11 @@ import irl.util.reactiveio.EventQueue;
 public class ShellItem implements HoldableItem {
 
     private final EventQueue<EngineEvent> eventQueue;
-    private final HoldableItemAdaptor holdable;
+    private final HoldableItemAdaptor<Shell> holdable;
 
     public ShellItem(EventQueue<EngineEvent> eventQueue) {
         this.eventQueue = eventQueue;
-        this.holdable = new HoldableItemAdaptor();
+        this.holdable = new HoldableItemAdaptor<>();
     }
 
     @Override
