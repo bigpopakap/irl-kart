@@ -7,6 +7,7 @@ import irl.fw.engine.events.UpdateEntity;
 import irl.fw.engine.geometry.ImmutableShape;
 import irl.kart.beacon.KartBeacon;
 import irl.fw.engine.entity.IRLEntity;
+import irl.kart.beacon.KartBeaconEvent;
 import irl.kart.entities.items.Item;
 import irl.kart.entities.items.actions.itemuser.ItemUser;
 import irl.kart.entities.items.actions.itemuser.ItemUserAdaptor;
@@ -14,11 +15,13 @@ import irl.kart.entities.weapons.Banana;
 import irl.kart.entities.weapons.Shell;
 import irl.kart.entities.weapons.WeaponEntity;
 import irl.kart.entities.weapons.WeaponTarget;
+import irl.kart.events.beacon.HoldItem;
 import irl.kart.events.beacon.KartStateUpdate;
 import irl.kart.events.beacon.UseItem;
 import irl.kart.events.kart.SpinKart;
 import irl.util.reactiveio.EventQueue;
 import irl.util.string.StringUtils;
+import rx.Observable;
 
 import java.awt.*;
 
@@ -57,19 +60,25 @@ public class Kart extends IRLEntity implements ItemUser, WeaponTarget {
         this.eventQueue = eventQueue;
         this.itemUser = new ItemUserAdaptor<>(this);
 
+        //look at only events for this kart
+        Observable<KartBeaconEvent> beaconEvents = this.kartBeacon.stream()
+                .filter(update -> update != null)
+                .filter(update -> StringUtils.equal(getKartId(), update.getKartId()));
+
         //merge in update position events
         this.eventQueue.mergeIn(
             //TODO we should only report the latest position or something
-            kartBeacon.stream()
+            beaconEvents
                 .ofType(KartStateUpdate.class)
-                .filter(update -> StringUtils.equal(getKartId(), update.getKartId()))
                 .map(update -> new UpdateEntity(getEngineId(), update.getStateUpdate()))
         );
 
         //merge in uses of items
-        kartBeacon.stream()
+        beaconEvents
+            .ofType(HoldItem.class)
+            .subscribe(update -> this.holdItem());
+        beaconEvents
             .ofType(UseItem.class)
-            .filter(update -> StringUtils.equal(getKartId(), update.getKartId()))
             .subscribe(update -> this.useItem());
     }
 
@@ -96,6 +105,11 @@ public class Kart extends IRLEntity implements ItemUser, WeaponTarget {
     @Override
     public void takeItem(Item item) {
         itemUser.takeItem(item);
+    }
+
+    @Override
+    public void holdItem() {
+        itemUser.holdItem();
     }
 
     @Override

@@ -11,6 +11,7 @@ import irl.kart.entities.items.Item;
 public interface ItemUser {
 
     void takeItem(Item item);
+    void holdItem();
     void useItem();
 
 }

@@ -28,6 +28,22 @@ public class ItemUserAdaptor<T extends Entity & ItemUser> implements ItemUser {
     }
 
     @Override
+    public void holdItem() {
+        if (this.item.isPresent()) {
+            Item item = this.item.get();
+
+            if (item.isHoldable()) {
+                //TODO do something here
+                System.out.println("HOLD ITEM");
+            } else {
+                //assume that non-holdable items should get
+                //used when the kart tries to "hold" it
+                useItem();
+            }
+        }
+    }
+
+    @Override
     public void useItem() {
         if (item.isPresent()) {
             item.get().doUseItem(user);

@@ -26,6 +26,11 @@ public class ShellItem implements Item {
     }
 
     @Override
+    public boolean isHoldable() {
+        return true;
+    }
+
+    @Override
     public <T extends Entity & ItemUser> void doUseItem(T user) {
         EntityState kartState = user.getState();
         Vector2D kartCenter = kartState.getCenter();
