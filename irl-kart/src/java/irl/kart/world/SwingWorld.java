@@ -152,8 +152,8 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
         return Observable.from(new AddEntity[] {
 
                 //left wall
-                new AddEntity(engineId -> new Wall(
-                    engineId,
+                new AddEntity(entityConfig -> new Wall(
+                    entityConfig,
                     new EntityStateBuilder().defaults()
                             .shape(new ImmutableShape(ImmutableShape.Type.RECTANGLE,
                                     new Rectangle2D.Double(0, 0, WALL_THICKNESS, worldBounds.getHeight())))
@@ -162,8 +162,8 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
                 )),
 
                 //right wall
-                new AddEntity(engineId -> new Wall(
-                    engineId,
+                new AddEntity(entityConfig -> new Wall(
+                    entityConfig,
                     new EntityStateBuilder().defaults()
                             .shape(new ImmutableShape(ImmutableShape.Type.RECTANGLE,
                                     new Rectangle2D.Double(0, 0, WALL_THICKNESS, worldBounds.getHeight())))
@@ -172,8 +172,8 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
                 )),
 
                 //top wall
-                new AddEntity(engineId -> new Wall(
-                    engineId,
+                new AddEntity(entityConfig -> new Wall(
+                    entityConfig,
                     new EntityStateBuilder().defaults()
                             .shape(new ImmutableShape(ImmutableShape.Type.RECTANGLE,
                                     new Rectangle2D.Double(0, 0, WALL_THICKNESS, worldBounds.getWidth())))
@@ -183,8 +183,8 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
                 )),
 
                 //bottom wall
-                new AddEntity(engineId -> new Wall(
-                    engineId,
+                new AddEntity(entityConfig -> new Wall(
+                    entityConfig,
                     new EntityStateBuilder().defaults()
                             .shape(new ImmutableShape(ImmutableShape.Type.RECTANGLE,
                                     new Rectangle2D.Double(0, 0, WALL_THICKNESS, worldBounds.getWidth())))
@@ -202,8 +202,8 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
         return Observable.from(new AddEntity[] {
 
             //top left
-            new AddEntity(engineId -> new ItemBoxPedestal(
-                engineId,
+            new AddEntity(entityConfig -> new ItemBoxPedestal(
+                entityConfig,
                 new EntityStateBuilder().defaults()
                         .center(new Vector2D(INSET, worldBounds.getHeight() - INSET))
                         .shape(ItemBoxPedestal.SHAPE)
@@ -212,8 +212,8 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
             )),
 
             //top right
-            new AddEntity(engineId -> new ItemBoxPedestal(
-                engineId,
+            new AddEntity(entityConfig -> new ItemBoxPedestal(
+                entityConfig,
                 new EntityStateBuilder().defaults()
                         .center(new Vector2D(worldBounds.getWidth() - INSET, worldBounds.getHeight() - INSET))
                         .shape(ItemBoxPedestal.SHAPE)
@@ -222,8 +222,8 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
             )),
 
             //bottom left
-            new AddEntity(engineId -> new ItemBoxPedestal(
-                engineId,
+            new AddEntity(entityConfig -> new ItemBoxPedestal(
+                entityConfig,
                 new EntityStateBuilder().defaults()
                         .center(new Vector2D(INSET, INSET))
                         .shape(ItemBoxPedestal.SHAPE)
@@ -232,8 +232,8 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
             )),
 
             //bottom right
-            new AddEntity(engineId -> new ItemBoxPedestal(
-                engineId,
+            new AddEntity(entityConfig -> new ItemBoxPedestal(
+                entityConfig,
                 new EntityStateBuilder().defaults()
                         .center(new Vector2D(worldBounds.getWidth() - INSET, INSET))
                         .shape(ItemBoxPedestal.SHAPE)
@@ -248,8 +248,8 @@ public class SwingWorld implements KartBeacon, Renderer, StoppableRunnable {
         return stream()
             .ofType(KartStateUpdate.class)
             .distinct(update -> update.getKartId())
-            .map(update -> new AddEntity(engineId -> new Kart(
-                engineId,
+            .map(update -> new AddEntity(entityConfig -> new Kart(
+                entityConfig,
                 new EntityStateBuilder()
                         .shape(Kart.SHAPE)
                         .rotation(Angle.deg(0))

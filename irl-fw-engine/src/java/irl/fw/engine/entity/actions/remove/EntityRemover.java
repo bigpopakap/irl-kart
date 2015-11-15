@@ -1,4 +1,4 @@
-package irl.fw.engine.entity.actions;
+package irl.fw.engine.entity.actions.remove;
 
 import irl.fw.engine.entity.Entity;
 import irl.fw.engine.events.EngineEvent;

@@ -1,7 +1,7 @@
 package irl.kart.entities.items;
 
-import irl.fw.engine.entity.EntityId;
 import irl.fw.engine.entity.VirtualEntity;
+import irl.fw.engine.entity.factory.EntityConfig;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.entity.state.EntityStateBuilder;
 import irl.fw.engine.events.AddEntity;
@@ -29,17 +29,17 @@ public class ItemBoxPedestal extends VirtualEntity {
 
     private final Pipe<EngineEvent> eventQueue;
 
-    public ItemBoxPedestal(EntityId engineId, EntityState initState,
+    public ItemBoxPedestal(EntityConfig entityConfig, EntityState initState,
                            Pipe<EngineEvent> eventQueue) {
-        super(engineId, initState);
+        super(entityConfig, initState);
         this.eventQueue = eventQueue;
 
         this.eventQueue.mergeIn(createItemBox());
     }
 
     private AddEntity createItemBox() {
-        return new AddEntity(engineId -> new ItemBox(
-            engineId,
+        return new AddEntity(entityConfig -> new ItemBox(
+            entityConfig,
             new EntityStateBuilder().defaults()
                     .center(getState().getCenter())
                     .shape(ItemBox.SHAPE)

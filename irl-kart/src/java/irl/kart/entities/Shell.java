@@ -1,9 +1,9 @@
 package irl.kart.entities;
 
-import irl.fw.engine.entity.EntityId;
 import irl.fw.engine.entity.VirtualEntity;
-import irl.fw.engine.entity.actions.EntityRemover;
-import irl.fw.engine.entity.actions.RemovableEntity;
+import irl.fw.engine.entity.actions.remove.EntityRemover;
+import irl.fw.engine.entity.actions.remove.RemovableEntity;
+import irl.fw.engine.entity.factory.EntityConfig;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.geometry.Angle;
@@ -32,10 +32,10 @@ public class Shell extends VirtualEntity implements RemovableEntity {
     private final String sourceKartId;
     private final EntityRemover remover;
 
-    public Shell(EntityId engineId, EntityState initState,
+    public Shell(EntityConfig entityConfig, EntityState initState,
                  String sourceKartId,
                  Pipe<EngineEvent> eventQueue) {
-        super(engineId, initState);
+        super(entityConfig, initState);
         this.sourceKartId = sourceKartId;
         this.remover = new EntityRemover(this, eventQueue);
     }

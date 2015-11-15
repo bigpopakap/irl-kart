@@ -1,9 +1,9 @@
 package irl.kart.entities.items;
 
-import irl.fw.engine.entity.EntityId;
 import irl.fw.engine.entity.VirtualEntity;
-import irl.fw.engine.entity.actions.EntityRemover;
-import irl.fw.engine.entity.actions.RemovableEntity;
+import irl.fw.engine.entity.actions.remove.EntityRemover;
+import irl.fw.engine.entity.actions.remove.RemovableEntity;
+import irl.fw.engine.entity.factory.EntityConfig;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.geometry.Angle;
@@ -33,14 +33,14 @@ public class ItemBox extends VirtualEntity implements RemovableEntity {
     private final Pipe<EngineEvent> eventQueue;
     private final EntityRemover remover;
 
-    public ItemBox(EntityId engineId, EntityState initState,
+    public ItemBox(EntityConfig entityConfig, EntityState initState,
                    Pipe<EngineEvent> eventQueue) {
-        this(engineId, initState, eventQueue, null);
+        this(entityConfig, initState, eventQueue, null);
     }
 
-    public ItemBox(EntityId engineId, EntityState initState,
+    public ItemBox(EntityConfig entityConfig, EntityState initState,
                    Pipe<EngineEvent> eventQueue, Callback onRemove) {
-        super(engineId, initState);
+        super(entityConfig, initState);
 
         availableItems = new ArrayList<>();
         this.eventQueue = eventQueue;

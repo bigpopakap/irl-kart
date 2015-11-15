@@ -1,5 +1,6 @@
 package irl.fw.engine.entity;
 
+import irl.fw.engine.entity.factory.EntityConfig;
 import irl.fw.engine.entity.state.EntityState;
 
 /**
@@ -10,8 +11,8 @@ import irl.fw.engine.entity.state.EntityState;
  */
 public abstract class VirtualEntity extends Entity {
 
-    public VirtualEntity(EntityId engineId, EntityState initState) {
-        super(engineId, initState);
+    public VirtualEntity(EntityConfig entityConfig, EntityState initState) {
+        super(entityConfig, initState);
     }
 
 //    TODO add this method

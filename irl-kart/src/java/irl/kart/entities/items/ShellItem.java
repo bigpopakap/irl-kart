@@ -33,8 +33,8 @@ public class ShellItem implements Item {
                 shellVelocity.scaleTo(Kart.KART_LENGTH + 0.25*Shell.SIZE)
         );
 
-        AddEntity addShell = new AddEntity(engineId -> new Shell(
-                engineId,
+        AddEntity addShell = new AddEntity(entityConfig -> new Shell(
+                entityConfig,
                 new EntityStateBuilder().defaults()
                         .shape(Shell.SHAPE)
                         .center(shellCenter)

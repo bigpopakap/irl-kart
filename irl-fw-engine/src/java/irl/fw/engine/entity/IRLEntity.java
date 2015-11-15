@@ -1,5 +1,6 @@
 package irl.fw.engine.entity;
 
+import irl.fw.engine.entity.factory.EntityConfig;
 import irl.fw.engine.entity.state.EntityState;
 
 /**
@@ -10,8 +11,8 @@ import irl.fw.engine.entity.state.EntityState;
  */
 public abstract class IRLEntity extends Entity {
 
-    public IRLEntity(EntityId engineId, EntityState initState) {
-        super(engineId, initState);
+    public IRLEntity(EntityConfig entityConfig, EntityState initState) {
+        super(entityConfig, initState);
     }
 
     @Override

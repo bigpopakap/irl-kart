@@ -1,6 +1,6 @@
 package irl.kart.entities;
 
-import irl.fw.engine.entity.EntityId;
+import irl.fw.engine.entity.factory.EntityConfig;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.events.UpdateEntity;
@@ -46,10 +46,10 @@ public class Kart extends IRLEntity {
 
     private Optional<Item> item = Optional.empty();
 
-    public Kart(EntityId engineId, EntityState initState,
+    public Kart(EntityConfig entityConfig, EntityState initState,
                 String kartId, KartBeacon kartBeacon,
                 Pipe<EngineEvent> eventQueue) {
-        super(engineId, initState);
+        super(entityConfig, initState);
 
         this.kartId = kartId;
         this.kartBeacon = kartBeacon;

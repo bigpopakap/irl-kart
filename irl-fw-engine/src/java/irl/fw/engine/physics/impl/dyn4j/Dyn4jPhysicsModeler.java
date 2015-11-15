@@ -1,7 +1,7 @@
 package irl.fw.engine.physics.impl.dyn4j;
 
 import irl.fw.engine.entity.Entity;
-import irl.fw.engine.entity.EntityFactory;
+import irl.fw.engine.entity.factory.EntityFactory;
 import irl.fw.engine.entity.EntityId;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.collisions.CollisionResolver;

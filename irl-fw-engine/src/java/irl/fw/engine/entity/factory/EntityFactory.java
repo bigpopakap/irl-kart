@@ -1,5 +1,7 @@
-package irl.fw.engine.entity;
+package irl.fw.engine.entity.factory;
 
+import irl.fw.engine.entity.Entity;
+import irl.fw.engine.entity.EntityId;
 import irl.util.universe.UniverseElementFactory;
 
 /**
@@ -12,9 +14,9 @@ public interface EntityFactory<T extends Entity> extends UniverseElementFactory<
 
     @Override
     default T create(String id) {
-        return create(new EntityId(id));
+        return create(new EntityConfig().setId(new EntityId(id)));
     }
 
-    T create(EntityId engineId);
+    T create(EntityConfig config);
 
 }

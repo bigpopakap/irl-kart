@@ -1,4 +1,4 @@
-package irl.fw.engine.entity.actions;
+package irl.fw.engine.entity.actions.remove;
 
 /**
  * TODO bigpopakap Javadoc this class

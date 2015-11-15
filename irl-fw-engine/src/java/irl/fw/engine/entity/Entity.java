@@ -1,5 +1,6 @@
 package irl.fw.engine.entity;
 
+import irl.fw.engine.entity.factory.EntityConfig;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.entity.state.EntityStateUpdate;
 
@@ -14,8 +15,12 @@ public abstract class Entity {
     private final EntityId engineId;
     private volatile EntityState state;
 
-    public Entity(EntityId engineId, EntityState initState) {
-        this.engineId = engineId;
+    public Entity(EntityConfig entityConfig, EntityState initState) {
+        this.engineId = entityConfig.getId();
+        if (this.engineId == null) {
+            throw new IllegalArgumentException("This entity must have an ID");
+        }
+
         setState(initState);
     }
 
