@@ -3,7 +3,6 @@ package irl.kart;
 import irl.fw.engine.engine.Engine;
 import irl.fw.engine.events.EngineEvent;
 import irl.kart.beacon.impl.SwingKartBeacon;
-import irl.kart.collisions.KartCollisionResolver;
 import irl.fw.engine.engine.EngineBuilder;
 import irl.kart.phases.HardcodedCourseBuilderPhase;
 import irl.kart.phases.KartDetectionPhase;
@@ -31,7 +30,6 @@ public class Main {
         //create the engine
         Engine engine = new EngineBuilder()
             .extraEvents(kartEventQueue.get())
-            .collisions(new KartCollisionResolver())
             .renderer(renderer)
             .build();
 

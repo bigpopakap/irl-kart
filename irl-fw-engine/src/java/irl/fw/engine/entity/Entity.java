@@ -1,5 +1,6 @@
 package irl.fw.engine.entity;
 
+import irl.fw.engine.collisions.CollidableEntity;
 import irl.fw.engine.entity.factory.EntityConfig;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.entity.state.EntityStateUpdate;
@@ -10,7 +11,7 @@ import irl.fw.engine.entity.state.EntityStateUpdate;
  * @author bigpopakap
  * @since 10/29/15
  */
-public abstract class Entity {
+public abstract class Entity implements CollidableEntity {
 
     private final EntityId engineId;
     private volatile EntityState state;
@@ -40,6 +41,11 @@ public abstract class Entity {
 
     public synchronized void updateState(EntityStateUpdate stateUpdates) {
         setState(stateUpdates.fillAndBuild(getState()));
+    }
+
+    @Override
+    public boolean collide(Entity other) {
+        return true;
     }
 
 }

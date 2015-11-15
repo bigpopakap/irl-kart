@@ -1,5 +1,6 @@
 package irl.kart.entities;
 
+import irl.fw.engine.entity.Entity;
 import irl.fw.engine.entity.EntityId;
 import irl.fw.engine.entity.VirtualEntity;
 import irl.fw.engine.entity.actions.remove.RemovableEntityAdaptor;
@@ -44,6 +45,21 @@ public class Shell extends VirtualEntity implements RemovableEntity {
 
     public EntityId getSourceKartId() {
         return sourceKartId;
+    }
+
+    @Override
+    public boolean collide(Entity other) {
+        if (other instanceof Kart) {
+            Kart kart = (Kart) other;
+            kart.spin();
+            remove();
+            return false;
+        } else if (other instanceof Shell || other instanceof Banana) {
+            remove();
+            return false;
+        } else {
+            return true;
+        }
     }
 
     @Override

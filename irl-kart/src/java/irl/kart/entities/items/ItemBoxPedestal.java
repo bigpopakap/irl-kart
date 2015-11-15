@@ -1,5 +1,6 @@
 package irl.kart.entities.items;
 
+import irl.fw.engine.entity.Entity;
 import irl.fw.engine.entity.VirtualEntity;
 import irl.fw.engine.entity.factory.EntityConfig;
 import irl.fw.engine.entity.state.EntityState;
@@ -35,6 +36,12 @@ public class ItemBoxPedestal extends VirtualEntity {
         this.eventQueue = eventQueue;
 
         this.eventQueue.mergeIn(createItemBox());
+    }
+
+    @Override
+    public boolean collide(Entity other) {
+        //this doesn't interact with any other object
+        return false;
     }
 
     private AddEntity createItemBox() {

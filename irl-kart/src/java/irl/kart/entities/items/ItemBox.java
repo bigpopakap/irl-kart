@@ -1,5 +1,6 @@
 package irl.kart.entities.items;
 
+import irl.fw.engine.entity.Entity;
 import irl.fw.engine.entity.VirtualEntity;
 import irl.fw.engine.entity.actions.remove.RemovableEntityAdaptor;
 import irl.fw.engine.entity.actions.remove.RemovableEntity;
@@ -8,6 +9,7 @@ import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.geometry.Angle;
 import irl.fw.engine.geometry.ImmutableShape;
+import irl.kart.entities.items.actions.itemuser.ItemUser;
 import irl.util.callbacks.Callback;
 import irl.util.reactiveio.EventQueue;
 
@@ -50,14 +52,26 @@ public class ItemBox extends VirtualEntity implements RemovableEntity {
         this.remover = new RemovableEntityAdaptor(this, this.eventQueue, onRemove);
     }
 
-    public Item getRandomItem() {
-        int randIndex = (int) (availableItems.size() * Math.random());
-        return availableItems.get(randIndex);
+    @Override
+    public boolean collide(Entity other) {
+        if (other instanceof ItemUser) {
+            ItemUser itemUser = (ItemUser) other;
+            itemUser.takeItem(getRandomItem());
+            remove();
+        }
+
+        //item boxes don't interact with anything
+        return false;
     }
 
     @Override
     public void remove() {
         remover.remove();
+    }
+
+    private Item getRandomItem() {
+        int randIndex = (int) (availableItems.size() * Math.random());
+        return availableItems.get(randIndex);
     }
 
 }

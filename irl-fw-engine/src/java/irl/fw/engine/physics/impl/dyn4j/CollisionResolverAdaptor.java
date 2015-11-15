@@ -57,7 +57,11 @@ class CollisionResolverAdaptor implements CollisionListener, ContactListener {
 
         EntityCollision event = new EntityCollision(entity1, entity2);
 
-        return resolver.onCollision(event);
+        boolean entity1Result = entity1.collide(entity2);
+        boolean entity2Result = entity2.collide(entity1);
+        boolean resolverResult = resolver.onCollision(event);
+
+        return entity1Result && entity2Result && resolverResult;
     }
 
     @Override
