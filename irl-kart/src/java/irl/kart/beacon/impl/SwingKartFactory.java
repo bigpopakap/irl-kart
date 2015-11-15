@@ -10,7 +10,7 @@ import java.awt.*;
  * @author bigpopakap
  * @since 11/14/15
  */
-public class SwingKartFactory implements UniverseElementFactory<SwingKart> {
+class SwingKartFactory implements UniverseElementFactory<SwingKart> {
 
     private final SwingKeyMapping keyMap;
 
