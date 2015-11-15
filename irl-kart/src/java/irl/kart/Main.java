@@ -8,6 +8,7 @@ import irl.fw.engine.engine.EngineBuilder;
 import irl.kart.engine.Initializer;
 import irl.kart.renderer.SwingRenderer;
 import irl.util.concurrent.ParallelRunnable;
+import irl.util.concurrent.SequentialRunnable;
 import irl.util.reactiveio.EventQueue;
 
 /**
@@ -25,7 +26,6 @@ public class Main {
         //create the beacon and renderer
         SwingRenderer renderer = new SwingRenderer();
         SwingKartBeacon beacon = new SwingKartBeacon(renderer.getPanel());
-        Initializer initializer = new Initializer(kartEventQueue, beacon);
 
         //create the engine
         Engine engine = new EngineBuilder()
@@ -35,13 +35,14 @@ public class Main {
             .build();
 
         //start the engine and world
-        ParallelRunnable runAll = new ParallelRunnable(
+        new ParallelRunnable(
             true, engine, renderer, beacon
-        );
-        runAll.run();
+        ).run();
 
-        //initialize the objects in the world
-        initializer.init();
+        //start running the different phases
+        new SequentialRunnable(
+            new Initializer(kartEventQueue, beacon)
+        ).run();
     }
 
 }

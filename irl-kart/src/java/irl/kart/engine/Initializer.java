@@ -11,6 +11,7 @@ import irl.kart.entities.Kart;
 import irl.kart.entities.Wall;
 import irl.kart.entities.items.ItemBoxPedestal;
 import irl.kart.events.beacon.KartStateUpdate;
+import irl.util.concurrent.SynchronousRunnable;
 import irl.util.reactiveio.EventQueue;
 import rx.Observable;
 
@@ -22,7 +23,7 @@ import java.awt.geom.Rectangle2D;
  * @author bigpopakap
  * @since 11/14/15
  */
-public class Initializer {
+public class Initializer extends SynchronousRunnable {
 
     private static final Rectangle2D WORLD_BOUNDS = new Rectangle2D.Double(
         0, 0, 1000, 500
@@ -38,7 +39,8 @@ public class Initializer {
         this.beacon = beacon;
     }
 
-    public void init() {
+    @Override
+    public void doRunSynchronous() {
         //add walls and add karts when they are first seen
         eventQueue.mergeIn(addWalls());
         eventQueue.mergeIn(addItemBoxes());
