@@ -21,13 +21,13 @@ import java.awt.*;
 public class Banana extends VirtualEntity implements RemovableEntity {
 
     public static final int SIZE = 10;
-    private static final int WIDTH = 2;
+    private static final int WIDTH = 4;
     public static final ImmutableShape SHAPE = new ImmutableShape(
         ImmutableShape.Type.CONVEX_POLY,
         new Polygon(
-                new int[] { (SIZE - WIDTH)/2, 0,                0,              (SIZE-WIDTH)/2, (SIZE+WIDTH)/2, SIZE,           SIZE,           (SIZE+WIDTH)/2 },
-                new int[] { 0               , (SIZE - WIDTH)/2, (SIZE+WIDTH)/2,  SIZE,           SIZE,          (SIZE+WIDTH)/2, (SIZE-WIDTH)/2, 0},
-                8
+            new int[] { (SIZE-WIDTH)/2, (SIZE+WIDTH)/2, SIZE,           SIZE,           (SIZE+WIDTH)/2, (SIZE-WIDTH)/2, 0,              0 },
+            new int[] { 0,              0,              (SIZE-WIDTH)/2, (SIZE+WIDTH)/2, SIZE,           SIZE,           (SIZE+WIDTH)/2, (SIZE-WIDTH)/2},
+            8
         )
     );
 
