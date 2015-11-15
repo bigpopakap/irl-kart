@@ -7,6 +7,8 @@ import rx.subjects.Subject;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import static irl.kart.beacon.impl.SwingKeyEvent.Type.*;
+
 /**
  * TODO bigpopakap Javadoc this class
  *
@@ -23,10 +25,9 @@ class SwingKeyListener implements KeyListener {
         keyReleases = PublishSubject.<KeyEvent>create().toSerialized();
     }
 
-    public Observable<KeyEvent> getKeys() {
-        return keyPresses
-            .takeUntil(keyReleases)
-            .repeat();
+    public Observable<SwingKeyEvent> getKeys() {
+        return keyPresses.map(keyEvent -> new SwingKeyEvent(KEY_DOWN, keyEvent))
+            .mergeWith(keyReleases.map(keyEvent -> new SwingKeyEvent(KEY_UP, keyEvent)));
     }
 
     @Override

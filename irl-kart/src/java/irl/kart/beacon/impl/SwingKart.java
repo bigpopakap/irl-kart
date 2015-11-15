@@ -44,12 +44,12 @@ class SwingKart {
         return id;
     }
 
-    public KartBeaconEvent handleKeyAndUpdate(int keyCode) {
-        if (!keyMap.canHandleKey(keyCode)) {
+    public KartBeaconEvent handleKeyAndUpdate(SwingKeyEvent keyEvent) {
+        if (!keyMap.canHandleKey(keyEvent.getEvent().getKeyCode())) {
             return null;
         }
 
-        SwingKartInput input = keyMap.fromKeyCode(keyCode);
+        SwingKartInput input = keyMap.fromKeyCode(keyEvent.getEvent().getKeyCode());
 
         boolean isStateUpdate;
         switch (input) {
@@ -78,6 +78,7 @@ class SwingKart {
                 break;
 
             case FIRE:
+                //TODO either use or hold item
                 return new UseItem(getId());
 
             default:
