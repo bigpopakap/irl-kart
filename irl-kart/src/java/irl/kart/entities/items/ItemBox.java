@@ -1,7 +1,7 @@
 package irl.kart.entities.items;
 
 import irl.fw.engine.entity.VirtualEntity;
-import irl.fw.engine.entity.actions.remove.EntityRemover;
+import irl.fw.engine.entity.actions.remove.RemovableEntityAdaptor;
 import irl.fw.engine.entity.actions.remove.RemovableEntity;
 import irl.fw.engine.entity.factory.EntityConfig;
 import irl.fw.engine.entity.state.EntityState;
@@ -31,7 +31,7 @@ public class ItemBox extends VirtualEntity implements RemovableEntity {
 
     private final ArrayList<Item> availableItems;
     private final Pipe<EngineEvent> eventQueue;
-    private final EntityRemover remover;
+    private final RemovableEntityAdaptor remover;
 
     public ItemBox(EntityConfig entityConfig, EntityState initState,
                    Pipe<EngineEvent> eventQueue) {
@@ -46,7 +46,7 @@ public class ItemBox extends VirtualEntity implements RemovableEntity {
         this.eventQueue = eventQueue;
         availableItems.add(new ShellItem(this.eventQueue));
 
-        this.remover = new EntityRemover(this, this.eventQueue, onRemove);
+        this.remover = new RemovableEntityAdaptor(this, this.eventQueue, onRemove);
     }
 
     public Item getRandomItem() {

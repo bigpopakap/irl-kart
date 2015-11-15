@@ -8,6 +8,8 @@ import irl.fw.engine.geometry.ImmutableShape;
 import irl.kart.beacon.KartBeacon;
 import irl.fw.engine.entity.IRLEntity;
 import irl.kart.entities.items.Item;
+import irl.kart.entities.items.actions.itemuser.ItemUser;
+import irl.kart.entities.items.actions.itemuser.ItemUserAdaptor;
 import irl.kart.events.beacon.KartStateUpdate;
 import irl.kart.events.beacon.UseItem;
 import irl.kart.events.kart.SpinKart;
@@ -15,7 +17,6 @@ import irl.util.reactiveio.Pipe;
 import irl.util.string.StringUtils;
 
 import java.awt.*;
-import java.util.Optional;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -23,7 +24,7 @@ import java.util.Optional;
  * @author bigpopakap
  * @since 11/1/15
  */
-public class Kart extends IRLEntity {
+public class Kart extends IRLEntity implements ItemUser {
 
     public static final double MAX_SPEED = 120;
     public static final double MIN_SPEED = -60;
@@ -43,8 +44,7 @@ public class Kart extends IRLEntity {
     private final String kartId;
     private final KartBeacon kartBeacon;
     private final Pipe<EngineEvent> eventQueue;
-
-    private Optional<Item> item = Optional.empty();
+    private final ItemUserAdaptor<Kart> itemUser;
 
     public Kart(EntityConfig entityConfig, EntityState initState,
                 String kartId, KartBeacon kartBeacon,
@@ -54,6 +54,7 @@ public class Kart extends IRLEntity {
         this.kartId = kartId;
         this.kartBeacon = kartBeacon;
         this.eventQueue = eventQueue;
+        this.itemUser = new ItemUserAdaptor<>(this);
 
         //merge in update position events
         this.eventQueue.mergeIn(
@@ -79,21 +80,14 @@ public class Kart extends IRLEntity {
         kartBeacon.send(new SpinKart(getKartId()));
     }
 
+    @Override
     public void takeItem(Item item) {
-        if (!this.item.isPresent()) {
-            this.item = Optional.of(item);
-        }
+        itemUser.takeItem(item);
     }
 
-    public void clearItem() {
-        this.item = Optional.empty();
-    }
-
+    @Override
     public void useItem() {
-        if (item.isPresent()) {
-            item.get().use(this);
-            clearItem();
-        }
+        itemUser.useItem();
     }
 
 }

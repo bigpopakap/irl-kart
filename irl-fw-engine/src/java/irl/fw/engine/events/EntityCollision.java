@@ -52,24 +52,18 @@ public class EntityCollision implements EngineEvent {
     }
 
     public <T extends Entity> T getTypeOrFirst(Class<T> type) {
-        return getTypeOrFallback(type, () -> {
-            @SuppressWarnings("unchecked")
-            T toReturn = (T) this.getEntity1();
-            return toReturn;
-        });
+        return getTypeOrFallback(type, this::getEntity1);
     }
 
     public <T extends Entity> T getTypeOrSecond(Class<T> type) {
-        return getTypeOrFallback(type, () -> {
-            @SuppressWarnings("unchecked")
-            T toReturn = (T) this.getEntity2();
-            return toReturn;
-        });
+        return getTypeOrFallback(type, this::getEntity2);
     }
 
-    private <T extends Entity> T getTypeOrFallback(Class<T> type, Supplier<T> fallback) {
+    private <T extends Entity> T getTypeOrFallback(Class<T> type, Supplier<Entity> fallback) {
         Entity actual1 = getEntity1();
         Entity actual2 = getEntity2();
+
+        Entity toReturn;
 
         if (!type.isInstance(actual1) && !type.isInstance(actual2)) {
             //neither are instances of that type
@@ -77,21 +71,23 @@ public class EntityCollision implements EngineEvent {
         }
         else if (type.isInstance(actual1) && type.isInstance(actual2)) {
             //both are instances of that type
-            return fallback.get();
+            toReturn = fallback.get();
         }
         else if (type.isInstance(actual1)) {
             //only the first is of that type
-            @SuppressWarnings("unchecked")
-            T toReturn = (T) this.getEntity1();
-            return toReturn;
+            toReturn = this.getEntity1();
         }
         else if (type.isInstance(actual2)) {
             //only the second is of that type
-            @SuppressWarnings("unchecked")
-            T toReturn = (T) this.getEntity2();
-            return toReturn;
+            toReturn = this.getEntity2();
         } else {
             throw new IllegalStateException("All cases should have been covered and we shouldn't be here");
+        }
+
+        if (type.isInstance(toReturn)) {
+            return (T) toReturn;
+        } else {
+            throw new RuntimeException(String.format("Error casting value (%s) to type %s", toReturn, type));
         }
     }
 

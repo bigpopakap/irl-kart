@@ -1,7 +1,8 @@
 package irl.kart.entities;
 
+import irl.fw.engine.entity.EntityId;
 import irl.fw.engine.entity.VirtualEntity;
-import irl.fw.engine.entity.actions.remove.EntityRemover;
+import irl.fw.engine.entity.actions.remove.RemovableEntityAdaptor;
 import irl.fw.engine.entity.actions.remove.RemovableEntity;
 import irl.fw.engine.entity.factory.EntityConfig;
 import irl.fw.engine.entity.state.EntityState;
@@ -29,18 +30,18 @@ public class Shell extends VirtualEntity implements RemovableEntity {
         new Ellipse2D.Double(0, 0, SIZE, 7*SIZE/8)
     );
 
-    private final String sourceKartId;
-    private final EntityRemover remover;
+    private final EntityId sourceKartId;
+    private final RemovableEntityAdaptor remover;
 
     public Shell(EntityConfig entityConfig, EntityState initState,
-                 String sourceKartId,
+                 EntityId sourceKartId,
                  Pipe<EngineEvent> eventQueue) {
         super(entityConfig, initState);
         this.sourceKartId = sourceKartId;
-        this.remover = new EntityRemover(this, eventQueue);
+        this.remover = new RemovableEntityAdaptor(this, eventQueue);
     }
 
-    public String getSourceKartId() {
+    public EntityId getSourceKartId() {
         return sourceKartId;
     }
 

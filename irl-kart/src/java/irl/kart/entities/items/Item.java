@@ -1,6 +1,7 @@
 package irl.kart.entities.items;
 
-import irl.kart.entities.Kart;
+import irl.fw.engine.entity.Entity;
+import irl.kart.entities.items.actions.itemuser.ItemUser;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -10,6 +11,6 @@ import irl.kart.entities.Kart;
  */
 public interface Item {
 
-    void use(Kart user);
+    <T extends Entity & ItemUser> void doUseItem(T user);
 
 }

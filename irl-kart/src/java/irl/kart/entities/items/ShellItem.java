@@ -1,5 +1,6 @@
 package irl.kart.entities.items;
 
+import irl.fw.engine.entity.Entity;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.entity.state.EntityStateBuilder;
 import irl.fw.engine.events.AddEntity;
@@ -7,6 +8,7 @@ import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.geometry.Vector2D;
 import irl.kart.entities.Kart;
 import irl.kart.entities.Shell;
+import irl.kart.entities.items.actions.itemuser.ItemUser;
 import irl.util.reactiveio.Pipe;
 
 /**
@@ -24,7 +26,7 @@ public class ShellItem implements Item {
     }
 
     @Override
-    public void use(Kart user) {
+    public <T extends Entity & ItemUser> void doUseItem(T user) {
         EntityState kartState = user.getState();
         Vector2D kartCenter = kartState.getCenter();
 
@@ -41,7 +43,7 @@ public class ShellItem implements Item {
                         .velocity(shellVelocity)
                         .angularVelocity(Shell.ROTATIONAL_SPEED)
                         .build(),
-                user.getKartId(),
+                user.getEngineId(),
                 eventQueue
         ));
 

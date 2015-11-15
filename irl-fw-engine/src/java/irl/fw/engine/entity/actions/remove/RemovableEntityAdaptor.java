@@ -13,19 +13,19 @@ import irl.util.reactiveio.Pipe;
  * @author bigpopakap
  * @since 11/12/15
  */
-public class EntityRemover {
+public class RemovableEntityAdaptor implements RemovableEntity {
 
     private final Entity entity;
     private final Pipe<EngineEvent> eventQueue;
     private final Callbacks onRemove;
     private boolean hasQueuedRemove = false;
 
-    public EntityRemover(Entity entity, Pipe<EngineEvent> eventQueue) {
+    public RemovableEntityAdaptor(Entity entity, Pipe<EngineEvent> eventQueue) {
         this(entity, eventQueue, null);
     }
 
-    public EntityRemover(Entity entity, Pipe<EngineEvent> eventQueue,
-                         Callback onRemove) {
+    public RemovableEntityAdaptor(Entity entity, Pipe<EngineEvent> eventQueue,
+                                  Callback onRemove) {
         this.entity = entity;
         this.eventQueue = eventQueue;
 
@@ -33,6 +33,7 @@ public class EntityRemover {
         this.onRemove.add(onRemove);
     }
 
+    @Override
     public void remove() {
         if (!hasQueuedRemove) {
             eventQueue.mergeIn(new RemoveEntity(entity.getEngineId()));
