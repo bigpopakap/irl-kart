@@ -78,8 +78,10 @@ class SwingKart {
                 break;
 
             case FIRE:
-                //TODO either use or hold item
-                return new UseItem(getId());
+                switch (keyEvent.getType()) {
+                    case KEY_DOWN: return null; //TODO
+                    case KEY_UP: return new UseItem(getId());
+                }
 
             default:
                 return null;
