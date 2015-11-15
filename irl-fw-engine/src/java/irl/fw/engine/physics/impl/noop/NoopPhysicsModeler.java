@@ -12,6 +12,8 @@ import irl.fw.engine.world.SimpleWorld;
 import irl.fw.engine.world.World;
 import irl.util.universe.Universe;
 
+import java.util.Optional;
+
 /**
  * TODO bigpopakap Javadoc this class
  *
@@ -52,8 +54,9 @@ public class NoopPhysicsModeler implements PhysicsModeler {
         EntityId entityId = update.getEntityId();
         EntityStateUpdate stateUpdate = update.getStateUpdate();
 
-        if (universe.contains(entityId.toString())) {
-            Entity entity = universe.get(entityId.toString());
+        Optional<Entity> entityOpt = universe.get(entityId.toString());
+        if (entityOpt.isPresent()) {
+            Entity entity = entityOpt.get();
             entity.updateState(stateUpdate);
             universe.update(entityId.toString(), entity);
         } else {

@@ -12,14 +12,21 @@ import java.util.Map;
  */
 class SwingKeyMapping {
 
-    public static final SwingKeyMapping WASD_SPACE = new Builder()
+    public static final SwingKeyMapping WASD = new Builder()
             .map(SwingKartInput.UP, KeyEvent.VK_W)
             .map(SwingKartInput.LEFT, KeyEvent.VK_A)
             .map(SwingKartInput.DOWN, KeyEvent.VK_S)
             .map(SwingKartInput.RIGHT, KeyEvent.VK_D)
-            .map(SwingKartInput.FIRE, KeyEvent.VK_SPACE)
+            .map(SwingKartInput.FIRE, KeyEvent.VK_E)
             .build();
-    public static final SwingKeyMapping ARROWS_ENTER = new Builder()
+    public static final SwingKeyMapping UHJK = new Builder()
+            .map(SwingKartInput.UP, KeyEvent.VK_U)
+            .map(SwingKartInput.LEFT, KeyEvent.VK_H)
+            .map(SwingKartInput.DOWN, KeyEvent.VK_J)
+            .map(SwingKartInput.RIGHT, KeyEvent.VK_K)
+            .map(SwingKartInput.FIRE, KeyEvent.VK_I)
+            .build();
+    public static final SwingKeyMapping ARROWS = new Builder()
             .map(SwingKartInput.UP, KeyEvent.VK_UP)
             .map(SwingKartInput.LEFT, KeyEvent.VK_LEFT)
             .map(SwingKartInput.DOWN, KeyEvent.VK_DOWN)

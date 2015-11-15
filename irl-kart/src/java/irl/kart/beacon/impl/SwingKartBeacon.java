@@ -8,12 +8,11 @@ import irl.util.callbacks.Callback;
 import irl.util.callbacks.Callbacks;
 import irl.util.concurrent.StoppableRunnable;
 import irl.util.reactiveio.Pipe;
+import irl.util.universe.Universe;
 import rx.Observable;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -31,14 +30,15 @@ public class SwingKartBeacon implements KartBeacon, StoppableRunnable {
     private final SwingKeyListener keyListener;
     private final Pipe<KartBeaconEvent> updates;
 
-    private final List<SwingKart> karts;
+    private final Universe<SwingKart> karts;
 
-    public SwingKartBeacon(JPanel panel) throws Exception {
+    public SwingKartBeacon(JPanel panel) {
         onStop = new Callbacks();
 
-        this.karts = new ArrayList<>();
-        this.karts.add(new SwingKart("kart1", SwingKeyMapping.ARROWS_ENTER));
-        this.karts.add(new SwingKart("kart2", SwingKeyMapping.WASD_SPACE));
+        this.karts = new Universe<>();
+        this.karts.add("kart1", new SwingKartFactory(SwingKeyMapping.ARROWS));
+        this.karts.add("kart2", new SwingKartFactory(SwingKeyMapping.WASD));
+        this.karts.add("kart3", new SwingKartFactory(SwingKeyMapping.UHJK));
 
         this.panel = panel;
         this.keyListener = new SwingKeyListener();
@@ -57,7 +57,7 @@ public class SwingKartBeacon implements KartBeacon, StoppableRunnable {
     private KartBeaconEvent keyEventToBeaconEvent(KeyEvent keyEvent) {
         //assuming no overlap in keys, just return the update from the first
         //kart that knows how to handle this key
-        for (SwingKart kart : karts) {
+        for (SwingKart kart : karts.toCollection()) {
             KartBeaconEvent beaconEvent = kart.handleKeyAndUpdate(keyEvent.getKeyCode());
             if (beaconEvent != null) {
                 return beaconEvent;
@@ -72,7 +72,7 @@ public class SwingKartBeacon implements KartBeacon, StoppableRunnable {
     public void send(KartEvent event) {
         if (event instanceof SpinKart) {
             SpinKart spinKart = ((SpinKart) event);
-            Optional<SwingKart> kartToSpinOpt = getKart(spinKart.getKartId());
+            Optional<SwingKart> kartToSpinOpt = karts.get(spinKart.getKartId());
 
             if (kartToSpinOpt.isPresent()) {
                 SwingKart kartToSpin = kartToSpinOpt.get();
@@ -106,12 +106,6 @@ public class SwingKartBeacon implements KartBeacon, StoppableRunnable {
     @Override
     public String onStop(Callback callback) {
         return onStop.add(callback);
-    }
-
-    private Optional<SwingKart> getKart(String id) {
-        return karts.parallelStream()
-            .filter(kart -> kart.getId().equals(id))
-            .findFirst();
     }
 
 }
