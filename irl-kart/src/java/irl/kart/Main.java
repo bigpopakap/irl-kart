@@ -5,7 +5,8 @@ import irl.fw.engine.events.EngineEvent;
 import irl.kart.beacon.impl.SwingKartBeacon;
 import irl.kart.collisions.KartCollisionResolver;
 import irl.fw.engine.engine.EngineBuilder;
-import irl.kart.engine.Initializer;
+import irl.kart.phases.HardcodedCourseBuilderPhase;
+import irl.kart.phases.KartDetectionPhase;
 import irl.kart.renderer.SwingRenderer;
 import irl.util.concurrent.ParallelRunnable;
 import irl.util.concurrent.SequentialRunnable;
@@ -41,7 +42,8 @@ public class Main {
 
         //start running the different phases
         new SequentialRunnable(
-            new Initializer(kartEventQueue, beacon)
+            new KartDetectionPhase(kartEventQueue, beacon),
+            new HardcodedCourseBuilderPhase(kartEventQueue)
         ).run();
     }
 
