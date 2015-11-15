@@ -91,7 +91,7 @@ public class Kart extends IRLEntity implements ItemUser, WeaponTarget {
         if (weapon instanceof Shell || weapon instanceof Banana) {
             spin();
         } else {
-            throw new RuntimeException(
+            System.err.println(
                 String.format("Kart %s was hit by weapon type %s, but doesn't know how to react to it",
                         getKartId(), weapon.getClass())
             );
