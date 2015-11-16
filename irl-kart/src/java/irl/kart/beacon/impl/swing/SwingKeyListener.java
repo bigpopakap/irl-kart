@@ -7,7 +7,7 @@ import rx.subjects.Subject;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import static irl.kart.beacon.impl.SwingKeyEvent.Type.*;
+import static irl.kart.beacon.impl.swing.SwingKeyEvent.Type.*;
 
 /**
  * TODO bigpopakap Javadoc this class
