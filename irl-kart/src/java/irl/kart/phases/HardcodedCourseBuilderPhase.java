@@ -7,7 +7,7 @@ import irl.fw.engine.geometry.Angle;
 import irl.fw.engine.geometry.ImmutableShape;
 import irl.fw.engine.geometry.Vector2D;
 import irl.kart.entities.Wall;
-import irl.kart.entities.items.ItemBoxPedestal;
+import irl.kart.entities.ItemBoxPedestal;
 import irl.util.concurrent.SynchronousRunnable;
 import irl.util.reactiveio.EventQueue;
 import rx.Observable;

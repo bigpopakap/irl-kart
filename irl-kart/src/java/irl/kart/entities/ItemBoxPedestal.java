@@ -1,4 +1,4 @@
-package irl.kart.entities.items;
+package irl.kart.entities;
 
 import irl.fw.engine.entity.Entity;
 import irl.fw.engine.entity.VirtualEntity;
