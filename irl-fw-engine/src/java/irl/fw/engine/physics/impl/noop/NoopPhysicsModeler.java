@@ -5,6 +5,7 @@ import irl.fw.engine.collisions.CollisionResolver;
 import irl.fw.engine.entity.EntityId;
 import irl.fw.engine.entity.state.EntityStateUpdate;
 import irl.fw.engine.events.AddEntity;
+import irl.fw.engine.events.AddJoint;
 import irl.fw.engine.events.RemoveEntity;
 import irl.fw.engine.events.UpdateEntity;
 import irl.fw.engine.physics.PhysicsModeler;
@@ -36,6 +37,11 @@ public class NoopPhysicsModeler implements PhysicsModeler {
     @Override
     public void addEntity(AddEntity add) {
         universe.add(add.getEntityFactory());
+    }
+
+    @Override
+    public void addJoint(AddJoint add) {
+        //TODO do nothing??
     }
 
     @Override

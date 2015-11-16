@@ -1,5 +1,6 @@
 package irl.kart.entities.items.actions.itemuser;
 
+import irl.fw.engine.entity.joints.JointPoint;
 import irl.kart.entities.items.Item;
 
 /**
@@ -13,5 +14,7 @@ public interface ItemUser {
     void takeItem(Item item);
     void holdItem();
     void useItem();
+
+    JointPoint getItemHoldPoint();
 
 }
