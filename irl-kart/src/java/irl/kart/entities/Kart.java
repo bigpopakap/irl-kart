@@ -7,6 +7,7 @@ import irl.fw.engine.events.UpdateEntity;
 import irl.fw.engine.geometry.ImmutableShape;
 import irl.kart.beacon.KartBeacon;
 import irl.fw.engine.entity.IRLEntity;
+import irl.kart.beacon.SingleKartBeacon;
 import irl.kart.entities.items.Item;
 import irl.kart.entities.items.actions.itemuser.ItemUser;
 import irl.kart.entities.items.actions.itemuser.ItemUserAdaptor;
@@ -43,7 +44,7 @@ public class Kart extends IRLEntity implements ItemUser, WeaponTarget {
     );
 
     private final String kartId;
-    private final KartBeacon kartBeacon;
+    private final SingleKartBeacon kartBeacon;
     private final EventQueue<EngineEvent> eventQueue;
     private final ItemUserAdaptor<Kart> itemUser;
 
@@ -53,21 +54,21 @@ public class Kart extends IRLEntity implements ItemUser, WeaponTarget {
         super(entityConfig, initState);
 
         this.kartId = kartId;
-        this.kartBeacon = kartBeacon;
+        this.kartBeacon = new SingleKartBeacon(kartId, kartBeacon);
         this.eventQueue = eventQueue;
         this.itemUser = new ItemUserAdaptor<>(this);
 
         //merge in update position events
         this.eventQueue.mergeIn(
             //TODO we should only report the latest position or something
-            kartBeacon.stream()
+            this.kartBeacon.stream()
                 .ofType(KartStateUpdate.class)
                 .filter(update -> StringUtils.equal(getKartId(), update.getKartId()))
                 .map(update -> new UpdateEntity(getEngineId(), update.getStateUpdate()))
         );
 
         //merge in uses of items
-        kartBeacon.stream()
+        this.kartBeacon.stream()
             .ofType(UseItem.class)
             .filter(update -> StringUtils.equal(getKartId(), update.getKartId()))
             .subscribe(update -> this.useItem());

@@ -10,4 +10,14 @@ import irl.fw.engine.events.EngineEvent;
  */
 public abstract class KartEvent implements EngineEvent {
 
+    private final String kartId;
+
+    public KartEvent(String kartId) {
+        this.kartId = kartId;
+    }
+
+    public String getKartId() {
+        return kartId;
+    }
+
 }
