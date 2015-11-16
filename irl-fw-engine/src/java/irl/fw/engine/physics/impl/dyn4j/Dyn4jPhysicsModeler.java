@@ -49,7 +49,7 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
     public irl.fw.engine.world.World getWorld() {
         Set<Entity> entityInstances
             = world.getBodies().parallelStream()
-                .map(body -> (Entity) body.getUserData())
+                .map(entityConverter::toEntity)
                 .collect(Collectors.toSet());
 
         Set<AABB> allBounds = world.getBodies().parallelStream()
@@ -115,7 +115,7 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
 
         if (foundBody.isPresent()) {
             Body body = foundBody.get();
-            Entity entity = (Entity) body.getUserData();
+            Entity entity = entityConverter.toEntity(body);
             updateBody(body, entity, stateUpdate);
             world.setUpdateRequired(true);
         } else {
@@ -128,7 +128,7 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         double timeStepInSeconds = timeStep / 1000.0;
 
         world.removeAllListeners(); //TODO don't be so heavy-handed
-        world.addListener(new CollisionResolverAdaptor(collisionResolver));
+        world.addListener(new CollisionResolverAdaptor(entityConverter, collisionResolver));
 
         world.update(timeStepInSeconds);
 
@@ -197,7 +197,7 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
     }
 
     private void updateEntityData(Body body) {
-        Entity entity = (Entity) body.getUserData();
+        Entity entity = entityConverter.toEntity(body);
 
         entity.setState(new EntityStateBuilder()
                 .shape(toShape(body.getFixture(0).getShape()))

@@ -18,9 +18,11 @@ import org.dyn4j.dynamics.contact.*;
  */
 class CollisionResolverAdaptor implements CollisionListener, ContactListener {
 
+    private final Dyn4jEntityConverter entityConverter;
     private final CollisionResolver resolver;
 
-    public CollisionResolverAdaptor(CollisionResolver resolver) {
+    public CollisionResolverAdaptor(Dyn4jEntityConverter entityConverter, CollisionResolver resolver) {
+        this.entityConverter = entityConverter;
         this.resolver = resolver;
     }
 
@@ -52,8 +54,8 @@ class CollisionResolverAdaptor implements CollisionListener, ContactListener {
 
     @Override
     public boolean begin(ContactPoint point) {
-        Entity entity1 = (Entity) point.getBody1().getUserData();
-        Entity entity2 = (Entity) point.getBody2().getUserData();
+        Entity entity1 = entityConverter.toEntity(point.getBody1());
+        Entity entity2 = entityConverter.toEntity(point.getBody2());
 
         EntityCollision event = new EntityCollision(entity1, entity2);
 
