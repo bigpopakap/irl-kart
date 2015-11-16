@@ -18,6 +18,7 @@ import irl.util.reactiveio.EventQueue;
 
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -34,6 +35,7 @@ public class ItemBox extends VirtualEntity implements RemovableEntity {
         new Rectangle2D.Double(0, 0, 15, 15)
     );
 
+    private final Random random;
     private final ArrayList<Item> availableItems;
     private final EventQueue<EngineEvent> eventQueue;
     private final RemovableEntityAdaptor remover;
@@ -47,9 +49,11 @@ public class ItemBox extends VirtualEntity implements RemovableEntity {
                    EventQueue<EngineEvent> eventQueue, Callback onRemove) {
         super(entityConfig, initState);
 
+        random = new Random(System.currentTimeMillis());
+
         availableItems = new ArrayList<>();
         this.eventQueue = eventQueue;
-        availableItems.add(new ShellItem(this.eventQueue));
+//        availableItems.add(new ShellItem(this.eventQueue));
         availableItems.add(new BananaItem(this.eventQueue));
 
         this.remover = new RemovableEntityAdaptor(this, this.eventQueue);
@@ -79,8 +83,9 @@ public class ItemBox extends VirtualEntity implements RemovableEntity {
     }
 
     private Item getRandomItem() {
-        int randIndex = (int) (availableItems.size() * Math.random());
-        return availableItems.get(randIndex);
+        return availableItems.get(
+            random.nextInt(availableItems.size())
+        );
     }
 
 }
