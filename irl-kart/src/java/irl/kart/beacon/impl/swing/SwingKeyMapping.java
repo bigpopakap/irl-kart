@@ -43,11 +43,9 @@ class SwingKeyMapping {
         this.kartInputToKeyCode = new HashMap<>(keyMap);
 
         this.keyCodeToKartInput = new HashMap<>();
-        this.kartInputToKeyCode.forEach((kartInput, keyCodes) -> {
-            keyCodes.forEach(keyCode -> {
-                this.keyCodeToKartInput.put(keyCode, kartInput);
-            });
-        });
+        this.kartInputToKeyCode.forEach((kartInput, keyCodes) ->
+            keyCodes.forEach(keyCode ->
+                this.keyCodeToKartInput.put(keyCode, kartInput)));
 
         //check that all inputs are in the map
         for (SwingKartInput input : SwingKartInput.values()) {
