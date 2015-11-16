@@ -9,12 +9,11 @@ import irl.util.callbacks.Callbacks;
 import irl.util.concurrent.StoppableRunnable;
 import irl.util.reactiveio.EventQueue;
 import rx.Observable;
-import rx.Observer;
 import rx.Subscription;
-import rx.schedulers.TimeInterval;
 
-import java.util.List;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -58,13 +57,14 @@ public class Engine implements StoppableRunnable {
     public synchronized void stop() {
         if (!isStopped()) {
             subscription.unsubscribe();
+            subscription = null;
             onStop.run();
         }
     }
 
     @Override
     public boolean isStopped() {
-        return subscription == null || subscription.isUnsubscribed();
+        return subscription == null;
     }
 
     @Override
@@ -74,75 +74,70 @@ public class Engine implements StoppableRunnable {
 
     @Override
     public void run() {
-        subscription = eventQueue.get()
-            .serialize()
-            .buffer(TIME_STEP, TimeUnit.MILLISECONDS)
-            .timeInterval()
-            .subscribe(new Observer<TimeInterval<List<EngineEvent>>>() {
+        Semaphore waitForUpdate = new Semaphore(0);
+        Semaphore waitForRender = new Semaphore(1);
+        AtomicLong lastUpdated = new AtomicLong(0);
 
-                private volatile long lag = 0;
+        subscription = eventQueue.get().subscribe(this::handleEvent);
 
-                @Override
-                public void onCompleted() {
-                    //do nothing
-                }
+        Observable.interval(TIME_STEP, TimeUnit.MILLISECONDS)
+                .subscribe(num -> {
+                    this.updatePhysics(TIME_STEP);
+                    lastUpdated.set(System.currentTimeMillis());
 
-                @Override
-                public void onError(Throwable e) {
+                    if (waitForRender.availablePermits() > 0) {
+                        waitForUpdate.release();
+                    }
+                });
+
+        new Thread(() -> {
+//            long lastRender = 0;
+            while (true) {
+                try {
+                    waitForUpdate.acquire();
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
 
-                @Override
-                public void onNext(TimeInterval<List<EngineEvent>> eventBatch) {
-                    /*
-                     * TODO the game loop logic should be fixed
-                     * It seems to know that there is *some* lag when there are
-                     * lots of objects in the world, but the rendering is
-                     * wayyyy more laggy than this thing thinks it is
-                     */
-                    long elapsed = eventBatch.getIntervalInMilliseconds();
-                    lag += elapsed;
+                long currentRender = System.currentTimeMillis();
+                long ellapsedSinceUpdate = currentRender - lastUpdated.get();
 
-                    //process the batched inputs
-                    //TODO is there a way to do this with observables instead of just iterating?
-                    eventBatch.getValue().forEach(Engine.this::handleEvent);
+//                //print stuff out for debugging
+//                long ellapsedSinceLastRender = currentRender - lastRender;
+//                System.out.println(String.format(
+//                    "Rendering (%s since render, %s since update)",
+//                    ellapsedSinceLastRender,
+//                    ellapsedSinceUpdate
+//                ));
 
-                    //TODO is there a way to do this more function-oriented?
-                    while (lag > TIME_STEP) {
-                        Engine.this.updatePhysics(TIME_STEP);
-                        lag -= TIME_STEP;
-                    }
+                this.render(ellapsedSinceUpdate);
+//                lastRender = currentRender;
 
-                    Engine.this.render(lag / TIME_STEP);
-                }
-
-            });
+                waitForRender.release();
+            }
+        }).start();
     }
 
-    public void handleEvent(EngineEvent event) {
+    public synchronized void handleEvent(EngineEvent event) {
         //TODO use command pattern instead of hardcoding a method per event
         if (event instanceof AddEntity) {
             phyisicsModel.addEntity((AddEntity) event);
-        }
-        else if (event instanceof AddJoint) {
+        } else if (event instanceof AddJoint) {
             phyisicsModel.addJoint((AddJoint) event);
-        }
-        else if (event instanceof RemoveEntity) {
+        } else if (event instanceof RemoveEntity) {
             phyisicsModel.removeEntity((RemoveEntity) event);
-        }
-        else if (event instanceof UpdateEntity) {
+        } else if (event instanceof UpdateEntity) {
             phyisicsModel.updateEntity((UpdateEntity) event);
-        }
-        else {
+        } else {
             System.err.println("Unhandled or unexpected event: " + event.getName());
         }
     }
 
-    public void updatePhysics(long timeStep) {
+    public synchronized void updatePhysics(long timeStep) {
         phyisicsModel.model(collisionResolver, timeStep);
     }
 
-    public void render(long timeSinceLastUpdate) {
+    public synchronized void render(long timeSinceLastUpdate) {
         renderer.render(phyisicsModel.getWorld(), timeSinceLastUpdate);
     }
 }

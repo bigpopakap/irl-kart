@@ -124,6 +124,8 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
             Entity entity = entityConverter.toEntity(body);
             updateBody(body, entity, stateUpdate);
             world.setUpdateRequired(true);
+
+            System.out.println("Updated " + entity.getClass().getSimpleName() + " to velocity " + body.getLinearVelocity().getMagnitude());
         } else {
             System.err.println("Tried to updateEntity non-existent body: " + entityId);
         }
