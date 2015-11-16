@@ -7,7 +7,7 @@ import irl.fw.engine.events.UpdateEntity;
 import irl.fw.engine.geometry.ImmutableShape;
 import irl.kart.beacon.KartBeacon;
 import irl.fw.engine.entity.IRLEntity;
-import irl.kart.beacon.KartBeaconEvent;
+import irl.kart.beacon.SingleKartBeacon;
 import irl.kart.entities.items.Item;
 import irl.kart.entities.items.actions.itemuser.ItemUser;
 import irl.kart.entities.items.actions.itemuser.ItemUserAdaptor;
@@ -20,8 +20,6 @@ import irl.kart.events.beacon.KartStateUpdate;
 import irl.kart.events.beacon.UseItem;
 import irl.kart.events.kart.SpinKart;
 import irl.util.reactiveio.EventQueue;
-import irl.util.string.StringUtils;
-import rx.Observable;
 
 import java.awt.*;
 
@@ -46,7 +44,7 @@ public class Kart extends IRLEntity implements ItemUser, WeaponTarget {
     );
 
     private final String kartId;
-    private final KartBeacon kartBeacon;
+    private final SingleKartBeacon kartBeacon;
     private final EventQueue<EngineEvent> eventQueue;
     private final ItemUserAdaptor<Kart> itemUser;
 
@@ -56,28 +54,22 @@ public class Kart extends IRLEntity implements ItemUser, WeaponTarget {
         super(entityConfig, initState);
 
         this.kartId = kartId;
-        this.kartBeacon = kartBeacon;
+        this.kartBeacon = new SingleKartBeacon(kartId, kartBeacon);
         this.eventQueue = eventQueue;
         this.itemUser = new ItemUserAdaptor<>(this);
 
-        //look at only events for this kart
-        Observable<KartBeaconEvent> beaconEvents = this.kartBeacon.stream()
-                .filter(update -> update != null)
-                .filter(update -> StringUtils.equal(getKartId(), update.getKartId()));
-
         //merge in update position events
         this.eventQueue.mergeIn(
-            //TODO we should only report the latest position or something
-            beaconEvents
-                .ofType(KartStateUpdate.class)
-                .map(update -> new UpdateEntity(getEngineId(), update.getStateUpdate()))
+            kartBeacon.stream()
+                    .ofType(KartStateUpdate.class)
+                    .map(update -> new UpdateEntity(getEngineId(), update.getStateUpdate()))
         );
 
-        //merge in uses of items
-        beaconEvents
+        //subscribe to uses of items
+        this.kartBeacon.stream()
             .ofType(HoldItem.class)
             .subscribe(update -> this.holdItem());
-        beaconEvents
+        this.kartBeacon.stream()
             .ofType(UseItem.class)
             .subscribe(update -> this.useItem());
     }
