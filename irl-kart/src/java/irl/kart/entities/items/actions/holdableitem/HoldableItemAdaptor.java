@@ -50,7 +50,7 @@ public class HoldableItemAdaptor<T extends Entity & RemovableEntity> {
             //track that this item is held
             setCreatedEntity(newEntity);
 
-            userUpdateSubscription = user.getStateUpdates().subscribe(userState -> {
+            userUpdateSubscription = user.getStates().subscribe(userState -> {
                 eventQueue.mergeIn(new UpdateEntity(
                         newEntity.getEngineId(),
                         new EntityStateUpdate()
@@ -65,7 +65,7 @@ public class HoldableItemAdaptor<T extends Entity & RemovableEntity> {
         eventQueue.mergeIn(addShell);
     }
 
-    public synchronized <T extends Entity & ItemUser> void doUseItem(T user) {
+    public synchronized <U extends Entity & ItemUser> void doUseItem(U user) {
         //TODO use the held entity if there is one
 
         EntityState userState = user.getState();

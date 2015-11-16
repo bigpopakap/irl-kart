@@ -15,20 +15,22 @@ public class SingleKartBeacon implements KartBeacon {
     private final String kartId;
     private final KartBeacon innerBeacon;
 
-    public SingleKartBeacon(String kartId, KartBeacon innerBeacon) {
+    public SingleKartBeacon(String kartId, KartBeacon beacon) {
         this.kartId = kartId;
-        this.innerBeacon = innerBeacon;
+        this.innerBeacon = beacon;
     }
 
     @Override
     public Observable<KartBeaconEvent> stream() {
         return innerBeacon.stream()
-                .filter(update -> StringUtils.equal(kartId, update.getKartId()));
+                    .filter(event -> StringUtils.equal(kartId, event.getKartId()));
     }
 
     @Override
     public void send(KartEvent event) {
-        innerBeacon.send(event);
+        if (StringUtils.equal(kartId, event.getKartId())) {
+            innerBeacon.send(event);
+        }
     }
 
 }

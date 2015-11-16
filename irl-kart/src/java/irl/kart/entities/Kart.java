@@ -20,6 +20,7 @@ import irl.kart.events.beacon.KartStateUpdate;
 import irl.kart.events.beacon.UseItem;
 import irl.kart.events.kart.SpinKart;
 import irl.util.reactiveio.EventQueue;
+import irl.util.string.StringUtils;
 
 import java.awt.*;
 
@@ -60,12 +61,14 @@ public class Kart extends IRLEntity implements ItemUser, WeaponTarget {
 
         //merge in update position events
         this.eventQueue.mergeIn(
-            kartBeacon.stream()
-                    .ofType(KartStateUpdate.class)
-                    .map(update -> new UpdateEntity(getEngineId(), update.getStateUpdate()))
+            //TODO we should only report the latest position or something
+            this.kartBeacon.stream()
+                .ofType(KartStateUpdate.class)
+                .filter(update -> StringUtils.equal(getKartId(), update.getKartId()))
+                .map(update -> new UpdateEntity(getEngineId(), update.getStateUpdate()))
         );
 
-        //subscribe to uses of items
+        //merge in uses of items
         this.kartBeacon.stream()
             .ofType(HoldItem.class)
             .subscribe(update -> this.holdItem());

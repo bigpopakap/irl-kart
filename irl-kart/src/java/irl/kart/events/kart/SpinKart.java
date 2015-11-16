@@ -8,14 +8,8 @@ package irl.kart.events.kart;
  */
 public class SpinKart extends KartEvent {
 
-    private final String kartId;
-
     public SpinKart(String kartId) {
-        this.kartId = kartId;
-    }
-
-    public String getKartId() {
-        return kartId;
+        super(kartId);
     }
 
 }

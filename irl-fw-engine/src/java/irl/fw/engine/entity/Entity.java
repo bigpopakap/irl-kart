@@ -18,7 +18,7 @@ public abstract class Entity implements CollidableEntity {
     private final EntityId engineId;
     private volatile EntityState state;
 
-    private final EventQueue<EntityState> stateUpdates;
+    private EventQueue<EntityState> states;
 
     public Entity(EntityConfig entityConfig, EntityState initState) {
         this.engineId = entityConfig.getId();
@@ -26,7 +26,7 @@ public abstract class Entity implements CollidableEntity {
             throw new IllegalArgumentException("This entity must have an ID");
         }
 
-        stateUpdates = new EventQueue<>();
+        this.states = new EventQueue<>();
 
         setState(initState);
     }
@@ -37,17 +37,17 @@ public abstract class Entity implements CollidableEntity {
         return engineId;
     }
 
-    public Observable<EntityState> getStateUpdates() {
-        return stateUpdates.get();
-    }
-
     public EntityState getState() {
         return state;
     }
 
+    public Observable<EntityState> getStates() {
+        return states.get();
+    }
+
     public synchronized void setState(EntityState state) {
         this.state = state;
-        stateUpdates.mergeIn(state);
+        this.states.mergeIn(this.state);
     }
 
     public synchronized void updateState(EntityStateUpdate stateUpdates) {

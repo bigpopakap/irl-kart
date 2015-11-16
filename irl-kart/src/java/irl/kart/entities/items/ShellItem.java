@@ -1,15 +1,8 @@
 package irl.kart.entities.items;
 
 import irl.fw.engine.entity.Entity;
-import irl.fw.engine.entity.factory.EntityFactory;
-import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.entity.state.EntityStateBuilder;
-import irl.fw.engine.entity.state.EntityStateUpdate;
-import irl.fw.engine.events.AddEntity;
 import irl.fw.engine.events.EngineEvent;
-import irl.fw.engine.events.UpdateEntity;
-import irl.fw.engine.geometry.Angle;
-import irl.fw.engine.geometry.Vector2D;
 import irl.kart.entities.Kart;
 import irl.kart.entities.items.actions.holdableitem.HoldableItemAdaptor;
 import irl.kart.entities.weapons.Shell;
