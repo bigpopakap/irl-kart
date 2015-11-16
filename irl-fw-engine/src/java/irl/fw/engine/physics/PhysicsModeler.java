@@ -2,6 +2,7 @@ package irl.fw.engine.physics;
 
 import irl.fw.engine.collisions.CollisionResolver;
 import irl.fw.engine.events.AddEntity;
+import irl.fw.engine.events.AddJoint;
 import irl.fw.engine.events.RemoveEntity;
 import irl.fw.engine.events.UpdateEntity;
 import irl.fw.engine.world.World;
@@ -17,6 +18,7 @@ public interface PhysicsModeler {
     World getWorld();
 
     void addEntity(AddEntity add);
+    void addJoint(AddJoint add);
     void removeEntity(RemoveEntity remove);
     void updateEntity(UpdateEntity update);
 

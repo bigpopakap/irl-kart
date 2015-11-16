@@ -3,17 +3,20 @@ package irl.fw.engine.physics.impl.dyn4j;
 import irl.fw.engine.entity.Entity;
 import irl.fw.engine.entity.factory.EntityFactory;
 import irl.fw.engine.entity.EntityId;
+import irl.fw.engine.entity.joints.factory.JointFactory;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.collisions.CollisionResolver;
 import irl.fw.engine.entity.state.EntityStateBuilder;
 import irl.fw.engine.entity.state.EntityStateUpdate;
 import irl.fw.engine.events.AddEntity;
+import irl.fw.engine.events.AddJoint;
 import irl.fw.engine.events.RemoveEntity;
 import irl.fw.engine.events.UpdateEntity;
 import irl.fw.engine.physics.PhysicsModeler;
 import irl.fw.engine.world.SimpleWorld;
 import org.dyn4j.collision.AbstractCollidable;
 import org.dyn4j.dynamics.*;
+import org.dyn4j.dynamics.joint.Joint;
 import org.dyn4j.geometry.*;
 
 import java.util.*;
@@ -31,10 +34,15 @@ import static irl.fw.engine.physics.impl.dyn4j.Dyn4jShapeConverter.*;
 public class Dyn4jPhysicsModeler implements PhysicsModeler {
 
     private final World world;
+    private final Dyn4jEntityConverter entityConverter;
+    private final Dyn4jJointConverter jointConverter;
 
     public Dyn4jPhysicsModeler() {
         world = new World();
         world.setGravity(World.ZERO_GRAVITY);
+
+        entityConverter = new Dyn4jEntityConverter(world);
+        jointConverter = new Dyn4jJointConverter(entityConverter);
     }
 
     @Override
@@ -79,9 +87,16 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
     }
 
     @Override
+    public void addJoint(AddJoint add) {
+        Joint joint = createJoint(add.getEntityFactory());
+        world.addJoint(joint);
+        world.setUpdateRequired(true);
+    }
+
+    @Override
     public synchronized void removeEntity(RemoveEntity remove) {
         EntityId entityId = remove.getEntityId();
-        Optional<Body> foundBody = findBody(entityId);
+        Optional<Body> foundBody = entityConverter.fromEntity(entityId);
 
         if (foundBody.isPresent()) {
             world.removeBody(foundBody.get());
@@ -96,7 +111,7 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         EntityId entityId = update.getEntityId();
         EntityStateUpdate stateUpdate = update.getStateUpdate();
 
-        Optional<Body> foundBody = findBody(entityId);
+        Optional<Body> foundBody = entityConverter.fromEntity(entityId);
 
         if (foundBody.isPresent()) {
             Body body = foundBody.get();
@@ -177,6 +192,10 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         body.setAsleep(false);
     }
 
+    private Joint createJoint(JointFactory<? extends irl.fw.engine.entity.joints.Joint> jointFactory) {
+        return jointConverter.fromJoint(jointFactory);
+    }
+
     private void updateEntityData(Body body) {
         Entity entity = (Entity) body.getUserData();
 
@@ -187,12 +206,6 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
                 .velocity(toVector(body.getLinearVelocity()))
                 .angularVelocity(toRadAngle(body.getAngularVelocity()))
                 .build());
-    }
-
-    private Optional<Body> findBody(EntityId entityId) {
-        return world.getBodies().stream()
-                .filter(body -> body.getId().equals(fromId(entityId)))
-                .findFirst();
     }
 
 }

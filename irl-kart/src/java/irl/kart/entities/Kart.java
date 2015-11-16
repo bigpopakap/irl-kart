@@ -1,6 +1,7 @@
 package irl.kart.entities;
 
 import irl.fw.engine.entity.factory.EntityConfig;
+import irl.fw.engine.entity.joints.JointPoint;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.events.UpdateEntity;
@@ -38,7 +39,7 @@ public class Kart extends IRLEntity implements ItemUser, WeaponTarget {
     public static final ImmutableShape SHAPE = new ImmutableShape(
         ImmutableShape.Type.CONVEX_POLY,
         new Polygon(
-            new int[] { 10, 10,  5,  0, 0},
+            new int[] { 10, 10, 5,           0,  0},
             new int[] {  0, 15, KART_LENGTH, 15, 0},
             5
         )
@@ -110,6 +111,11 @@ public class Kart extends IRLEntity implements ItemUser, WeaponTarget {
     @Override
     public void useItem() {
         itemUser.useItem();
+    }
+
+    @Override
+    public JointPoint getItemHoldPoint() {
+        return new JointPoint(this, getState().getCenter());
     }
 
 }

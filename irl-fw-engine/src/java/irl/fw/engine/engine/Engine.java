@@ -1,11 +1,8 @@
 package irl.fw.engine.engine;
 
+import irl.fw.engine.events.*;
 import irl.fw.engine.graphics.Renderer;
 import irl.fw.engine.collisions.CollisionResolver;
-import irl.fw.engine.events.AddEntity;
-import irl.fw.engine.events.EngineEvent;
-import irl.fw.engine.events.RemoveEntity;
-import irl.fw.engine.events.UpdateEntity;
 import irl.fw.engine.physics.PhysicsModeler;
 import irl.util.callbacks.Callback;
 import irl.util.callbacks.Callbacks;
@@ -126,6 +123,9 @@ public class Engine implements StoppableRunnable {
         //TODO use command pattern instead of hardcoding a method per event
         if (event instanceof AddEntity) {
             phyisicsModel.addEntity((AddEntity) event);
+        }
+        else if (event instanceof AddJoint) {
+            phyisicsModel.addJoint((AddJoint) event);
         }
         else if (event instanceof RemoveEntity) {
             phyisicsModel.removeEntity((RemoveEntity) event);
