@@ -1,6 +1,5 @@
 package irl.fw.engine.entity.joints.factory;
 
-import irl.fw.engine.entity.EntityId;
 import irl.fw.engine.entity.joints.DistanceJoint;
 import irl.fw.engine.entity.joints.JointPoint;
 import irl.fw.engine.events.EngineEvent;

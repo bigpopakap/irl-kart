@@ -1,7 +1,6 @@
 package irl.kart.entities.items;
 
 import irl.fw.engine.entity.Entity;
-import irl.fw.engine.entity.EntityId;
 import irl.fw.engine.entity.joints.Joint;
 import irl.fw.engine.entity.joints.JointPoint;
 import irl.fw.engine.entity.joints.factory.DistanceJointFactory;
