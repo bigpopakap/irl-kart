@@ -18,6 +18,8 @@ import irl.util.reactiveio.EventQueue;
  */
 public class BananaItem extends BaseItem {
 
+    private static final double DISTANCE_WHEN_HELD = Kart.KART_LENGTH/2 + Banana.SIZE;
+
     private final HoldableItemAdaptor<Banana> holdable;
 
     public BananaItem(EventQueue<EngineEvent> eventQueue) {
@@ -34,14 +36,16 @@ public class BananaItem extends BaseItem {
                         .build(),
                 eventQueue
             ),
-            Kart.KART_LENGTH/2 + Banana.SIZE
+            DISTANCE_WHEN_HELD
         );
     }
 
     @Override
     public <T extends Entity & ItemUser> void doUseItem(T user) {
         //for bananas, using the item just means unholding it
-        holdable.doUseItem(user, banana -> {});
+        holdable.doUseItem(user, banana -> {
+            onUsed.run();
+        });
     }
 
     @Override

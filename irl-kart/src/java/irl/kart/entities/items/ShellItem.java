@@ -3,10 +3,12 @@ package irl.kart.entities.items;
 import irl.fw.engine.entity.Entity;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.entity.state.EntityStateBuilder;
-import irl.fw.engine.events.AddEntity;
+import irl.fw.engine.entity.state.EntityStateUpdate;
 import irl.fw.engine.events.EngineEvent;
+import irl.fw.engine.events.UpdateEntity;
 import irl.fw.engine.geometry.Vector2D;
 import irl.kart.entities.Kart;
+import irl.kart.entities.items.actions.holdable.HoldableItemAdaptor;
 import irl.kart.entities.items.actions.itemuser.ItemUser;
 import irl.kart.entities.weapons.Shell;
 import irl.util.reactiveio.EventQueue;
@@ -19,42 +21,57 @@ import irl.util.reactiveio.EventQueue;
  */
 public class ShellItem extends BaseItem {
 
+    private static final double DISTANCE_WHEN_HELD = 2*Kart.KART_LENGTH/3 + Shell.SIZE/2;
+    private static final double DISTANCE_WHEN_FIRED = DISTANCE_WHEN_HELD + Kart.KART_LENGTH/2;
+
     private final EventQueue<EngineEvent> eventQueue;
+    private final HoldableItemAdaptor<Shell> holdable;
 
     public ShellItem(EventQueue<EngineEvent> eventQueue) {
         this.eventQueue = eventQueue;
+
+        this.holdable = new HoldableItemAdaptor<>(
+            eventQueue, onRemoved,
+            entityConfig -> new Shell(
+                entityConfig,
+                new EntityStateBuilder().defaults()
+                    .shape(Shell.SHAPE)
+                    .center(entityConfig.getCenter())
+                    .build(),
+                null, //TODO what to do here?
+                eventQueue
+            ),
+            DISTANCE_WHEN_HELD
+        );
     }
 
     @Override
     public <T extends Entity & ItemUser> void doUseItem(T user) {
-        EntityState kartState = user.getState();
-        Vector2D kartCenter = kartState.getCenter();
+        holdable.doUseItem(user, shell -> {
+            //re-center the shell and give it some velocity
+            EntityState userState = user.getState();
+            Vector2D userCenter = userState.getCenter();
 
-        Vector2D shellVelocity = new Vector2D(0, Shell.SPEED).rotate(kartState.getRotation());
-        Vector2D shellCenter = kartCenter.add(
-                shellVelocity.scaleTo(Kart.KART_LENGTH + 0.25*Shell.SIZE)
-        );
+            Vector2D shellVelocity = new Vector2D(0, Shell.SPEED).rotate(userState.getRotation());
+            Vector2D shellCenter = userCenter.add(
+                shellVelocity.scaleTo(DISTANCE_WHEN_FIRED)
+            );
 
-        AddEntity addShell = new AddEntity(entityConfig -> new Shell(
-                entityConfig,
-                new EntityStateBuilder().defaults()
-                        .shape(Shell.SHAPE)
-                        .center(shellCenter)
-                        .velocity(shellVelocity)
-                        .angularVelocity(Shell.ROTATIONAL_SPEED)
-                        .build(),
-                user.getEngineId(),
-                eventQueue
-        ));
+            eventQueue.mergeIn(new UpdateEntity(
+                shell.getEngineId(),
+                new EntityStateUpdate()
+                    .center(shellCenter)
+                    .velocity(shellVelocity)
+                    .angularVelocity(Shell.ROTATIONAL_SPEED)
+            ));
 
-        eventQueue.mergeIn(addShell);
-        onUsed.run();
+            onUsed.run();
+        });
     }
 
     @Override
     public <T extends Entity & ItemUser> void doHoldItem(T user) {
-        //TODO
-        System.out.println("Shell being held");
+        holdable.doHoldItem(user);
     }
 
 }
