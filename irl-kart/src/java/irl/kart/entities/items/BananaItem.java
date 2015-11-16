@@ -18,7 +18,7 @@ import irl.util.reactiveio.EventQueue;
  * @author bigpopakap
  * @since 11/15/15
  */
-public class BananaItem implements Item {
+public class BananaItem extends BaseItem {
 
     private final EventQueue<EngineEvent> eventQueue;
 
@@ -28,13 +28,13 @@ public class BananaItem implements Item {
 
     @Override
     public <T extends Entity & ItemUser> void doUseItem(T user) {
-        EntityState kartState = user.getState();
-        Vector2D kartCenter = kartState.getCenter();
+        EntityState userState = user.getState();
+        Vector2D userCenter = userState.getCenter();
 
         Vector2D bananaDirection = new Vector2D(0, 1)
-                                        .rotate(kartState.getRotation())
+                                        .rotate(userState.getRotation())
                                         .rotate(Angle.HALF);
-        Vector2D bananaCenter = kartCenter.add(
+        Vector2D bananaCenter = userCenter.add(
                 bananaDirection.scaleTo(Kart.KART_LENGTH/2 + Banana.SIZE)
         );
 
@@ -49,6 +49,12 @@ public class BananaItem implements Item {
         ));
 
         eventQueue.mergeIn(addBanana);
+    }
+
+    @Override
+    public <T extends Entity & ItemUser> void doHoldItem(T user) {
+        //TODO
+        System.out.println("Banana being held");
     }
 
 }

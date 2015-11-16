@@ -7,8 +7,8 @@ import irl.fw.engine.events.AddEntity;
 import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.geometry.Vector2D;
 import irl.kart.entities.Kart;
-import irl.kart.entities.weapons.Shell;
 import irl.kart.entities.items.actions.itemuser.ItemUser;
+import irl.kart.entities.weapons.Shell;
 import irl.util.reactiveio.EventQueue;
 
 /**
@@ -17,7 +17,7 @@ import irl.util.reactiveio.EventQueue;
  * @author bigpopakap
  * @since 11/11/15
  */
-public class ShellItem implements Item {
+public class ShellItem extends BaseItem {
 
     private final EventQueue<EngineEvent> eventQueue;
 
@@ -48,6 +48,12 @@ public class ShellItem implements Item {
         ));
 
         eventQueue.mergeIn(addShell);
+    }
+
+    @Override
+    public <T extends Entity & ItemUser> void doHoldItem(T user) {
+        //TODO
+        System.out.println("Shell being held");
     }
 
 }

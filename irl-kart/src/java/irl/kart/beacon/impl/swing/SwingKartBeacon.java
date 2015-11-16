@@ -12,7 +12,6 @@ import irl.util.universe.Universe;
 import rx.Observable;
 
 import javax.swing.*;
-import java.awt.event.KeyEvent;
 import java.util.Optional;
 
 /**
@@ -54,11 +53,11 @@ public class SwingKartBeacon implements KartBeacon, StoppableRunnable {
         return updates.get();
     }
 
-    private KartBeaconEvent keyEventToBeaconEvent(KeyEvent keyEvent) {
+    private KartBeaconEvent keyEventToBeaconEvent(SwingKeyEvent keyEvent) {
         //assuming no overlap in keys, just return the update from the first
         //kart that knows how to handle this key
         for (SwingKart kart : karts.toCollection()) {
-            KartBeaconEvent beaconEvent = kart.handleKeyAndUpdate(keyEvent.getKeyCode());
+            KartBeaconEvent beaconEvent = kart.handleKeyAndUpdate(keyEvent);
             if (beaconEvent != null) {
                 return beaconEvent;
             }

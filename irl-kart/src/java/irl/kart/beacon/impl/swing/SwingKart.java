@@ -4,6 +4,7 @@ import irl.fw.engine.entity.state.EntityStateUpdate;
 import irl.fw.engine.geometry.Angle;
 import irl.fw.engine.geometry.Vector2D;
 import irl.kart.beacon.KartBeaconEvent;
+import irl.kart.events.beacon.HoldItem;
 import irl.kart.events.beacon.KartStateUpdate;
 import irl.kart.events.beacon.UseItem;
 
@@ -44,12 +45,12 @@ class SwingKart {
         return id;
     }
 
-    public KartBeaconEvent handleKeyAndUpdate(int keyCode) {
-        if (!keyMap.canHandleKey(keyCode)) {
+    public KartBeaconEvent handleKeyAndUpdate(SwingKeyEvent keyEvent) {
+        if (!keyMap.canHandleKey(keyEvent.getEvent().getKeyCode())) {
             return null;
         }
 
-        SwingKartInput input = keyMap.fromKeyCode(keyCode);
+        SwingKartInput input = keyMap.fromKeyCode(keyEvent.getEvent().getKeyCode());
 
         boolean isStateUpdate;
         switch (input) {
@@ -78,7 +79,10 @@ class SwingKart {
                 break;
 
             case FIRE:
-                return new UseItem(getId());
+                switch (keyEvent.getType()) {
+                    case KEY_DOWN: return new HoldItem(getId());
+                    case KEY_UP: return new UseItem(getId());
+                }
 
             default:
                 return null;

@@ -151,8 +151,8 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         }
 
         if (state.getCenter().isPresent()) {
+            body.translateToOrigin();
             body.translate(fromVector(state.getCenter().get()));
-            //TODO re-center the shape here?
         }
 
         if (state.getVelocity().isPresent()) {

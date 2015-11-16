@@ -15,6 +15,7 @@ import irl.kart.entities.weapons.Banana;
 import irl.kart.entities.weapons.Shell;
 import irl.kart.entities.weapons.WeaponEntity;
 import irl.kart.entities.weapons.WeaponTarget;
+import irl.kart.events.beacon.HoldItem;
 import irl.kart.events.beacon.KartStateUpdate;
 import irl.kart.events.beacon.UseItem;
 import irl.kart.events.kart.SpinKart;
@@ -69,8 +70,10 @@ public class Kart extends IRLEntity implements ItemUser, WeaponTarget {
 
         //merge in uses of items
         this.kartBeacon.stream()
+            .ofType(HoldItem.class)
+            .subscribe(update -> this.holdItem());
+        this.kartBeacon.stream()
             .ofType(UseItem.class)
-            .filter(update -> StringUtils.equal(getKartId(), update.getKartId()))
             .subscribe(update -> this.useItem());
     }
 
@@ -83,7 +86,7 @@ public class Kart extends IRLEntity implements ItemUser, WeaponTarget {
         if (weapon instanceof Shell || weapon instanceof Banana) {
             spin();
         } else {
-            throw new RuntimeException(
+            System.err.println(
                 String.format("Kart %s was hit by weapon type %s, but doesn't know how to react to it",
                         getKartId(), weapon.getClass())
             );
@@ -97,6 +100,11 @@ public class Kart extends IRLEntity implements ItemUser, WeaponTarget {
     @Override
     public void takeItem(Item item) {
         itemUser.takeItem(item);
+    }
+
+    @Override
+    public void holdItem() {
+        itemUser.holdItem();
     }
 
     @Override

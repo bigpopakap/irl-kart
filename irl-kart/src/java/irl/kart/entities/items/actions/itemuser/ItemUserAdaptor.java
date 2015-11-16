@@ -11,7 +11,7 @@ import java.util.Optional;
  * @author bigpopakap
  * @since 11/14/15
  */
-public class ItemUserAdaptor<T extends Entity & ItemUser> implements ItemUser {
+public class ItemUserAdaptor<T extends Entity & ItemUser> {
 
     private final T user;
     private Optional<Item> item = Optional.empty();
@@ -20,18 +20,24 @@ public class ItemUserAdaptor<T extends Entity & ItemUser> implements ItemUser {
         this.user = user;
     }
 
-    @Override
     public void takeItem(Item item) {
         if (!this.item.isPresent()) {
             this.item = Optional.of(item);
+            item.onRemoved(this::clearItem);
+            item.onUsed(this::clearItem);
         }
     }
 
-    @Override
+    public void holdItem() {
+        if (this.item.isPresent()) {
+            Item item = this.item.get();
+            item.doHoldItem(user);
+        }
+    }
+
     public void useItem() {
         if (item.isPresent()) {
             item.get().doUseItem(user);
-            clearItem();
         }
     }
 
