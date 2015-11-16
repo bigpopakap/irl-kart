@@ -1,6 +1,7 @@
 package irl.fw.engine.physics.impl.dyn4j;
 
 import irl.fw.engine.entity.Entity;
+import irl.fw.engine.entity.factory.EntityConfig;
 import irl.fw.engine.entity.factory.EntityFactory;
 import irl.fw.engine.entity.EntityId;
 import irl.fw.engine.entity.joints.factory.JointFactory;
@@ -88,7 +89,7 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
 
     @Override
     public void addJoint(AddJoint add) {
-        Joint joint = createJoint(add.getEntityFactory());
+        Joint joint = createJoint(add.getJointFactory());
         world.addJoint(joint);
         world.setUpdateRequired(true);
     }
@@ -96,10 +97,15 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
     @Override
     public synchronized void removeEntity(RemoveEntity remove) {
         EntityId entityId = remove.getEntityId();
+
         Optional<Body> foundBody = entityConverter.fromEntity(entityId);
+        Optional<Joint> foundJoint = entityConverter.fromJoint(entityId);
 
         if (foundBody.isPresent()) {
             world.removeBody(foundBody.get());
+            world.setUpdateRequired(true);
+        } else if (foundJoint.isPresent()) {
+            world.removeJoint(foundJoint.get());
             world.setUpdateRequired(true);
         } else {
             System.err.println("Tried to removeEntity non-existent body: " + entityId);
@@ -134,13 +140,14 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
 
         //update all the associated entity states
         world.getBodies().parallelStream()
-                .forEach(body -> updateEntityData(body));
+                .forEach(this::updateEntityData);
     }
 
     private Body createBody(EntityFactory<? extends Entity> entityFactory) {
         Body body = new Body();
 
-        Entity entity = entityFactory.create(body.getId().toString());
+        Entity entity = entityFactory.create(new EntityConfig()
+                            .setId(toId(body.getId())));
         EntityState state = entity.getState();
         body.setUserData(entity);
 
@@ -178,16 +185,25 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
             body.setAngularVelocity(state.getAngularVelocity().get().asRad());
         }
 
+        if (state.getFriction().isPresent()) {
+            //since this is a top-down zero-gravity world, we
+            //model "friction" as linear damping
+            body.setLinearDamping(state.getFriction().get());
+        }
+
+        if (state.getRestitution().isPresent()) {
+            //FIXME I don't think this works
+            fixture.setRestitution(state.getRestitution().get());
+        }
+
         //default settings
         if (entity.isVirtual()) {
-            body.setAutoSleepingEnabled(false);
+            body.setAutoSleepingEnabled(false); //TODO is this necessary?
             //TODO should shells have fixed angular velocity?
             body.setMass(MassType.NORMAL);
         } else {
             body.setMass(MassType.INFINITE);
         }
-        fixture.setRestitution(1.0);
-        fixture.setFriction(0.0);
         body.setActive(true);
         body.setAsleep(false);
     }
@@ -198,13 +214,16 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
 
     private void updateEntityData(Body body) {
         Entity entity = entityConverter.toEntity(body);
+        BodyFixture fixture = body.getFixture(0);
 
         entity.setState(new EntityStateBuilder()
-                .shape(toShape(body.getFixture(0).getShape()))
+                .shape(toShape(fixture.getShape()))
                 .rotation(toRadAngle(body.getTransform().getRotation()))
                 .center(toVector(body.getWorldCenter()))
                 .velocity(toVector(body.getLinearVelocity()))
                 .angularVelocity(toRadAngle(body.getAngularVelocity()))
+                .friction(fixture.getFriction())
+                .restitution(fixture.getRestitution())
                 .build());
     }
 

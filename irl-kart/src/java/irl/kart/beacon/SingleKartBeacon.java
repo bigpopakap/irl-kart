@@ -1,7 +1,7 @@
 package irl.kart.beacon;
 
 import irl.kart.events.kart.KartEvent;
-import irl.util.string.StringUtils;
+import irl.util.string.CompareUtils;
 import rx.Observable;
 
 /**
@@ -23,12 +23,12 @@ public class SingleKartBeacon implements KartBeacon {
     @Override
     public Observable<KartBeaconEvent> stream() {
         return innerBeacon.stream()
-                    .filter(event -> StringUtils.equal(kartId, event.getKartId()));
+                    .filter(event -> CompareUtils.equal(kartId, event.getKartId()));
     }
 
     @Override
     public void send(KartEvent event) {
-        if (StringUtils.equal(kartId, event.getKartId())) {
+        if (CompareUtils.equal(kartId, event.getKartId())) {
             innerBeacon.send(event);
         }
     }

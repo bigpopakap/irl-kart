@@ -17,6 +17,8 @@ public class EntityStateBuilder {
     private Vector2D center;
     private Vector2D velocity;
     private Angle angularVelocity;
+    private double friction;
+    private double restitution;
 
     public EntityStateBuilder() {
         //set no defaults here
@@ -28,6 +30,8 @@ public class EntityStateBuilder {
         center(null); //required
         velocity(Vector2D.ZERO);
         angularVelocity(Angle.ZERO);
+        friction(0);
+        restitution(1);
         return this;
     }
 
@@ -56,9 +60,19 @@ public class EntityStateBuilder {
         return this;
     }
 
+    public EntityStateBuilder friction(double friction) {
+        this.friction = friction;
+        return this;
+    }
+
+    public EntityStateBuilder restitution(double restitution) {
+        this.restitution = restitution;
+        return this;
+    }
+
     public EntityState build() {
         return new EntityState(shape, rotation, center, velocity,
-                            angularVelocity);
+                            angularVelocity, friction, restitution);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package irl.fw.engine.physics.impl.dyn4j;
 
+import irl.fw.engine.entity.factory.EntityConfig;
 import irl.fw.engine.entity.joints.JointPoint;
+import irl.fw.engine.entity.joints.factory.DistanceJointFactory;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.joint.DistanceJoint;
 import org.dyn4j.dynamics.joint.Joint;
@@ -22,15 +24,15 @@ public class Dyn4jJointConverter {
         this.entityConverter = entityConverter;
     }
 
-    public Joint fromJoint(irl.fw.engine.entity.joints.factory.JointFactory jointFactory) {
-        if (irl.fw.engine.entity.joints.DistanceJoint.class.isAssignableFrom(jointFactory.getType())) {
-            return fromDistanceJoint(jointFactory);
+    public Joint fromJoint(irl.fw.engine.entity.joints.factory.JointFactory<? extends irl.fw.engine.entity.joints.Joint> jointFactory) {
+        if (jointFactory instanceof DistanceJointFactory) {
+            return fromDistanceJoint((DistanceJointFactory) jointFactory);
         } else {
-            throw new UnsupportedOperationException("Unsupported joint type: " + jointFactory.getType());
+            throw new UnsupportedOperationException("Unsupported joint factory type: " + jointFactory.getClass());
         }
     }
 
-    private DistanceJoint fromDistanceJoint(irl.fw.engine.entity.joints.factory.JointFactory<irl.fw.engine.entity.joints.DistanceJoint> distanceJointFactory) {
+    private DistanceJoint fromDistanceJoint(DistanceJointFactory distanceJointFactory) {
         JointPoint jp1 = distanceJointFactory.getPoint1();
         JointPoint jp2 = distanceJointFactory.getPoint2();
 
@@ -40,7 +42,10 @@ public class Dyn4jJointConverter {
         Vector2 point1 = fromVector(jp1.getLocation());
         Vector2 point2 = fromVector(jp2.getLocation());
 
-        return new DistanceJoint(body1, body2, point1, point2);
+        DistanceJoint dj = new DistanceJoint(body1, body2, point1, point2);
+        distanceJointFactory.create(new EntityConfig()
+                                            .setId(toId(dj.getId())));
+        return dj;
     }
 
 }

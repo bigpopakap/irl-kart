@@ -19,10 +19,13 @@ public class EntityState {
     private final Vector2D center;
     private final Vector2D velocity;
     private final Angle angularVelocity;
+    private final double friction;
+    private final double restitution;
 
     EntityState(ImmutableShape shape, Angle rotation,
                 Vector2D center, Vector2D velocity,
-                Angle angularVelocity) {
+                Angle angularVelocity, double friction,
+                double restitution) {
         if (shape == null || rotation == null || center == null
             || velocity == null || angularVelocity == null) {
             throw new IllegalArgumentException("These fields must not be null");
@@ -33,6 +36,8 @@ public class EntityState {
         this.center = center;
         this.velocity = velocity;
         this.angularVelocity = angularVelocity;
+        this.friction = friction;
+        this.restitution = restitution;
     }
 
     public ImmutableShape getShape() {
@@ -63,6 +68,14 @@ public class EntityState {
 
     public Angle getAngularVelocity() {
         return angularVelocity;
+    }
+
+    public double getFriction() {
+        return friction;
+    }
+
+    public double getRestitution() {
+        return restitution;
     }
 
     public EntityStateUpdate toStateUpdate() {

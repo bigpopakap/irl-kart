@@ -21,7 +21,7 @@ import irl.kart.events.beacon.KartStateUpdate;
 import irl.kart.events.beacon.UseItem;
 import irl.kart.events.kart.SpinKart;
 import irl.util.reactiveio.EventQueue;
-import irl.util.string.StringUtils;
+import irl.util.string.CompareUtils;
 
 import java.awt.*;
 
@@ -65,7 +65,7 @@ public class Kart extends IRLEntity implements ItemUser, WeaponTarget {
             //TODO we should only report the latest position or something
             this.kartBeacon.stream()
                 .ofType(KartStateUpdate.class)
-                .filter(update -> StringUtils.equal(getKartId(), update.getKartId()))
+                .filter(update -> CompareUtils.equal(getKartId(), update.getKartId()))
                 .map(update -> new UpdateEntity(getEngineId(), update.getStateUpdate()))
         );
 

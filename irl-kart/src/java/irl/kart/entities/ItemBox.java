@@ -18,6 +18,7 @@ import irl.util.reactiveio.EventQueue;
 
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -79,8 +80,10 @@ public class ItemBox extends VirtualEntity implements RemovableEntity {
     }
 
     private Item getRandomItem() {
-        int randIndex = (int) (availableItems.size() * Math.random());
-        return availableItems.get(randIndex);
+        return availableItems.get(
+            new Random(System.currentTimeMillis())
+                    .nextInt(availableItems.size())
+        );
     }
 
 }

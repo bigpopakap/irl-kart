@@ -1,7 +1,6 @@
 package irl.kart.entities.weapons;
 
 import irl.fw.engine.entity.factory.EntityConfig;
-import irl.fw.engine.entity.joints.JointPoint;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.geometry.ImmutableShape;
@@ -28,14 +27,12 @@ public class Banana extends WeaponEntity {
             8
         )
     );
+    public static final double FRICTION = 5.0;
+    public static final double RESTITUTION = 0.1;
 
     public Banana(EntityConfig entityConfig, EntityState initState,
                   EventQueue<EngineEvent> eventQueue) {
         super(entityConfig, initState, eventQueue);
-    }
-
-    public JointPoint getHoldPoint() {
-        return new JointPoint(this, getState().getCenter());
     }
 
 }

@@ -1,6 +1,6 @@
 package irl.fw.engine.entity.actions.remove;
 
-import irl.fw.engine.entity.EngineEntity;
+import irl.fw.engine.entity.EngineElement;
 import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.events.RemoveEntity;
 import irl.util.callbacks.Callback;
@@ -15,12 +15,12 @@ import irl.util.reactiveio.EventQueue;
  */
 public class RemovableEntityAdaptor implements RemovableEntity {
 
-    private final EngineEntity entity;
+    private final EngineElement entity;
     private final EventQueue<EngineEvent> eventQueue;
     private final Callbacks onRemove;
     private boolean hasQueuedRemove = false;
 
-    public RemovableEntityAdaptor(EngineEntity entity, EventQueue<EngineEvent> eventQueue) {
+    public RemovableEntityAdaptor(EngineElement entity, EventQueue<EngineEvent> eventQueue) {
         this.entity = entity;
         this.eventQueue = eventQueue;
         this.onRemove = new Callbacks();
