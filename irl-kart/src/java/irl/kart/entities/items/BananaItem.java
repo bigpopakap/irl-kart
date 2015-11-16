@@ -7,7 +7,6 @@ import irl.fw.engine.events.AddEntity;
 import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.geometry.Angle;
 import irl.fw.engine.geometry.Vector2D;
-import irl.kart.entities.items.actions.holdableitem.HoldableItemAdaptor;
 import irl.kart.entities.weapons.Banana;
 import irl.kart.entities.Kart;
 import irl.kart.entities.items.actions.itemuser.ItemUser;
@@ -22,11 +21,9 @@ import irl.util.reactiveio.EventQueue;
 public class BananaItem extends BaseItem {
 
     private final EventQueue<EngineEvent> eventQueue;
-    private final HoldableItemAdaptor<Banana> holdable;
 
     public BananaItem(EventQueue<EngineEvent> eventQueue) {
         this.eventQueue = eventQueue;
-        this.holdable = new HoldableItemAdaptor<>(this.eventQueue, null);
     }
 
     @Override
@@ -58,7 +55,6 @@ public class BananaItem extends BaseItem {
     public <T extends Entity & ItemUser> void doHoldItem(T user) {
         //TODO
         System.out.println("Banana being held");
-//        holdable.createdEntity(null);
     }
 
 }

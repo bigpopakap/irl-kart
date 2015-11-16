@@ -9,6 +9,7 @@ import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.geometry.Angle;
 import irl.fw.engine.geometry.ImmutableShape;
+import irl.kart.entities.items.BananaItem;
 import irl.kart.entities.items.Item;
 import irl.kart.entities.items.ShellItem;
 import irl.kart.entities.items.actions.itemuser.ItemUser;
@@ -49,7 +50,7 @@ public class ItemBox extends VirtualEntity implements RemovableEntity {
         availableItems = new ArrayList<>();
         this.eventQueue = eventQueue;
         availableItems.add(new ShellItem(this.eventQueue));
-//        availableItems.add(new BananaItem(this.eventQueue));
+        availableItems.add(new BananaItem(this.eventQueue));
 
         this.remover = new RemovableEntityAdaptor(this, this.eventQueue);
         onRemove(onRemove);
