@@ -32,11 +32,11 @@ public class ShellItem extends BaseItem {
 
         this.holdable = new HoldableItemAdaptor<>(
             eventQueue, onRemoved,
-            entityConfig -> new Shell(
-                entityConfig,
+            (config, state) -> new Shell(
+                config,
                 new EntityStateBuilder().defaults()
                     .shape(Shell.SHAPE)
-                    .center(entityConfig.getCenter())
+                    .center(state.getCenter())
                     .build(),
                 null, //TODO what to do here?
                 eventQueue

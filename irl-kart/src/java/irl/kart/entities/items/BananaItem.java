@@ -25,11 +25,11 @@ public class BananaItem extends BaseItem {
     public BananaItem(EventQueue<EngineEvent> eventQueue) {
         holdable = new HoldableItemAdaptor<>(
             eventQueue, onRemoved,
-            entityConfig -> new Banana(
-                entityConfig,
+            (config, state) -> new Banana(
+                config,
                 new EntityStateBuilder().defaults()
                         .shape(Banana.SHAPE)
-                        .center(entityConfig.getCenter())
+                        .center(state.getCenter())
                         .rotation(Angle.random())
                         .friction(Banana.FRICTION)
                         .restitution(Banana.RESTITUTION)

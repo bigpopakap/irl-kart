@@ -4,6 +4,8 @@ import irl.fw.engine.geometry.Angle;
 import irl.fw.engine.geometry.ImmutableShape;
 import irl.fw.engine.geometry.Vector2D;
 
+import java.util.Optional;
+
 /**
  * TODO bigpopakap Javadoc this class
  *
@@ -27,7 +29,7 @@ public class EntityStateBuilder {
     public EntityStateBuilder defaults() {
         shape(null); //required
         rotation(Angle.ZERO);
-        center(null); //required
+        center(Optional.empty()); //required
         velocity(Vector2D.ZERO);
         angularVelocity(Angle.ZERO);
         friction(0);
@@ -47,6 +49,13 @@ public class EntityStateBuilder {
 
     public EntityStateBuilder center(Vector2D center) {
         this.center = center;
+        return this;
+    }
+
+    public EntityStateBuilder center(Optional<Vector2D> center) {
+        if (center.isPresent()) {
+            center(center.get());
+        }
         return this;
     }
 
