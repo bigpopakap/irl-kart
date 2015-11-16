@@ -2,7 +2,6 @@ package irl.kart.entities.items;
 
 import irl.fw.engine.entity.Entity;
 import irl.fw.engine.entity.joints.Joint;
-import irl.fw.engine.entity.joints.JointPoint;
 import irl.fw.engine.entity.joints.factory.DistanceJointFactory;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.entity.state.EntityStateBuilder;
@@ -71,6 +70,8 @@ public class BananaItem extends BaseItem {
                             .shape(Banana.SHAPE)
                             .center(bananaCenter)
                             .rotation(Angle.random())
+                            .friction(Banana.FRICTION)
+                            .restitution(Banana.RESTITUTION)
                             .build(),
                     eventQueue
             );
@@ -81,7 +82,7 @@ public class BananaItem extends BaseItem {
             });
 
             eventQueue.mergeIn(new AddJoint(new DistanceJointFactory(
-                new JointPoint(newBanana, newBanana.getState().getCenter()),
+                newBanana.getHoldPoint(),
                 user.getItemHoldPoint(),
                 eventQueue,
                 joint -> {

@@ -28,6 +28,8 @@ public class Banana extends WeaponEntity {
             8
         )
     );
+    public static final double FRICTION = 5.0;
+    public static final double RESTITUTION = 0.1;
 
     public Banana(EntityConfig entityConfig, EntityState initState,
                   EventQueue<EngineEvent> eventQueue) {

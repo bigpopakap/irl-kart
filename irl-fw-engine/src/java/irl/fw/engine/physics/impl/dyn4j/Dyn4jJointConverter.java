@@ -24,7 +24,7 @@ public class Dyn4jJointConverter {
         this.entityConverter = entityConverter;
     }
 
-    public Joint fromJoint(irl.fw.engine.entity.joints.factory.JointFactory jointFactory) {
+    public Joint fromJoint(irl.fw.engine.entity.joints.factory.JointFactory<? extends irl.fw.engine.entity.joints.Joint> jointFactory) {
         if (jointFactory instanceof DistanceJointFactory) {
             return fromDistanceJoint((DistanceJointFactory) jointFactory);
         } else {

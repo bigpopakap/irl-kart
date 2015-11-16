@@ -14,18 +14,16 @@ import java.util.Optional;
  */
 public class EntityStateUpdate {
 
-    private Optional<ImmutableShape> shape;
-    private Optional<Angle> rotation;
-    private Optional<Vector2D> center;
-    private Optional<Vector2D> velocity;
-    private Optional<Angle> angularVelocity;
+    private Optional<ImmutableShape> shape = Optional.empty();
+    private Optional<Angle> rotation = Optional.empty();
+    private Optional<Vector2D> center = Optional.empty();
+    private Optional<Vector2D> velocity = Optional.empty();
+    private Optional<Angle> angularVelocity = Optional.empty();
+    private Optional<Double> friction = Optional.empty();
+    private Optional<Double> restitution = Optional.empty();
 
     public EntityStateUpdate() {
-        shape = Optional.empty();
-        rotation = Optional.empty();
-        center = Optional.empty();
-        velocity = Optional.empty();
-        angularVelocity = Optional.empty();
+        //do nothing... everything should already be initialized
     }
 
     public EntityStateUpdate(EntityState stateToCopy) {
@@ -34,6 +32,8 @@ public class EntityStateUpdate {
         center(stateToCopy.getCenter());
         velocity(stateToCopy.getVelocity());
         angularVelocity(stateToCopy.getAngularVelocity());
+        friction(stateToCopy.getFriction());
+        restitution(stateToCopy.getRestitution());
     }
 
     public EntityStateUpdate shape(ImmutableShape shape) {
@@ -81,13 +81,33 @@ public class EntityStateUpdate {
         return angularVelocity;
     }
 
+    public EntityStateUpdate friction(double friction) {
+        this.friction = Optional.of(friction);
+        return this;
+    }
+
+    public Optional<Double> getFriction() {
+        return friction;
+    }
+
+    public EntityStateUpdate restitution(double restitution) {
+        this.restitution = Optional.of(restitution);
+        return this;
+    }
+
+    public Optional<Double> getRestitution() {
+        return restitution;
+    }
+
     public EntityState fillAndBuild(EntityState base) {
         return new EntityState(
             shape.orElse(base.getShape()),
             rotation.orElse(base.getRotation()),
             center.orElse(base.getCenter()),
             velocity.orElse(base.getVelocity()),
-            angularVelocity.orElse(base.getAngularVelocity())
+            angularVelocity.orElse(base.getAngularVelocity()),
+            friction.orElse(base.getFriction()),
+            restitution.orElse(base.getRestitution())
         );
     }
 

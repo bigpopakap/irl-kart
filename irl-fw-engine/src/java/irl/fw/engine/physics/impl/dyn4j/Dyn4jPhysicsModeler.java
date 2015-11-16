@@ -185,16 +185,25 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
             body.setAngularVelocity(state.getAngularVelocity().get().asRad());
         }
 
+        if (state.getFriction().isPresent()) {
+            //since this is a top-down zero-gravity world, we
+            //model "friction" as linear damping
+            body.setLinearDamping(state.getFriction().get());
+        }
+
+        if (state.getRestitution().isPresent()) {
+            //FIXME I don't think this works
+            fixture.setRestitution(state.getRestitution().get());
+        }
+
         //default settings
         if (entity.isVirtual()) {
-            body.setAutoSleepingEnabled(false);
+            body.setAutoSleepingEnabled(false); //TODO is this necessary?
             //TODO should shells have fixed angular velocity?
             body.setMass(MassType.NORMAL);
         } else {
             body.setMass(MassType.INFINITE);
         }
-        fixture.setRestitution(1.0);
-        fixture.setFriction(0.0);
         body.setActive(true);
         body.setAsleep(false);
     }
@@ -205,13 +214,16 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
 
     private void updateEntityData(Body body) {
         Entity entity = entityConverter.toEntity(body);
+        BodyFixture fixture = body.getFixture(0);
 
         entity.setState(new EntityStateBuilder()
-                .shape(toShape(body.getFixture(0).getShape()))
+                .shape(toShape(fixture.getShape()))
                 .rotation(toRadAngle(body.getTransform().getRotation()))
                 .center(toVector(body.getWorldCenter()))
                 .velocity(toVector(body.getLinearVelocity()))
                 .angularVelocity(toRadAngle(body.getAngularVelocity()))
+                .friction(fixture.getFriction())
+                .restitution(fixture.getRestitution())
                 .build());
     }
 
