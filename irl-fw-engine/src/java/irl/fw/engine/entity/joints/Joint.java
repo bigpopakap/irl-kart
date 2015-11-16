@@ -1,6 +1,6 @@
 package irl.fw.engine.entity.joints;
 
-import irl.fw.engine.entity.EngineEntity;
+import irl.fw.engine.entity.EngineElement;
 import irl.fw.engine.entity.EntityId;
 import irl.fw.engine.entity.actions.remove.RemovableEntity;
 import irl.fw.engine.entity.actions.remove.RemovableEntityAdaptor;
@@ -16,7 +16,7 @@ import irl.util.reactiveio.EventQueue;
  * @since 11/15/15
  */
 //TODO this class should move into the Entity class hierarchy
-public abstract class Joint implements EngineEntity, RemovableEntity {
+public abstract class Joint implements EngineElement, RemovableEntity {
 
     private final EntityId engineId;
     private final JointPoint point1;

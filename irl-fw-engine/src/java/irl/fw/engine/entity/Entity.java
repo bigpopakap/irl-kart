@@ -13,7 +13,7 @@ import rx.Observable;
  * @author bigpopakap
  * @since 10/29/15
  */
-public abstract class Entity implements EngineEntity, CollidableEntity {
+public abstract class Entity implements EngineElement, CollidableEntity {
 
     private final EntityId engineId;
     private volatile EntityState state;

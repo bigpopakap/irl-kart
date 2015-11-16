@@ -48,6 +48,7 @@ public class ShellItem extends BaseItem {
         ));
 
         eventQueue.mergeIn(addShell);
+        onUsed.run();
     }
 
     @Override

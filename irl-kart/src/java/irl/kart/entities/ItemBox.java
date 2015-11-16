@@ -35,7 +35,6 @@ public class ItemBox extends VirtualEntity implements RemovableEntity {
         new Rectangle2D.Double(0, 0, 15, 15)
     );
 
-    private final Random random;
     private final ArrayList<Item> availableItems;
     private final EventQueue<EngineEvent> eventQueue;
     private final RemovableEntityAdaptor remover;
@@ -48,8 +47,6 @@ public class ItemBox extends VirtualEntity implements RemovableEntity {
     public ItemBox(EntityConfig entityConfig, EntityState initState,
                    EventQueue<EngineEvent> eventQueue, Callback onRemove) {
         super(entityConfig, initState);
-
-        random = new Random(System.currentTimeMillis());
 
         availableItems = new ArrayList<>();
         this.eventQueue = eventQueue;
@@ -84,7 +81,8 @@ public class ItemBox extends VirtualEntity implements RemovableEntity {
 
     private Item getRandomItem() {
         return availableItems.get(
-            random.nextInt(availableItems.size())
+            new Random(System.currentTimeMillis())
+                    .nextInt(availableItems.size())
         );
     }
 

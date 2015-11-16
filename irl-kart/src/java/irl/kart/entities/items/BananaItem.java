@@ -9,7 +9,6 @@ import irl.fw.engine.entity.state.EntityStateBuilder;
 import irl.fw.engine.events.AddEntity;
 import irl.fw.engine.events.AddJoint;
 import irl.fw.engine.events.EngineEvent;
-import irl.fw.engine.events.RemoveEntity;
 import irl.fw.engine.geometry.Angle;
 import irl.fw.engine.geometry.Vector2D;
 import irl.kart.entities.weapons.Banana;
@@ -36,13 +35,9 @@ public class BananaItem extends BaseItem {
 
     @Override
     public <T extends Entity & ItemUser> void doUseItem(T user) {
-        System.out.println("Using banana");
-
         doHoldItem(user, () -> {
-            if (joint != null) {
-                System.out.println("Using banana: removing joint");
-                eventQueue.mergeIn(new RemoveEntity(joint.getEngineId()));
-            }
+            joint.remove();
+            onUsed.run();
         });
     }
 
@@ -52,15 +47,12 @@ public class BananaItem extends BaseItem {
     }
 
     private <T extends Entity & ItemUser> void doHoldItem(T user, Callback afterHold) {
-        System.out.println("Holding banana");
         if (isHeld) {
             //only hold the item once
-            System.out.println("Holding banana: already holding");
             afterHold.run();
             return;
         }
         isHeld = true;
-        System.out.println("Holding banana: proceeding");
 
         EntityState userState = user.getState();
         Vector2D userCenter = userState.getCenter();
@@ -83,7 +75,10 @@ public class BananaItem extends BaseItem {
                     eventQueue
             );
 
-            newBanana.onRemove(() -> isHeld = false);
+            newBanana.onRemove(() -> {
+                isHeld = false;
+                onRemoved.run();
+            });
 
             eventQueue.mergeIn(new AddJoint(new DistanceJointFactory(
                 new JointPoint(newBanana, newBanana.getState().getCenter()),

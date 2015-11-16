@@ -17,7 +17,7 @@ public class AddJoint implements EngineEvent {
         this.jointFactory = jointFactory;
     }
 
-    public JointFactory<? extends Joint> getEntityFactory() {
+    public JointFactory<? extends Joint> getJointFactory() {
         return jointFactory;
     }
 

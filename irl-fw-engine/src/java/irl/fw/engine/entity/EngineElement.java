@@ -6,7 +6,7 @@ package irl.fw.engine.entity;
  * @author bigpopakap
  * @since 11/15/15
  */
-public interface EngineEntity {
+public interface EngineElement {
 
     EntityId getEngineId();
 

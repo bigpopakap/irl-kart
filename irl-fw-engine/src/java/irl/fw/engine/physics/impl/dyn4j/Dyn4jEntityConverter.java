@@ -2,8 +2,10 @@ package irl.fw.engine.physics.impl.dyn4j;
 
 import irl.fw.engine.entity.Entity;
 import irl.fw.engine.entity.EntityId;
+import irl.util.string.CompareUtils;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.World;
+import org.dyn4j.dynamics.joint.Joint;
 
 import java.util.Optional;
 
@@ -31,13 +33,27 @@ public class Dyn4jEntityConverter {
         return findBody(entityId);
     }
 
+    public Optional<Joint> fromJoint(irl.fw.engine.entity.joints.Joint joint) {
+        return fromJoint(joint.getEngineId());
+    }
+
+    public Optional<Joint> fromJoint(EntityId jointId) {
+        return findJoint(jointId);
+    }
+
     public Entity toEntity(Body body) {
         return (Entity) body.getUserData();
     }
 
     private Optional<Body> findBody(EntityId entityId) {
-        return world.getBodies().stream()
-                .filter(body -> body.getId().equals(fromId(entityId)))
+        return world.getBodies().parallelStream()
+                .filter(body -> CompareUtils.equal(body.getId(), fromId(entityId)))
+                .findFirst();
+    }
+
+    private Optional<Joint> findJoint(EntityId entityId) {
+        return world.getJoints().parallelStream()
+                .filter(joint -> CompareUtils.equal(joint.getId(), fromId(entityId)))
                 .findFirst();
     }
 

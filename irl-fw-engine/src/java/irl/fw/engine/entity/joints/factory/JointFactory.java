@@ -1,7 +1,7 @@
 package irl.fw.engine.entity.joints.factory;
 
+import irl.fw.engine.entity.factory.EntityConfig;
 import irl.fw.engine.entity.joints.Joint;
-import irl.fw.engine.entity.joints.JointPoint;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -11,10 +11,6 @@ import irl.fw.engine.entity.joints.JointPoint;
  */
 public interface JointFactory<T extends Joint> {
 
-    Class<T> getType();
-    JointPoint getPoint1();
-    JointPoint getPoint2();
-
-    T create(JointConfig jointConfig);
+    T create(EntityConfig entityConfig);
 
 }

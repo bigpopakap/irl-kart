@@ -19,6 +19,10 @@ class Dyn4jConverter {
         return UUID.fromString(entitId.toString());
     }
 
+    public static EntityId toId(UUID id) {
+        return new EntityId(id.toString());
+    }
+
     public static Vector2 fromVector(Vector2D vector) {
         return new Vector2(vector.getX(), vector.getY());
     }
