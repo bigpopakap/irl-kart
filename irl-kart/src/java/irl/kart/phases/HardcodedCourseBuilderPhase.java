@@ -13,7 +13,6 @@ import irl.util.reactiveio.EventQueue;
 import rx.Observable;
 
 import java.awt.geom.Rectangle2D;
-import java.util.Vector;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -24,7 +23,7 @@ import java.util.Vector;
 public class HardcodedCourseBuilderPhase extends SynchronousRunnable {
 
     private static final Rectangle2D WORLD_BOUNDS = new Rectangle2D.Double(
-        50, 50, 1000, 500
+        50, 50, 800, 600
     );
     private static final Vector2D BOTTOM_LEFT = new Vector2D(WORLD_BOUNDS.getMinX(), WORLD_BOUNDS.getMinY());
     private static final double WALL_THICKNESS = 20;

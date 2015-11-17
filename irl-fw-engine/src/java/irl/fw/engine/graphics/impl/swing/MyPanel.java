@@ -53,10 +53,12 @@ class MyPanel extends JPanel {
         drawArrow(g, 0, 0, 400, 0);
         drawArrow(g, 0, 0, 0, 200);
 
-        //TODO transform the graphics so the world is scaled
-//            transform.translate(world.getMinX(), world.getMinY());
-//            transform.scale(getWidth() / world.getWidth(),
-//                            getHeight() / world.getHeight());
+        {
+            double scale = Math.min(getWidth() / world.getWidth(),
+                                    getHeight() / world.getHeight());
+            transform.scale(scale, scale);
+        }
+        transform.translate(-world.getMinX(), -world.getMinY());
         g2.setTransform(transform);
 
         //draw bounds around the world
