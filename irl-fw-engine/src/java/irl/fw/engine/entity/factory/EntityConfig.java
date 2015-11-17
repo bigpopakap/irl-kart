@@ -10,7 +10,8 @@ import irl.fw.engine.entity.EntityId;
  */
 public class EntityConfig {
 
-    private EntityId id;
+    private EntityId id = null;
+    private EntityDisplayConfig displayConfig = new EntityDisplayConfig();
 
     public EntityConfig() {
         //do nothing... this is sort of a builder class
@@ -26,6 +27,15 @@ public class EntityConfig {
         } else {
             this.id = id;
         }
+        return this;
+    }
+
+    public EntityDisplayConfig getDisplayConfig() {
+        return displayConfig;
+    }
+
+    public EntityConfig display(EntityDisplayConfig displayConfig) {
+        this.displayConfig = displayConfig;
         return this;
     }
 
