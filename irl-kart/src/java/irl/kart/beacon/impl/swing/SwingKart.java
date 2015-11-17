@@ -18,9 +18,9 @@ import java.awt.*;
  */
 class SwingKart {
 
-    private static final double MAX_SPEED = 120;
-    private static final double MIN_SPEED = -60;
-    private static final double SPEED_INCR = 20;
+    private static final double MAX_SPEED = 60.0;
+    private static final double MIN_SPEED = -30.0;
+    private static final double SPEED_INCR = 5;
     private static final Angle ROT_INCR = Angle.deg(15);
 
     private final String id;

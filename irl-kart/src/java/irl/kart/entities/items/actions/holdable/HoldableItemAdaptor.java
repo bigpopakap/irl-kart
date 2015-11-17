@@ -26,6 +26,8 @@ import java.util.function.Consumer;
  */
 public class HoldableItemAdaptor<T extends Entity & HoldableEntity & RemovableEntity> {
 
+    private static final double FRICTION_WHEN_HELD = 8.0;
+
     private final EventQueue<EngineEvent> eventQueue;
     private final Callback onRemoved;
     private final InitializedHoldableEntityFactory<T> factory;
@@ -92,7 +94,8 @@ public class HoldableItemAdaptor<T extends Entity & HoldableEntity & RemovableEn
             T createdEntity = innerFactory.create(
                 entityConfig,
                 new EntityStateUpdate()
-                    .center(calculateNewEntityCenter(user)),
+                    .center(calculateNewEntityCenter(user))
+                    .friction(FRICTION_WHEN_HELD),
                 user
             );
             createdEntity.onRemove(this::onEntityRemoved);

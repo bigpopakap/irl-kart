@@ -18,15 +18,16 @@ import java.awt.geom.Ellipse2D;
  */
 public class Shell extends WeaponEntity {
 
-    public static final int SIZE = 15;
+    public static final double SIZE = 10;
     //FIXME this doesn't seem to actually go much faster than a kart
     //FIXME this should also be calculated on-the-fly based on the Kart's speed
-    public static final double SPEED = 300;
+    public static final double SPEED = 200.0;
     public static final Angle ROTATIONAL_SPEED = Angle.rad(8 * Math.PI);
     public static final ImmutableShape SHAPE = new ImmutableShape(
         ImmutableShape.Type.ELLIPSE,
-        new Ellipse2D.Double(0, 0, SIZE, 7*SIZE/8)
+        new Ellipse2D.Double(0, 0, SIZE, .9*SIZE)
     );
+    public static final double FRICTION = 0;
 
     private final EntityId sourceKartId;
 

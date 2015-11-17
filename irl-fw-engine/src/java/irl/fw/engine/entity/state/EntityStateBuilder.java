@@ -74,6 +74,13 @@ public class EntityStateBuilder {
         return this;
     }
 
+    public EntityStateBuilder friction(Optional<Double> friction) {
+        if (friction.isPresent()) {
+            friction(friction.get());
+        }
+        return this;
+    }
+
     public EntityStateBuilder restitution(double restitution) {
         this.restitution = restitution;
         return this;

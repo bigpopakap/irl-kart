@@ -43,7 +43,7 @@ public class KartDetectionPhase extends SynchronousRunnable {
                         new EntityStateBuilder()
                                 .shape(Kart.SHAPE)
                                 .rotation(Angle.deg(0))
-                                .center(new Vector2D(200, 200))
+                                .center(new Vector2D(50, 50))
                                 .velocity(new Vector2D(0, 0))
                                 .angularVelocity(Angle.deg(0))
                                 .build(),

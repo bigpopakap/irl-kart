@@ -32,7 +32,7 @@ public class ItemBox extends VirtualEntity implements RemovableEntity {
     public static final Angle ROTATION_SPEED = Angle.rad(-Math.PI);
     public static final ImmutableShape SHAPE = new ImmutableShape(
         ImmutableShape.Type.RECTANGLE,
-        new Rectangle2D.Double(0, 0, 15, 15)
+        new Rectangle2D.Double(0, 0, 10, 10)
     );
 
     private final ArrayList<Item> availableItems;

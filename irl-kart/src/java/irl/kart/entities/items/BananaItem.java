@@ -5,6 +5,7 @@ import irl.fw.engine.entity.factory.EntityConfig;
 import irl.fw.engine.entity.state.EntityStateBuilder;
 import irl.fw.engine.entity.state.EntityStateUpdate;
 import irl.fw.engine.events.EngineEvent;
+import irl.fw.engine.events.UpdateEntity;
 import irl.fw.engine.geometry.Angle;
 import irl.kart.entities.items.actions.holdable.HoldableItemAdaptor;
 import irl.kart.entities.items.actions.holdable.InitializedHoldableEntityFactory;
@@ -23,9 +24,12 @@ public class BananaItem extends BaseItem {
 
     private static final double DISTANCE_WHEN_HELD = Kart.KART_LENGTH/2 + Banana.SIZE;
 
+    private final EventQueue<EngineEvent> eventQueue;
     private final HoldableItemAdaptor<Banana> holdable;
 
     public BananaItem(EventQueue<EngineEvent> eventQueue) {
+        this.eventQueue = eventQueue;
+
         holdable = new HoldableItemAdaptor<>(
             eventQueue, onRemoved,
             new BananaItemFactory(eventQueue),
@@ -35,8 +39,13 @@ public class BananaItem extends BaseItem {
 
     @Override
     public <T extends Entity & ItemUser> void doUseItem(T user) {
-        //for bananas, using the item just means unholding it
         holdable.doUseItem(user, banana -> {
+            eventQueue.mergeIn(new UpdateEntity(
+                banana.getEngineId(),
+                new EntityStateUpdate()
+                    .friction(Banana.FRICTION)
+            ));
+
             onUsed.run();
         });
     }
@@ -68,7 +77,7 @@ public class BananaItem extends BaseItem {
                         .shape(Banana.SHAPE)
                         .center(state.getCenter())
                         .rotation(Angle.random())
-                        .friction(Banana.FRICTION)
+                        .friction(state.getFriction())
                         .restitution(Banana.RESTITUTION)
                         .build(),
                 eventQueue

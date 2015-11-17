@@ -24,7 +24,7 @@ public class ItemBoxPedestal extends VirtualEntity {
 
     public static final ImmutableShape SHAPE = new ImmutableShape(
         ImmutableShape.Type.ELLIPSE,
-        new Ellipse2D.Double(0, 0, 2, 2)
+        new Ellipse2D.Double(0, 0, 1, 1)
     );
     private static final long ITEM_BOX_REGEN_DELAY = 2000;
 
