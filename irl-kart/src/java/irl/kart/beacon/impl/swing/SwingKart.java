@@ -52,30 +52,38 @@ class SwingKart {
 
         SwingKartInput input = keyMap.fromKeyCode(keyEvent.getEvent().getKeyCode());
 
-        boolean isStateUpdate;
+        boolean isStateUpdate = false;
         switch (input) {
             case LEFT:
-                rotation = speed >= 0
-                        ? rotation.add(ROT_INCR)
-                        : rotation.sub(ROT_INCR);
-                isStateUpdate = true;
+                if (keyEvent.getType() == SwingKeyEvent.Type.KEY_DOWN) {
+                    rotation = speed >= 0
+                            ? rotation.add(ROT_INCR)
+                            : rotation.sub(ROT_INCR);
+                    isStateUpdate = true;
+                }
                 break;
 
             case RIGHT:
-                rotation = speed >= 0
-                        ? rotation.sub(ROT_INCR)
-                        : rotation.add(ROT_INCR);
-                isStateUpdate = true;
+                if (keyEvent.getType() == SwingKeyEvent.Type.KEY_DOWN) {
+                    rotation = speed >= 0
+                            ? rotation.sub(ROT_INCR)
+                            : rotation.add(ROT_INCR);
+                    isStateUpdate = true;
+                }
                 break;
 
             case UP:
-                speed = Math.min(MAX_SPEED, speed + SPEED_INCR);
-                isStateUpdate = true;
+                if (keyEvent.getType() == SwingKeyEvent.Type.KEY_DOWN) {
+                    speed = Math.min(MAX_SPEED, speed + SPEED_INCR);
+                    isStateUpdate = true;
+                }
                 break;
 
             case DOWN:
-                speed = Math.max(MIN_SPEED, speed - SPEED_INCR);
-                isStateUpdate = true;
+                if (keyEvent.getType() == SwingKeyEvent.Type.KEY_DOWN) {
+                    speed = Math.max(MIN_SPEED, speed - SPEED_INCR);
+                    isStateUpdate = true;
+                }
                 break;
 
             case FIRE:
