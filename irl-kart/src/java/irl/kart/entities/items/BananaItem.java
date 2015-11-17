@@ -22,7 +22,7 @@ import irl.util.reactiveio.EventQueue;
  */
 public class BananaItem extends BaseItem {
 
-    private static final double DISTANCE_WHEN_HELD = Kart.KART_LENGTH/2 + Banana.SIZE;
+    private static final double DISTANCE_WHEN_HELD = Kart.KART_LENGTH/2 + Banana.SIZE/2;
 
     private final EventQueue<EngineEvent> eventQueue;
     private final HoldableItemAdaptor<Banana> holdable;
