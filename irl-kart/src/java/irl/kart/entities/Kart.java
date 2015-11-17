@@ -60,6 +60,7 @@ public class Kart extends IRLEntity implements ItemUser, WeaponTarget {
                 .display(
                     new EntityDisplayConfig()
                         .fillColor(ColorUtils.random())
+                        .label(kartId)
                 ),
             initState
         );

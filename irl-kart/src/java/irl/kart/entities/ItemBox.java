@@ -52,7 +52,7 @@ public class ItemBox extends VirtualEntity implements RemovableEntity {
             entityConfig
                 .display(
                     new EntityDisplayConfig()
-                            .outlineColor(ColorUtils.random(0.6))
+                            .outlineColor(ColorUtils.random())
                             .fillColor(ColorUtils.random(0.4))
                 ),
             initState

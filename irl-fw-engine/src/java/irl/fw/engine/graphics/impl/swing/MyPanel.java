@@ -81,6 +81,7 @@ class MyPanel extends JPanel {
 
     private void draw(Graphics2D g2, Entity entity) {
         EntityState state = entity.getState();
+        Vector2D center = state.getCenter();
         Shape shape = state.getTransformedShape();
         EntityDisplayConfig display = entity.getDisplayConfig();
 
@@ -89,12 +90,15 @@ class MyPanel extends JPanel {
         g2.fill(shape);
 
         //draw the outline
+        //TODO rotate the text so it's upright
         g2.setColor(display.getOutlineColor());
         g2.setStroke(new BasicStroke(1));
         g2.draw(shape);
 
         //draw the label text
-        //TODO
+        g2.setColor(display.getLabelColor());
+        g2.drawString(display.getLabel(),
+                (int) center.getX(), (int) center.getY());
 
         //draw the velocity vector
         Vector2D velocity = state.getVelocity();
@@ -104,11 +108,8 @@ class MyPanel extends JPanel {
                 0.3
             ));
             g2.setStroke(new BasicStroke(1));
-
-            Vector2D arrowBase = state.getCenter();
-            Vector2D arrowEnd = arrowBase.add(velocity);
-
-            drawArrow(g2, (int) arrowBase.getX(), (int) arrowBase.getY(),
+            Vector2D arrowEnd = center.add(velocity);
+            drawArrow(g2, (int) center.getX(), (int) center.getY(),
                     (int) arrowEnd.getX(), (int) arrowEnd.getY());
         }
     }
