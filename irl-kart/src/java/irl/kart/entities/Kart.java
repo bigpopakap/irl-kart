@@ -1,6 +1,7 @@
 package irl.kart.entities;
 
 import irl.fw.engine.entity.factory.EntityConfig;
+import irl.fw.engine.entity.factory.EntityDisplayConfig;
 import irl.fw.engine.entity.joints.JointPoint;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.events.EngineEvent;
@@ -20,8 +21,9 @@ import irl.kart.events.beacon.HoldItem;
 import irl.kart.events.beacon.KartStateUpdate;
 import irl.kart.events.beacon.UseItem;
 import irl.kart.events.kart.SpinKart;
+import irl.util.ColorUtils;
 import irl.util.reactiveio.EventQueue;
-import irl.util.string.CompareUtils;
+import irl.util.CompareUtils;
 
 import java.awt.*;
 
@@ -53,7 +55,14 @@ public class Kart extends IRLEntity implements ItemUser, WeaponTarget {
     public Kart(EntityConfig entityConfig, EntityState initState,
                 String kartId, KartBeacon kartBeacon,
                 EventQueue<EngineEvent> eventQueue) {
-        super(entityConfig, initState);
+        super(
+            entityConfig
+                .display(
+                    new EntityDisplayConfig()
+                        .fillColor(ColorUtils.random())
+                ),
+            initState
+        );
 
         this.kartId = kartId;
         this.kartBeacon = new SingleKartBeacon(kartId, kartBeacon);

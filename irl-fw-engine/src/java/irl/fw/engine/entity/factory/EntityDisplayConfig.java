@@ -1,5 +1,7 @@
 package irl.fw.engine.entity.factory;
 
+import irl.util.ColorUtils;
+
 import java.awt.*;
 
 /**
@@ -9,8 +11,6 @@ import java.awt.*;
  * @since 11/17/15
  */
 public class EntityDisplayConfig {
-
-    private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
 
     private String label;
     private Color labelColor;
@@ -22,7 +22,7 @@ public class EntityDisplayConfig {
         label("");
         labelColor(Color.BLACK);
         outlineColor(Color.BLACK);
-        fillColor(TRANSPARENT);
+        fillColor(ColorUtils.TRANSPARENT);
         velocityColor(Color.RED);
     }
 
