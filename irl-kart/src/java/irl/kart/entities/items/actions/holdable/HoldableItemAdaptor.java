@@ -76,9 +76,8 @@ public class HoldableItemAdaptor<T extends Entity & HoldableEntity & RemovableEn
     }
 
     private synchronized void onEntityRemoved() {
-        if (joint != null) {
-            joint.remove();
-        }
+        //don't need to delete the joint because it will be
+        //deleted when one of its anchors is removed
         isHeld = false;
         onRemoved.run();
     }
