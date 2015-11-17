@@ -56,8 +56,13 @@ public abstract class Joint implements EngineElement, RemovableEntity {
     }
 
     @Override
-    public String onRemove(Callback callback) {
-        return entityRemover.onRemove(callback);
+    public String addRemoveHandler(Callback callback) {
+        return entityRemover.addRemoveHandler(callback);
+    }
+
+    @Override
+    public void removeRemoveHandler(String callbackId) {
+        entityRemover.removeRemoveHandler(callbackId);
     }
 
 }

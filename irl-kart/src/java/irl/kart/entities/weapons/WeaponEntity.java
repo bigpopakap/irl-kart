@@ -49,8 +49,13 @@ public abstract class WeaponEntity extends VirtualEntity implements HoldableEnti
     }
 
     @Override
-    public String onRemove(Callback callback) {
-        return remover.onRemove(callback);
+    public String addRemoveHandler(Callback callback) {
+        return remover.addRemoveHandler(callback);
+    }
+
+    @Override
+    public void removeRemoveHandler(String callbackId) {
+        remover.removeRemoveHandler(callbackId);
     }
 
     @Override

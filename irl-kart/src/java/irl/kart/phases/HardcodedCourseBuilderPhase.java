@@ -25,9 +25,14 @@ public class HardcodedCourseBuilderPhase extends SynchronousRunnable {
     private static final Rectangle2D WORLD_BOUNDS = new Rectangle2D.Double(
         -10, -10, 400, 400
     );
-    private static final Vector2D BOTTOM_LEFT = new Vector2D(WORLD_BOUNDS.getMinX(), WORLD_BOUNDS.getMinY());
+    private static final Rectangle2D INNER_WALL_BOUNDS = new Rectangle2D.Double(
+        WORLD_BOUNDS.getMinX() + .25*WORLD_BOUNDS.getWidth(),
+        WORLD_BOUNDS.getMinY() + .25*WORLD_BOUNDS.getHeight(),
+        .5*WORLD_BOUNDS.getWidth(),
+        .5*WORLD_BOUNDS.getHeight()
+    );
     private static final double WALL_THICKNESS = 15;
-    private static final double ITEM_BOX_INSET = WORLD_BOUNDS.getWidth() / 10.0;
+    private static final double ITEM_BOX_INSET = WORLD_BOUNDS.getWidth() / 8.0;
 
     private final EventQueue<EngineEvent> eventQueue;
 
@@ -37,11 +42,17 @@ public class HardcodedCourseBuilderPhase extends SynchronousRunnable {
 
     @Override
     protected void doRunSynchronous() {
-        eventQueue.mergeIn(addWalls());
-        eventQueue.mergeIn(addItemBoxes());
+        //add outer walls and item boxes
+        eventQueue.mergeIn(addWalls(WORLD_BOUNDS));
+        eventQueue.mergeIn(addItemBoxes(WORLD_BOUNDS));
+
+        //add inner walls
+        eventQueue.mergeIn(addWalls(INNER_WALL_BOUNDS));
     }
 
-    private Observable<AddEntity> addWalls() {
+    private Observable<AddEntity> addWalls(Rectangle2D bounds) {
+        final Vector2D bottomLeft = new Vector2D(bounds.getMinX(), bounds.getMinY());
+
         return Observable.from(new AddEntity[] {
 
                 //left wall
@@ -49,9 +60,9 @@ public class HardcodedCourseBuilderPhase extends SynchronousRunnable {
                         entityConfig,
                         new EntityStateBuilder().defaults()
                                 .shape(new ImmutableShape(ImmutableShape.Type.RECTANGLE,
-                                        new Rectangle2D.Double(0, 0, WALL_THICKNESS, WORLD_BOUNDS.getHeight())))
-                                .center(new Vector2D(WALL_THICKNESS / 2, WORLD_BOUNDS.getHeight() / 2)
-                                        .add(BOTTOM_LEFT))
+                                        new Rectangle2D.Double(0, 0, WALL_THICKNESS, bounds.getHeight())))
+                                .center(new Vector2D(WALL_THICKNESS / 2, bounds.getHeight() / 2)
+                                        .add(bottomLeft))
                                 .build()
                 )),
 
@@ -60,9 +71,9 @@ public class HardcodedCourseBuilderPhase extends SynchronousRunnable {
                         entityConfig,
                         new EntityStateBuilder().defaults()
                                 .shape(new ImmutableShape(ImmutableShape.Type.RECTANGLE,
-                                        new Rectangle2D.Double(0, 0, WALL_THICKNESS, WORLD_BOUNDS.getHeight())))
-                                .center(new Vector2D(WORLD_BOUNDS.getWidth() - WALL_THICKNESS / 2, WORLD_BOUNDS.getHeight() / 2)
-                                        .add(BOTTOM_LEFT))
+                                        new Rectangle2D.Double(0, 0, WALL_THICKNESS, bounds.getHeight())))
+                                .center(new Vector2D(bounds.getWidth() - WALL_THICKNESS / 2, bounds.getHeight() / 2)
+                                        .add(bottomLeft))
                                 .build()
                 )),
 
@@ -71,10 +82,10 @@ public class HardcodedCourseBuilderPhase extends SynchronousRunnable {
                         entityConfig,
                         new EntityStateBuilder().defaults()
                                 .shape(new ImmutableShape(ImmutableShape.Type.RECTANGLE,
-                                        new Rectangle2D.Double(0, 0, WALL_THICKNESS, WORLD_BOUNDS.getWidth())))
+                                        new Rectangle2D.Double(0, 0, WALL_THICKNESS, bounds.getWidth())))
                                 .rotation(Angle.deg(90))
-                                .center(new Vector2D(WORLD_BOUNDS.getWidth()/2, WORLD_BOUNDS.getHeight() - WALL_THICKNESS/2)
-                                        .add(BOTTOM_LEFT))
+                                .center(new Vector2D(bounds.getWidth()/2, bounds.getHeight() - WALL_THICKNESS/2)
+                                        .add(bottomLeft))
                                 .build()
                 )),
 
@@ -83,25 +94,27 @@ public class HardcodedCourseBuilderPhase extends SynchronousRunnable {
                         entityConfig,
                         new EntityStateBuilder().defaults()
                                 .shape(new ImmutableShape(ImmutableShape.Type.RECTANGLE,
-                                        new Rectangle2D.Double(0, 0, WALL_THICKNESS, WORLD_BOUNDS.getWidth())))
+                                        new Rectangle2D.Double(0, 0, WALL_THICKNESS, bounds.getWidth())))
                                 .rotation(Angle.deg(90))
-                                .center(new Vector2D(WORLD_BOUNDS.getWidth()/2, WALL_THICKNESS/2)
-                                            .add(BOTTOM_LEFT))
+                                .center(new Vector2D(bounds.getWidth()/2, WALL_THICKNESS/2)
+                                            .add(bottomLeft))
                                 .build()
                 ))
 
         });
     }
 
-    private Observable<AddEntity> addItemBoxes() {
+    private Observable<AddEntity> addItemBoxes(Rectangle2D bounds) {
+        final Vector2D bottomLeft = new Vector2D(bounds.getMinX(), bounds.getMinY());
+
         return Observable.from(new AddEntity[] {
 
                 //top left
                 new AddEntity(entityConfig -> new ItemBoxPedestal(
                         entityConfig,
                         new EntityStateBuilder().defaults()
-                                .center(new Vector2D(ITEM_BOX_INSET, WORLD_BOUNDS.getHeight() - ITEM_BOX_INSET)
-                                            .add(BOTTOM_LEFT))
+                                .center(new Vector2D(ITEM_BOX_INSET, bounds.getHeight() - ITEM_BOX_INSET)
+                                            .add(bottomLeft))
                                 .shape(ItemBoxPedestal.SHAPE)
                                 .build(),
                         eventQueue
@@ -111,8 +124,8 @@ public class HardcodedCourseBuilderPhase extends SynchronousRunnable {
                 new AddEntity(entityConfig -> new ItemBoxPedestal(
                         entityConfig,
                         new EntityStateBuilder().defaults()
-                                .center(new Vector2D(WORLD_BOUNDS.getWidth() - ITEM_BOX_INSET, WORLD_BOUNDS.getHeight() - ITEM_BOX_INSET)
-                                        .add(BOTTOM_LEFT))
+                                .center(new Vector2D(bounds.getWidth() - ITEM_BOX_INSET, bounds.getHeight() - ITEM_BOX_INSET)
+                                        .add(bottomLeft))
                                 .shape(ItemBoxPedestal.SHAPE)
                                 .build(),
                         eventQueue
@@ -123,7 +136,7 @@ public class HardcodedCourseBuilderPhase extends SynchronousRunnable {
                         entityConfig,
                         new EntityStateBuilder().defaults()
                                 .center(new Vector2D(ITEM_BOX_INSET, ITEM_BOX_INSET)
-                                        .add(BOTTOM_LEFT))
+                                        .add(bottomLeft))
                                 .shape(ItemBoxPedestal.SHAPE)
                                 .build(),
                         eventQueue
@@ -133,8 +146,8 @@ public class HardcodedCourseBuilderPhase extends SynchronousRunnable {
                 new AddEntity(entityConfig -> new ItemBoxPedestal(
                         entityConfig,
                         new EntityStateBuilder().defaults()
-                                .center(new Vector2D(WORLD_BOUNDS.getWidth() - ITEM_BOX_INSET, ITEM_BOX_INSET)
-                                        .add(BOTTOM_LEFT))
+                                .center(new Vector2D(bounds.getWidth() - ITEM_BOX_INSET, ITEM_BOX_INSET)
+                                        .add(bottomLeft))
                                 .shape(ItemBoxPedestal.SHAPE)
                                 .build(),
                         eventQueue

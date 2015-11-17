@@ -16,6 +16,8 @@ import irl.kart.entities.items.actions.itemuser.ItemUser;
 import irl.util.callbacks.Callback;
 import irl.util.reactiveio.EventQueue;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -36,6 +38,7 @@ public class HoldableItemAdaptor<T extends Entity & HoldableEntity & RemovableEn
     private volatile boolean isHeld = false;
     private volatile Joint joint = null;
     private volatile T createdEntity = null;
+    private final List<String> entityCallbacks = new ArrayList<>();
 
     public HoldableItemAdaptor(EventQueue<EngineEvent> eventQueue,
                                Callback onRemoved,
@@ -50,6 +53,7 @@ public class HoldableItemAdaptor<T extends Entity & HoldableEntity & RemovableEn
     public <U extends Entity & ItemUser> void doUseItem(U user, Consumer<T> afterUnhold) {
         doHoldItem(user, () -> {
             joint.remove();
+            unlinkEntity();
             afterUnhold.accept(createdEntity);
         });
     }
@@ -81,11 +85,21 @@ public class HoldableItemAdaptor<T extends Entity & HoldableEntity & RemovableEn
         //don't need to delete the joint because it will be
         //deleted when one of its anchors is removed
         isHeld = false;
+        unlinkEntity();
         onRemoved.run();
     }
 
     private synchronized void onJointRemoved() {
         isHeld = false;
+    }
+
+    private void unlinkEntity() {
+        synchronized (entityCallbacks) {
+            for (String callbackId : entityCallbacks) {
+                createdEntity.removeRemoveHandler(callbackId);
+            }
+            entityCallbacks.clear();
+        }
     }
 
     private <U extends Entity & ItemUser> EntityFactory<T> wrapFactory(U user, InitializedHoldableEntityFactory<T> innerFactory,
@@ -98,7 +112,9 @@ public class HoldableItemAdaptor<T extends Entity & HoldableEntity & RemovableEn
                     .friction(FRICTION_WHEN_HELD),
                 user
             );
-            createdEntity.onRemove(this::onEntityRemoved);
+            entityCallbacks.add(
+                createdEntity.addRemoveHandler(this::onEntityRemoved)
+            );
 
             eventQueue.mergeIn(addJoint(user, createdEntity, afterCreate));
 
@@ -112,7 +128,7 @@ public class HoldableItemAdaptor<T extends Entity & HoldableEntity & RemovableEn
             user.getItemHoldPoint(),
             eventQueue,
             joint -> {
-                joint.onRemove(this::onJointRemoved);
+                joint.addRemoveHandler(this::onJointRemoved);
                 afterCreate.accept(joint);
             }
         ));

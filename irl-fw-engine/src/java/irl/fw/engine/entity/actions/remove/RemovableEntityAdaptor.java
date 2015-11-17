@@ -36,8 +36,13 @@ public class RemovableEntityAdaptor implements RemovableEntity {
     }
 
     @Override
-    public String onRemove(Callback callback) {
+    public String addRemoveHandler(Callback callback) {
         return onRemove.add(callback);
+    }
+
+    @Override
+    public void removeRemoveHandler(String callbackId) {
+        onRemove.remove(callbackId);
     }
 
 }

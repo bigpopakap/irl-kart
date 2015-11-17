@@ -11,6 +11,7 @@ import irl.util.callbacks.Callback;
 public interface RemovableEntity {
 
     void remove();
-    String onRemove(Callback callback);
+    String addRemoveHandler(Callback callback);
+    void removeRemoveHandler(String callbackId);
 
 }
