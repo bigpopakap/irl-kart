@@ -3,7 +3,6 @@ package irl.kart.entities.items.actions.holdable;
 import irl.fw.engine.entity.Entity;
 import irl.fw.engine.entity.actions.remove.RemovableEntity;
 import irl.fw.engine.entity.factory.EntityFactory;
-import irl.fw.engine.entity.factory.InitializedEntityFactory;
 import irl.fw.engine.entity.joints.Joint;
 import irl.fw.engine.entity.joints.factory.DistanceJointFactory;
 import irl.fw.engine.entity.state.EntityState;
@@ -29,7 +28,7 @@ public class HoldableItemAdaptor<T extends Entity & HoldableEntity & RemovableEn
 
     private final EventQueue<EngineEvent> eventQueue;
     private final Callback onRemoved;
-    private final InitializedEntityFactory<T> factory;
+    private final InitializedHoldableEntityFactory<T> factory;
     private final double distanceBetweenCenters;
 
     private volatile boolean isHeld = false;
@@ -38,7 +37,7 @@ public class HoldableItemAdaptor<T extends Entity & HoldableEntity & RemovableEn
 
     public HoldableItemAdaptor(EventQueue<EngineEvent> eventQueue,
                                Callback onRemoved,
-                               InitializedEntityFactory<T> factory,
+                               InitializedHoldableEntityFactory<T> factory,
                                double distanceBetweenCenters) {
         this.eventQueue = eventQueue;
         this.onRemoved = onRemoved;
@@ -88,13 +87,14 @@ public class HoldableItemAdaptor<T extends Entity & HoldableEntity & RemovableEn
         isHeld = false;
     }
 
-    private <U extends Entity & ItemUser> EntityFactory<T> wrapFactory(U user, InitializedEntityFactory<T> innerFactory,
+    private <U extends Entity & ItemUser> EntityFactory<T> wrapFactory(U user, InitializedHoldableEntityFactory<T> innerFactory,
                                                                        Consumer<Joint> afterCreate) {
         return entityConfig -> {
             T createdEntity = innerFactory.create(
                 entityConfig,
                 new EntityStateUpdate()
-                    .center(calculateNewEntityCenter(user))
+                    .center(calculateNewEntityCenter(user)),
+                user
             );
             createdEntity.onRemove(this::onEntityRemoved);
 

@@ -1,6 +1,7 @@
 package irl.kart.entities.items;
 
 import irl.fw.engine.entity.Entity;
+import irl.fw.engine.entity.factory.EntityConfig;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.entity.state.EntityStateBuilder;
 import irl.fw.engine.entity.state.EntityStateUpdate;
@@ -9,6 +10,7 @@ import irl.fw.engine.events.UpdateEntity;
 import irl.fw.engine.geometry.Vector2D;
 import irl.kart.entities.Kart;
 import irl.kart.entities.items.actions.holdable.HoldableItemAdaptor;
+import irl.kart.entities.items.actions.holdable.InitializedHoldableEntityFactory;
 import irl.kart.entities.items.actions.itemuser.ItemUser;
 import irl.kart.entities.weapons.Shell;
 import irl.util.reactiveio.EventQueue;
@@ -32,15 +34,7 @@ public class ShellItem extends BaseItem {
 
         this.holdable = new HoldableItemAdaptor<>(
             eventQueue, onRemoved,
-            (config, state) -> new Shell(
-                config,
-                new EntityStateBuilder().defaults()
-                    .shape(Shell.SHAPE)
-                    .center(state.getCenter())
-                    .build(),
-                null, //TODO what to do here?
-                eventQueue
-            ),
+            new ShellItemFactory(eventQueue),
             DISTANCE_WHEN_HELD
         );
     }
@@ -72,6 +66,29 @@ public class ShellItem extends BaseItem {
     @Override
     public <T extends Entity & ItemUser> void doHoldItem(T user) {
         holdable.doHoldItem(user);
+    }
+
+    private static class ShellItemFactory implements InitializedHoldableEntityFactory<Shell> {
+
+        private final EventQueue<EngineEvent> eventQueue;
+
+        private ShellItemFactory(EventQueue<EngineEvent> eventQueue) {
+            this.eventQueue = eventQueue;
+        }
+
+        @Override
+        public <U extends Entity & ItemUser> Shell create(EntityConfig config, EntityStateUpdate state, U user) {
+            return new Shell(
+                config,
+                new EntityStateBuilder().defaults()
+                        .shape(Shell.SHAPE)
+                        .center(state.getCenter())
+                        .build(),
+                user.getEngineId(),
+                eventQueue
+            );
+        }
+
     }
 
 }

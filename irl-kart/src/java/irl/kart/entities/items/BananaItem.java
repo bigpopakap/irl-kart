@@ -1,10 +1,13 @@
 package irl.kart.entities.items;
 
 import irl.fw.engine.entity.Entity;
+import irl.fw.engine.entity.factory.EntityConfig;
 import irl.fw.engine.entity.state.EntityStateBuilder;
+import irl.fw.engine.entity.state.EntityStateUpdate;
 import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.geometry.Angle;
 import irl.kart.entities.items.actions.holdable.HoldableItemAdaptor;
+import irl.kart.entities.items.actions.holdable.InitializedHoldableEntityFactory;
 import irl.kart.entities.weapons.Banana;
 import irl.kart.entities.Kart;
 import irl.kart.entities.items.actions.itemuser.ItemUser;
@@ -25,17 +28,7 @@ public class BananaItem extends BaseItem {
     public BananaItem(EventQueue<EngineEvent> eventQueue) {
         holdable = new HoldableItemAdaptor<>(
             eventQueue, onRemoved,
-            (config, state) -> new Banana(
-                config,
-                new EntityStateBuilder().defaults()
-                        .shape(Banana.SHAPE)
-                        .center(state.getCenter())
-                        .rotation(Angle.random())
-                        .friction(Banana.FRICTION)
-                        .restitution(Banana.RESTITUTION)
-                        .build(),
-                eventQueue
-            ),
+            new BananaItemFactory(eventQueue),
             DISTANCE_WHEN_HELD
         );
     }
@@ -51,6 +44,37 @@ public class BananaItem extends BaseItem {
     @Override
     public <T extends Entity & ItemUser> void doHoldItem(T user) {
         holdable.doHoldItem(user);
+    }
+
+    /**
+     * TODO bigpopakap Javadoc this class
+     *
+     * @author bigpopakap
+     * @since 11/16/15
+     */
+    private static class BananaItemFactory implements InitializedHoldableEntityFactory<Banana> {
+
+        private final EventQueue<EngineEvent> eventQueue;
+
+        private BananaItemFactory(EventQueue<EngineEvent> eventQueue) {
+            this.eventQueue = eventQueue;
+        }
+
+        @Override
+        public <U extends Entity & ItemUser> Banana create(EntityConfig config, EntityStateUpdate state, U user) {
+            return new Banana(
+                config,
+                new EntityStateBuilder().defaults()
+                        .shape(Banana.SHAPE)
+                        .center(state.getCenter())
+                        .rotation(Angle.random())
+                        .friction(Banana.FRICTION)
+                        .restitution(Banana.RESTITUTION)
+                        .build(),
+                eventQueue
+            );
+        }
+
     }
 
 }
