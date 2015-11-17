@@ -2,7 +2,7 @@ package irl.fw.engine.physics.impl.dyn4j;
 
 import irl.fw.engine.entity.Entity;
 import irl.fw.engine.entity.EntityId;
-import irl.util.string.CompareUtils;
+import irl.util.CompareUtils;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.World;
 import org.dyn4j.dynamics.joint.Joint;

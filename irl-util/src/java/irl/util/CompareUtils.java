@@ -1,4 +1,4 @@
-package irl.util.string;
+package irl.util;
 
 /**
  * TODO bigpopakap Javadoc this class

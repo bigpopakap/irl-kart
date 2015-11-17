@@ -5,6 +5,7 @@ import irl.fw.engine.entity.VirtualEntity;
 import irl.fw.engine.entity.actions.remove.RemovableEntityAdaptor;
 import irl.fw.engine.entity.actions.remove.RemovableEntity;
 import irl.fw.engine.entity.factory.EntityConfig;
+import irl.fw.engine.entity.factory.EntityDisplayConfig;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.geometry.Angle;
@@ -13,6 +14,7 @@ import irl.kart.entities.items.BananaItem;
 import irl.kart.entities.items.Item;
 import irl.kart.entities.items.ShellItem;
 import irl.kart.entities.items.actions.itemuser.ItemUser;
+import irl.util.ColorUtils;
 import irl.util.callbacks.Callback;
 import irl.util.reactiveio.EventQueue;
 
@@ -46,7 +48,15 @@ public class ItemBox extends VirtualEntity implements RemovableEntity {
 
     public ItemBox(EntityConfig entityConfig, EntityState initState,
                    EventQueue<EngineEvent> eventQueue, Callback onRemove) {
-        super(entityConfig, initState);
+        super(
+            entityConfig
+                .display(
+                    new EntityDisplayConfig()
+                            .outlineColor(ColorUtils.random())
+                            .fillColor(ColorUtils.random(0.4))
+                ),
+            initState
+        );
 
         availableItems = new ArrayList<>();
         this.eventQueue = eventQueue;

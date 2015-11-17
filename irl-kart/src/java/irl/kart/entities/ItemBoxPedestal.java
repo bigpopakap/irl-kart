@@ -3,11 +3,13 @@ package irl.kart.entities;
 import irl.fw.engine.entity.Entity;
 import irl.fw.engine.entity.VirtualEntity;
 import irl.fw.engine.entity.factory.EntityConfig;
+import irl.fw.engine.entity.factory.EntityDisplayConfig;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.entity.state.EntityStateBuilder;
 import irl.fw.engine.events.AddEntity;
 import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.geometry.ImmutableShape;
+import irl.util.ColorUtils;
 import irl.util.reactiveio.EventQueue;
 import rx.Observable;
 
@@ -27,12 +29,18 @@ public class ItemBoxPedestal extends VirtualEntity {
         new Ellipse2D.Double(0, 0, 1, 1)
     );
     private static final long ITEM_BOX_REGEN_DELAY = 2000;
+    private static final EntityDisplayConfig DISPLAY = new EntityDisplayConfig()
+            .outlineColor(ColorUtils.TRANSPARENT)
+            .fillColor(ColorUtils.TRANSPARENT);
 
     private final EventQueue<EngineEvent> eventQueue;
 
     public ItemBoxPedestal(EntityConfig entityConfig, EntityState initState,
                            EventQueue<EngineEvent> eventQueue) {
-        super(entityConfig, initState);
+        super(
+            entityConfig.display(DISPLAY),
+            initState
+        );
         this.eventQueue = eventQueue;
 
         this.eventQueue.mergeIn(createItemBox());

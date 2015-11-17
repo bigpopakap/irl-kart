@@ -1,7 +1,11 @@
 package irl.fw.engine.graphics.impl.swing;
 
-import irl.fw.engine.geometry.ImmutableShape;
+import irl.fw.engine.entity.Entity;
+import irl.fw.engine.entity.factory.EntityDisplayConfig;
+import irl.fw.engine.entity.state.EntityState;
+import irl.fw.engine.geometry.Vector2D;
 import irl.fw.engine.world.World;
+import irl.util.ColorUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,6 +21,8 @@ import java.awt.geom.Rectangle2D;
 class MyPanel extends JPanel {
 
     public static final long serialVersionUID = 1L;
+
+    private static final boolean DRAW_VELOCITY = true;
 
     private volatile World world;
 
@@ -49,9 +55,8 @@ class MyPanel extends JPanel {
         //draw axes
         g2.setColor(Color.RED);
         g2.drawRect(0, 0, getWidth(), getHeight());
-        g2.setColor(Color.BLACK);
-        drawArrow(g, 0, 0, 400, 0);
-        drawArrow(g, 0, 0, 0, 200);
+        drawArrow(g2, 0, 0, 400, 0);
+        drawArrow(g2, 0, 0, 0, 200);
 
         {
             double scale = Math.min(getWidth() / world.getWidth(),
@@ -65,36 +70,67 @@ class MyPanel extends JPanel {
         g2.setColor(Color.GREEN);
         g2.draw(new Rectangle2D.Double(world.getMinX(), world.getMinY(),
                 world.getWidth(), world.getHeight()));
-        g2.setColor(Color.BLACK);
 
         //draw all the items in the world
         world.getEntities().stream()
-                .map(entity -> entity.getState().getTransformedShape())
-                .forEach(shape -> draw(g2, shape));
+                .forEach(entity -> draw(g2, entity));
 
         //revert back to the original transform
         g2.setTransform(savedTrans);
     }
 
-    private void draw(Graphics2D g2, ImmutableShape shape) {
+    private void draw(Graphics2D g2, Entity entity) {
+        EntityState state = entity.getState();
+        Vector2D center = state.getCenter();
+        Shape shape = state.getTransformedShape();
+        EntityDisplayConfig display = entity.getDisplayConfig();
+
+        //fill in the shape
+        g2.setColor(display.getFillColor());
+        g2.fill(shape);
+
+        //draw the outline
+        //TODO rotate the text so it's upright
+        g2.setColor(display.getOutlineColor());
+        g2.setStroke(new BasicStroke(1));
         g2.draw(shape);
+
+        //draw the label text
+        g2.setColor(display.getLabelColor());
+        g2.drawString(display.getLabel(),
+                (int) center.getX(), (int) center.getY());
+
+        //draw the velocity vector
+        Vector2D velocity = state.getVelocity();
+        if (DRAW_VELOCITY && velocity.getMagnitude() > 0) {
+            g2.setColor(ColorUtils.makeTransparent(
+                display.getVelocityColor(),
+                0.3
+            ));
+            g2.setStroke(new BasicStroke(1));
+            Vector2D arrowEnd = center.add(velocity);
+            drawArrow(g2, (int) center.getX(), (int) center.getY(),
+                    (int) arrowEnd.getX(), (int) arrowEnd.getY());
+        }
     }
 
-    private void drawArrow(Graphics g1, int x1, int y1, int x2, int y2) {
+    private void drawArrow(Graphics2D g2, int x1, int y1, int x2, int y2) {
         final int ARR_SIZE = 4;
 
-        Graphics2D g = (Graphics2D) g1.create();
+        AffineTransform origTans = g2.getTransform();
 
         double dx = x2 - x1, dy = y2 - y1;
         double angle = Math.atan2(dy, dx);
         int len = (int) Math.sqrt(dx * dx + dy * dy);
         AffineTransform at = AffineTransform.getTranslateInstance(x1, y1);
         at.concatenate(AffineTransform.getRotateInstance(angle));
-        g.transform(at);
+        g2.transform(at);
 
         // Draw horizontal arrow starting in (0, 0)
-        g.drawLine(0, 0, len, 0);
-        g.fillPolygon(new int[]{len, len - ARR_SIZE, len - ARR_SIZE, len},
+        g2.drawLine(0, 0, len, 0);
+        g2.fillPolygon(new int[]{len, len - ARR_SIZE, len - ARR_SIZE, len},
                 new int[]{0, -ARR_SIZE, ARR_SIZE, 0}, 4);
+
+        g2.setTransform(origTans);
     }
 }

@@ -1,7 +1,7 @@
 package irl.kart.beacon;
 
 import irl.kart.events.kart.KartEvent;
-import irl.util.string.CompareUtils;
+import irl.util.CompareUtils;
 import rx.Observable;
 
 /**

@@ -2,12 +2,14 @@ package irl.kart.entities.weapons;
 
 import irl.fw.engine.entity.EntityId;
 import irl.fw.engine.entity.factory.EntityConfig;
+import irl.fw.engine.entity.factory.EntityDisplayConfig;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.geometry.Angle;
 import irl.fw.engine.geometry.ImmutableShape;
 import irl.util.reactiveio.EventQueue;
 
+import java.awt.*;
 import java.awt.geom.Ellipse2D;
 
 /**
@@ -28,13 +30,19 @@ public class Shell extends WeaponEntity {
         new Ellipse2D.Double(0, 0, SIZE, .9*SIZE)
     );
     public static final double FRICTION = 0;
+    private static final EntityDisplayConfig DISPLAY = new EntityDisplayConfig()
+            .fillColor(Color.GREEN);
 
     private final EntityId sourceKartId;
 
     public Shell(EntityConfig entityConfig, EntityState initState,
                  EntityId sourceKartId,
                  EventQueue<EngineEvent> eventQueue) {
-        super(entityConfig, initState, eventQueue);
+        super(
+            entityConfig.display(DISPLAY),
+            initState,
+            eventQueue
+        );
         this.sourceKartId = sourceKartId;
     }
 
