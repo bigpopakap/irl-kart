@@ -34,6 +34,9 @@ import static irl.fw.engine.physics.impl.dyn4j.Dyn4jShapeConverter.*;
  */
 public class Dyn4jPhysicsModeler implements PhysicsModeler {
 
+    //if an item is moving faster than this, it is considered a bullet
+    private static final double BULLET_THRESHOLD = 1000;
+
     private final World world;
     private final Dyn4jEntityConverter entityConverter;
     private final Dyn4jJointConverter jointConverter;
@@ -180,7 +183,9 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         }
 
         if (state.getVelocity().isPresent()) {
-            body.setLinearVelocity(fromVector(state.getVelocity().get()));
+            Vector2 velocity = fromVector(state.getVelocity().get());
+            body.setLinearVelocity(velocity);
+            body.setBullet(velocity.getMagnitude() > BULLET_THRESHOLD);
         }
 
         if (state.getAngularVelocity().isPresent()) {

@@ -21,7 +21,7 @@ public class Shell extends WeaponEntity {
     public static final double SIZE = 10;
     //FIXME this doesn't seem to actually go much faster than a kart
     //FIXME this should also be calculated on-the-fly based on the Kart's speed
-    public static final double SPEED = 200.0;
+    public static final double SPEED = 400.0;
     public static final Angle ROTATIONAL_SPEED = Angle.rad(8 * Math.PI);
     public static final ImmutableShape SHAPE = new ImmutableShape(
         ImmutableShape.Type.ELLIPSE,
