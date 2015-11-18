@@ -62,9 +62,4 @@ public abstract class Entity implements EngineElement, CollidableEntity {
         setState(stateUpdates.fillAndBuild(getState()));
     }
 
-    @Override
-    public boolean collide(Entity other) {
-        return true;
-    }
-
 }

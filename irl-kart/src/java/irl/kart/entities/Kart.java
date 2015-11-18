@@ -1,5 +1,6 @@
 package irl.kart.entities;
 
+import irl.fw.engine.entity.EntityId;
 import irl.fw.engine.entity.factory.EntityConfig;
 import irl.fw.engine.entity.factory.EntityDisplayConfig;
 import irl.fw.engine.entity.joints.JointPoint;
@@ -13,6 +14,8 @@ import irl.kart.beacon.SingleKartBeacon;
 import irl.kart.entities.items.Item;
 import irl.kart.entities.items.actions.itemuser.ItemUser;
 import irl.kart.entities.items.actions.itemuser.ItemUserAdaptor;
+import irl.kart.entities.surface.SpeedAdjustable;
+import irl.kart.entities.surface.SpeedAdjustableAdaptor;
 import irl.kart.entities.weapons.Banana;
 import irl.kart.entities.weapons.Shell;
 import irl.kart.entities.weapons.WeaponEntity;
@@ -33,7 +36,7 @@ import java.awt.*;
  * @author bigpopakap
  * @since 11/1/15
  */
-public class Kart extends IRLEntity implements ItemUser, WeaponTarget {
+public class Kart extends IRLEntity implements ItemUser, WeaponTarget, SpeedAdjustable {
 
     //TODO this kart shouldn't know about its length and shape.
     //      that should come from the beacon
@@ -51,6 +54,7 @@ public class Kart extends IRLEntity implements ItemUser, WeaponTarget {
     private final SingleKartBeacon kartBeacon;
     private final EventQueue<EngineEvent> eventQueue;
     private final ItemUserAdaptor<Kart> itemUser;
+    private final SpeedAdjustableAdaptor speedAdjustable;
 
     public Kart(EntityConfig entityConfig, EntityState initState,
                 String kartId, KartBeacon kartBeacon,
@@ -69,6 +73,7 @@ public class Kart extends IRLEntity implements ItemUser, WeaponTarget {
         this.kartBeacon = new SingleKartBeacon(kartId, kartBeacon);
         this.eventQueue = eventQueue;
         this.itemUser = new ItemUserAdaptor<>(this);
+        this.speedAdjustable = new SpeedAdjustableAdaptor();
 
         //merge in update position events
         this.eventQueue.mergeIn(
@@ -126,6 +131,18 @@ public class Kart extends IRLEntity implements ItemUser, WeaponTarget {
     @Override
     public JointPoint getItemHoldPoint() {
         return new JointPoint(this, getState().getCenter());
+    }
+
+    @Override
+    public void slowBy(EntityId slowPatchId, double factor) {
+        speedAdjustable.add(slowPatchId, factor);
+        System.out.println("Slowing by " + speedAdjustable.getAccumulatedFactor());
+    }
+
+    @Override
+    public void unslow(EntityId slowPatchId) {
+        speedAdjustable.remove(slowPatchId);
+        System.out.println("Unslowing, now " + speedAdjustable.getAccumulatedFactor());
     }
 
 }

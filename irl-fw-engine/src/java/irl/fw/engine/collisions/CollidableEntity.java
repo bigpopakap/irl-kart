@@ -10,6 +10,12 @@ import irl.fw.engine.entity.Entity;
  */
 public interface CollidableEntity {
 
-    boolean collide(Entity other);
+    default boolean collide(Entity other) {
+        return true;
+    }
+
+    default void afterCollide(Entity other) {
+        //do nothing
+    }
 
 }
