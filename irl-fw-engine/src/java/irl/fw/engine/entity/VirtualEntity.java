@@ -12,15 +12,12 @@ import irl.fw.engine.entity.state.EntityState;
 public abstract class VirtualEntity extends Entity {
 
     public VirtualEntity(EntityConfig entityConfig, EntityState initState) {
-        super(entityConfig, initState);
-    }
-
-//    TODO add this method
-//    public abstract boolean isInteractable();
-
-    @Override
-    public final boolean isVirtual() {
-        return true;
+        super(
+            entityConfig
+                //don't overwrite, but default to NORMAL
+                .type_safe(EntityType.NORMAL),
+            initState
+        );
     }
 
 }

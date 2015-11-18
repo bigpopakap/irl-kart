@@ -28,22 +28,34 @@ class CollisionResolverAdaptor implements CollisionListener, ContactListener {
 
     @Override
     public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2) {
+        System.out.println(String.format("COLLISION 1 between %s and %s",
+                entityConverter.toEntity(body1).getClass().getSimpleName(),
+                entityConverter.toEntity(body2).getClass().getSimpleName()));
         return true;
     }
 
     @Override
     public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2, Penetration penetration) {
+        System.out.println(String.format("COLLISION 2 between %s and %s",
+                entityConverter.toEntity(body1).getClass().getSimpleName(),
+                entityConverter.toEntity(body2).getClass().getSimpleName()));
         return true;
     }
 
     @Override
     public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2, Manifold manifold) {
+        System.out.println(String.format("COLLISION 3 between %s and %s",
+                entityConverter.toEntity(body1).getClass().getSimpleName(),
+                entityConverter.toEntity(body2).getClass().getSimpleName()));
         return true;
     }
 
     @Override
     public boolean collision(ContactConstraint contactConstraint) {
         //do nothing
+        System.out.println(String.format("COLLISION 4 between %s and %s",
+                entityConverter.toEntity(contactConstraint.getBody1()).getClass().getSimpleName(),
+                entityConverter.toEntity(contactConstraint.getBody2()).getClass().getSimpleName()));
         return true;
     }
 

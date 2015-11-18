@@ -12,11 +12,12 @@ import irl.fw.engine.entity.state.EntityState;
 public abstract class IRLEntity extends Entity {
 
     public IRLEntity(EntityConfig entityConfig, EntityState initState) {
-        super(entityConfig, initState);
+        super(
+            entityConfig
+                //overwrite the type to be fixed
+                .type(EntityType.FIXED),
+            initState
+        );
     }
 
-    @Override
-    public final boolean isVirtual() {
-        return false;
-    }
 }

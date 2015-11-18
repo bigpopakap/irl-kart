@@ -3,7 +3,6 @@ package irl.kart.beacon.impl.swing;
 import irl.kart.beacon.KartBeacon;
 import irl.kart.beacon.KartBeaconEvent;
 import irl.kart.events.kart.KartEvent;
-import irl.kart.events.kart.SpinKart;
 import irl.util.callbacks.Callback;
 import irl.util.callbacks.Callbacks;
 import irl.util.concurrent.StoppableRunnable;

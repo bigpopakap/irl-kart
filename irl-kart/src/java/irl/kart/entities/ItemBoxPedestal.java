@@ -1,6 +1,6 @@
 package irl.kart.entities;
 
-import irl.fw.engine.entity.Entity;
+import irl.fw.engine.entity.EntityType;
 import irl.fw.engine.entity.VirtualEntity;
 import irl.fw.engine.entity.factory.EntityConfig;
 import irl.fw.engine.entity.factory.EntityDisplayConfig;
@@ -47,9 +47,8 @@ public class ItemBoxPedestal extends VirtualEntity {
     }
 
     @Override
-    public boolean collide(Entity other) {
-        //this doesn't interact with any other object
-        return false;
+    public EntityType getEntityType() {
+        return EntityType.FIXED;
     }
 
     private AddEntity createItemBox() {

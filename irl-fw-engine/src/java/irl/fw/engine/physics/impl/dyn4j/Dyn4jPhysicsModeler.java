@@ -1,6 +1,7 @@
 package irl.fw.engine.physics.impl.dyn4j;
 
 import irl.fw.engine.entity.Entity;
+import irl.fw.engine.entity.EntityType;
 import irl.fw.engine.entity.factory.EntityConfig;
 import irl.fw.engine.entity.factory.EntityFactory;
 import irl.fw.engine.entity.EntityId;
@@ -195,7 +196,9 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         if (state.getFriction().isPresent()) {
             //since this is a top-down zero-gravity world, we
             //model "friction" as linear damping
-            body.setLinearDamping(state.getFriction().get());
+            double friction = state.getFriction().get();
+            body.setLinearDamping(friction);
+            body.setAngularDamping(friction);
         }
 
         if (state.getRestitution().isPresent()) {
@@ -204,13 +207,11 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
         }
 
         //default settings
-        if (entity.isVirtual()) {
-            body.setAutoSleepingEnabled(false); //TODO is this necessary?
-            //TODO should shells have fixed angular velocity?
-            body.setMass(MassType.NORMAL);
-        } else {
-            body.setMass(MassType.INFINITE);
+        if (entity.getEntityType() != EntityType.FIXED) {
+            //TODO is this necessary?
+            body.setAutoSleepingEnabled(false);
         }
+        body.setMass(fromEntityType(entity.getEntityType()));
         body.setActive(true);
         body.setAsleep(false);
     }

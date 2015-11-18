@@ -1,6 +1,7 @@
 package irl.kart.entities.surface;
 
 import irl.fw.engine.entity.Entity;
+import irl.fw.engine.entity.EntityType;
 import irl.fw.engine.entity.VirtualEntity;
 import irl.fw.engine.entity.factory.EntityConfig;
 import irl.fw.engine.entity.state.EntityState;
@@ -18,6 +19,11 @@ public abstract class SpeedAdjustingSurface extends VirtualEntity {
     }
 
     protected abstract double slowFactor();
+
+    @Override
+    public EntityType getEntityType() {
+        return EntityType.FIXED;
+    }
 
     @Override
     public boolean collide(Entity other) {

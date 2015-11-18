@@ -17,6 +17,7 @@ import rx.Observable;
 public abstract class Entity implements EngineElement, CollidableEntity {
 
     private final EntityId engineId;
+    private final EntityType entityType;
     private final EntityDisplayConfig displayConfig;
     private volatile EntityState state;
 
@@ -24,21 +25,25 @@ public abstract class Entity implements EngineElement, CollidableEntity {
 
     public Entity(EntityConfig entityConfig, EntityState initState) {
         if (entityConfig == null || entityConfig.getId() == null
-            || entityConfig.getDisplayConfig() == null) {
+            || entityConfig.getDisplayConfig() == null
+            || entityConfig.getEntityType() == null) {
             throw new IllegalArgumentException("These cannot be null");
         }
 
         this.engineId = entityConfig.getId();
+        this.entityType = entityConfig.getEntityType();
         this.displayConfig = entityConfig.getDisplayConfig();
         this.states = new EventQueue<>();
         setState(initState);
     }
 
-    public abstract boolean isVirtual();
-
     @Override
     public EntityId getEngineId() {
         return engineId;
+    }
+
+    public EntityType getEntityType() {
+        return entityType;
     }
 
     public EntityDisplayConfig getDisplayConfig() {

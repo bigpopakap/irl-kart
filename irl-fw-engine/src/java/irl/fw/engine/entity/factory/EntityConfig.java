@@ -1,6 +1,7 @@
 package irl.fw.engine.entity.factory;
 
 import irl.fw.engine.entity.EntityId;
+import irl.fw.engine.entity.EntityType;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -11,6 +12,7 @@ import irl.fw.engine.entity.EntityId;
 public class EntityConfig {
 
     private EntityId id = null;
+    private EntityType entityType = null;
     private EntityDisplayConfig displayConfig = new EntityDisplayConfig();
 
     public EntityConfig() {
@@ -26,6 +28,22 @@ public class EntityConfig {
             throw new UnsupportedOperationException("Can't re-set the ID");
         } else {
             this.id = id;
+        }
+        return this;
+    }
+
+    public EntityType getEntityType() {
+        return entityType;
+    }
+
+    public EntityConfig type(EntityType entityType) {
+        this.entityType = entityType;
+        return this;
+    }
+
+    public EntityConfig type_safe(EntityType entityType) {
+        if (getEntityType() == null) {
+            type(entityType);
         }
         return this;
     }

@@ -1,6 +1,7 @@
 package irl.kart.entities.weapons;
 
 import irl.fw.engine.entity.EntityId;
+import irl.fw.engine.entity.EntityType;
 import irl.fw.engine.entity.factory.EntityConfig;
 import irl.fw.engine.entity.factory.EntityDisplayConfig;
 import irl.fw.engine.entity.state.EntityState;
@@ -44,6 +45,11 @@ public class Shell extends WeaponEntity {
             eventQueue
         );
         this.sourceKartId = sourceKartId;
+    }
+
+    @Override
+    public EntityType getEntityType() {
+        return EntityType.FIXED_SPIN;
     }
 
     public EntityId getSourceKartId() {
