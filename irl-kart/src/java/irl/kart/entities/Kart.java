@@ -23,6 +23,7 @@ import irl.kart.entities.weapons.WeaponTarget;
 import irl.kart.events.beacon.HoldItem;
 import irl.kart.events.beacon.KartStateUpdate;
 import irl.kart.events.beacon.UseItem;
+import irl.kart.events.kart.AdjustKartSpeed;
 import irl.kart.events.kart.SpinKart;
 import irl.util.ColorUtils;
 import irl.util.reactiveio.EventQueue;
@@ -135,14 +136,24 @@ public class Kart extends IRLEntity implements ItemUser, WeaponTarget, SpeedAdju
 
     @Override
     public void slowBy(EntityId slowPatchId, double factor) {
-        speedAdjustable.add(slowPatchId, factor);
-        System.out.println("Slowing by " + speedAdjustable.getAccumulatedFactor());
+        boolean wasAdded = speedAdjustable.add(slowPatchId, factor);
+        if (wasAdded) {
+            kartBeacon.send(
+                new AdjustKartSpeed(getKartId(),
+                speedAdjustable.getAccumulatedFactor())
+            );
+        }
     }
 
     @Override
     public void unslow(EntityId slowPatchId) {
-        speedAdjustable.remove(slowPatchId);
-        System.out.println("Unslowing, now " + speedAdjustable.getAccumulatedFactor());
+        boolean wasRemoved = speedAdjustable.remove(slowPatchId);
+        if (wasRemoved) {
+            kartBeacon.send(
+                new AdjustKartSpeed(getKartId(),
+                speedAdjustable.getAccumulatedFactor())
+            );
+        }
     }
 
 }

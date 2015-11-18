@@ -16,7 +16,7 @@ import java.awt.*;
  */
 public class Desert extends SpeedAdjustingSurface {
 
-    private static final double SLOW_FACTOR = 2;
+    private static final double SLOW_FACTOR = .666;
     private static final Color COLOR = new Color(211, 199, 162);
     private static final EntityDisplayConfig DISPLAY = new EntityDisplayConfig()
             .outlineColor(ColorUtils.TRANSPARENT)

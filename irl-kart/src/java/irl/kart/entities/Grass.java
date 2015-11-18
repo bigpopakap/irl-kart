@@ -16,7 +16,7 @@ import java.awt.*;
  */
 public class Grass extends SpeedAdjustingSurface {
 
-    private static final double SLOW_FACTOR = 1.5;
+    private static final double SLOW_FACTOR = .75;
     private static final Color COLOR = new Color(163, 255, 74);
     private static final EntityDisplayConfig DISPLAY = new EntityDisplayConfig()
             .outlineColor(ColorUtils.TRANSPARENT)

@@ -19,13 +19,17 @@ public class SpeedAdjustableAdaptor {
         allSlowPatches = new HashMap<>();
     }
 
-    public synchronized void add(EntityId slowPatchId, double factor) {
+    public synchronized boolean add(EntityId slowPatchId, double factor) {
         //doesn't matter if this overwrites the value from the same slow patch
+        boolean alreadyExisted = allSlowPatches.containsKey(slowPatchId);
         allSlowPatches.put(slowPatchId, factor);
+        return !alreadyExisted;
     }
 
-    public synchronized void remove(EntityId slowPatchId) {
+    public synchronized boolean remove(EntityId slowPatchId) {
+        boolean alreadyExisted = allSlowPatches.containsKey(slowPatchId);
         allSlowPatches.remove(slowPatchId);
+        return alreadyExisted;
     }
 
     public synchronized double getAccumulatedFactor() {

@@ -69,16 +69,10 @@ public class SwingKartBeacon implements KartBeacon, StoppableRunnable {
 
     @Override
     public void send(KartEvent event) {
-        if (event instanceof SpinKart) {
-            SpinKart spinKart = ((SpinKart) event);
-            Optional<SwingKart> kartToSpinOpt = karts.get(spinKart.getKartId());
-
-            if (kartToSpinOpt.isPresent()) {
-                SwingKart kartToSpin = kartToSpinOpt.get();
-                kartToSpin.spin();
-            }
-        } else {
-            System.err.println("Unhandled or unexpected event: " + event.getName());
+        Optional<SwingKart> kartOpt = karts.get(event.getKartId());
+        if (kartOpt.isPresent()) {
+            SwingKart kart = kartOpt.get();
+            kart.handleKartEvent(event);
         }
     }
 
