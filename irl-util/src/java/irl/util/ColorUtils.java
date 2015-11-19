@@ -11,6 +11,7 @@ import java.util.Random;
  */
 public class ColorUtils {
 
+    private static final int DARK_MIN = 100;
     private static final int MAX = 255;
 
     public static final Color TRANSPARENT = new Color(0, 0, 0, 0);
@@ -31,11 +32,15 @@ public class ColorUtils {
     public static Color random(double trans) {
         Random random = new Random(System.currentTimeMillis());
         return new Color(
-            random.nextInt(MAX),
-            random.nextInt(MAX),
-            random.nextInt(MAX),
+            randInRange(random, DARK_MIN, MAX),
+            randInRange(random, DARK_MIN, MAX),
+            randInRange(random, DARK_MIN, MAX),
             (int) (trans * MAX)
         );
+    }
+
+    private static int randInRange(Random random, int min, int max) {
+        return min + random.nextInt(max - min);
     }
 
 }
