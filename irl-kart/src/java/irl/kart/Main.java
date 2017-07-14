@@ -3,6 +3,7 @@ package irl.kart;
 import irl.fw.engine.engine.Engine;
 import irl.fw.engine.events.EngineEvent;
 import irl.fw.engine.graphics.Renderers;
+import irl.fw.engine.graphics.irl.fw.engine.graphics.impl.server.ServerRenderer;
 import irl.kart.beacon.impl.swing.SwingKartBeacon;
 import irl.fw.engine.engine.EngineBuilder;
 import irl.kart.phases.HardcodedCourseBuilderPhase;
@@ -24,24 +25,30 @@ public class Main {
         //create an event queue for kart events
         EventQueue<EngineEvent> kartEventQueue = new EventQueue<>();
 
-        //create the beacon and renderer
-        SwingRenderer renderer = new SwingRenderer();
-        SwingKartBeacon beacon = new SwingKartBeacon(renderer.getPanel());
+        //set up the Swing inputs and visualizer
+        SwingRenderer swingRenderer = new SwingRenderer();
+        SwingKartBeacon swingBeacon = new SwingKartBeacon(swingRenderer.getPanel());
 
-        //create the engine
+        //set up the JSON server
+        ServerRenderer serverRenderer = new ServerRenderer();
+
         Engine engine = new EngineBuilder()
             .extraEvents(kartEventQueue.get())
-            .renderer(new Renderers(renderer))
+            .renderer(new Renderers(swingRenderer, serverRenderer))
             .build();
 
         //start the engine and world
         new ParallelRunnable(
-            true, engine, renderer, beacon
+            true,
+            engine,
+            swingRenderer,
+            swingBeacon,
+            serverRenderer
         ).run();
 
         //start running the different phases
         new SequentialRunnable(
-            new KartDetectionPhase(kartEventQueue, beacon),
+            new KartDetectionPhase(kartEventQueue, swingBeacon),
             new HardcodedCourseBuilderPhase(kartEventQueue)
         ).run();
     }

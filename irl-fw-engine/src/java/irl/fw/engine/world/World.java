@@ -1,6 +1,7 @@
 package irl.fw.engine.world;
 
 import irl.fw.engine.entity.Entity;
+import irl.util.serialization.JSONSerializable;
 
 import java.util.Collection;
 
@@ -10,7 +11,7 @@ import java.util.Collection;
  * @author bigpopakap
  * @since 11/6/15
  */
-public interface World {
+public interface World extends JSONSerializable {
 
     double getMinX();
     double getMaxX();

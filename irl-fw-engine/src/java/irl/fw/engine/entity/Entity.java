@@ -6,6 +6,7 @@ import irl.fw.engine.entity.factory.EntityDisplayConfig;
 import irl.fw.engine.entity.state.EntityState;
 import irl.fw.engine.entity.state.EntityStateUpdate;
 import irl.util.reactiveio.EventQueue;
+import irl.util.serialization.JSONSerializable;
 import rx.Observable;
 
 /**
@@ -14,7 +15,7 @@ import rx.Observable;
  * @author bigpopakap
  * @since 10/29/15
  */
-public abstract class Entity implements EngineElement, CollidableEntity {
+public abstract class Entity implements EngineElement, CollidableEntity, JSONSerializable {
 
     private final EntityId engineId;
     private final EntityDisplayConfig displayConfig;
@@ -67,4 +68,26 @@ public abstract class Entity implements EngineElement, CollidableEntity {
         return true;
     }
 
+    @Override
+    public String toJSON() {
+        // TODO use Gson
+        return String.format(
+            "{ " +
+                "id: %s, " +
+                "entityClass: %s, " +
+                "width: %s, " +
+                "height: %s, " +
+                "center: { " +
+                    "x: %s, " +
+                    "y: %s " +
+                "} " +
+            "}",
+            getEngineId(),
+            getClass(), // TODO define this explicitly instead of using the class
+            getState().getShape().getBounds2D().getWidth(),
+            getState().getShape().getBounds2D().getHeight(),
+            getState().getCenter().getX(),
+            getState().getCenter().getY()
+        );
+    }
 }
