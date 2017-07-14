@@ -11,6 +11,9 @@
 # Mac
 .DS_Store
 
+# Running output stuff
+.log
+
 # Maven
 log/
 target/
