@@ -44,6 +44,7 @@ public class BananaItem extends BaseItem {
                 banana.getEngineId(),
                 new EntityStateUpdate()
                     .friction(Banana.FRICTION)
+                    .angularDamping(Banana.ANGULAR_DAMPING)
             ));
 
             onUsed.run();
@@ -78,6 +79,7 @@ public class BananaItem extends BaseItem {
                         .center(state.getCenter())
                         .rotation(Angle.random())
                         .friction(state.getFriction())
+                        .angularDamping(Banana.ANGULAR_DAMPING)
                         .restitution(Banana.RESTITUTION)
                         .build(),
                 eventQueue

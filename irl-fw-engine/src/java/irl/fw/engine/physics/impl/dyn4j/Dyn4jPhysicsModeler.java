@@ -128,7 +128,9 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
             updateBody(body, entity, stateUpdate);
             world.setUpdateRequired(true);
 
-            System.out.println("Updated " + entity.getClass().getSimpleName() + " to velocity " + body.getLinearVelocity().getMagnitude());
+            System.out.println("Updated " + entity.getClass().getSimpleName() +
+                " " + entityId + " " +
+                " to velocity " + body.getLinearVelocity().getMagnitude());
         } else {
             System.err.println("Tried to updateEntity non-existent body: " + entityId);
         }
@@ -196,6 +198,10 @@ public class Dyn4jPhysicsModeler implements PhysicsModeler {
             //since this is a top-down zero-gravity world, we
             //model "friction" as linear damping
             body.setLinearDamping(state.getFriction().get());
+        }
+
+        if (state.getAngularDamping().isPresent()) {
+            body.setAngularDamping(state.getAngularDamping().get());
         }
 
         if (state.getRestitution().isPresent()) {

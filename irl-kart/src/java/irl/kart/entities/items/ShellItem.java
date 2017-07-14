@@ -84,6 +84,7 @@ public class ShellItem extends BaseItem {
                 new EntityStateBuilder().defaults()
                         .shape(Shell.SHAPE)
                         .center(state.getCenter())
+                        .angularVelocity(Shell.HELD_ROTATIONAL_SPEED)
                         .friction(state.getFriction())
                         .build(),
                 user.getEngineId(),

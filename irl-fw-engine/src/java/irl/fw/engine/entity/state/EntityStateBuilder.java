@@ -20,6 +20,7 @@ public class EntityStateBuilder {
     private Vector2D velocity;
     private Angle angularVelocity;
     private double friction;
+    private double angularDamping;
     private double restitution;
 
     public EntityStateBuilder() {
@@ -81,6 +82,11 @@ public class EntityStateBuilder {
         return this;
     }
 
+    public EntityStateBuilder angularDamping(double angularDamping) {
+        this.angularDamping = angularDamping;
+        return this;
+    }
+
     public EntityStateBuilder restitution(double restitution) {
         this.restitution = restitution;
         return this;
@@ -88,7 +94,8 @@ public class EntityStateBuilder {
 
     public EntityState build() {
         return new EntityState(shape, rotation, center, velocity,
-                            angularVelocity, friction, restitution);
+                            angularVelocity, friction, angularDamping,
+                            restitution);
     }
 
     @Override

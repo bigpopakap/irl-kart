@@ -20,6 +20,7 @@ public class EntityStateUpdate {
     private Optional<Vector2D> velocity = Optional.empty();
     private Optional<Angle> angularVelocity = Optional.empty();
     private Optional<Double> friction = Optional.empty();
+    private Optional<Double> angularDamping = Optional.empty();
     private Optional<Double> restitution = Optional.empty();
 
     public EntityStateUpdate() {
@@ -33,6 +34,7 @@ public class EntityStateUpdate {
         velocity(stateToCopy.getVelocity());
         angularVelocity(stateToCopy.getAngularVelocity());
         friction(stateToCopy.getFriction());
+        angularDamping(stateToCopy.getAngularDamping());
         restitution(stateToCopy.getRestitution());
     }
 
@@ -90,6 +92,15 @@ public class EntityStateUpdate {
         return friction;
     }
 
+    public EntityStateUpdate angularDamping(double angularDamping) {
+        this.angularDamping = Optional.of(angularDamping);
+        return this;
+    }
+
+    public Optional<Double> getAngularDamping() {
+        return angularDamping;
+    }
+
     public EntityStateUpdate restitution(double restitution) {
         this.restitution = Optional.of(restitution);
         return this;
@@ -107,6 +118,7 @@ public class EntityStateUpdate {
             velocity.orElse(base.getVelocity()),
             angularVelocity.orElse(base.getAngularVelocity()),
             friction.orElse(base.getFriction()),
+            angularDamping.orElse(base.getAngularDamping()),
             restitution.orElse(base.getRestitution())
         );
     }

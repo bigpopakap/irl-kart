@@ -25,6 +25,7 @@ public class Banana extends WeaponEntity {
         new Ellipse2D.Double(0, 0, .5*SIZE, SIZE)
     );
     public static final double FRICTION = 8.0;
+    public static final double ANGULAR_DAMPING = 5.0;
     public static final double RESTITUTION = 0.1;
     private static final EntityDisplayConfig DISPLAY = new EntityDisplayConfig()
             .fillColor(Color.YELLOW);
