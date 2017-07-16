@@ -2,10 +2,8 @@ package irl.fw.engine.world;
 
 import irl.fw.engine.entity.Entity;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.stream.Collectors;
 
 /**
  * TODO bigpopakap Javadoc this class
@@ -51,34 +49,5 @@ public class SimpleWorld implements World {
     @Override
     public double getMaxY() {
         return maxY;
-    }
-
-    @Override
-    public String toJSON() {
-        // TODO use Gson
-        String entitiesString = Arrays.toString(
-            getEntities().stream()
-                .map(Entity::toJSON)
-                .collect(Collectors.toList())
-                .toArray()
-        );
-
-        return String.format(
-            "{ " +
-                "dimensions: { " +
-                    "minX: %s, " +
-                    "maxX: %s, " +
-                    "minY: %s, " +
-                    "maxY: %s, " +
-                    "width: %s, " +
-                    "height: %s " +
-                "} " +
-                "entities: %s" +
-            "}",
-            getMinX(), getMaxX(),
-            getMinY(), getMaxY(),
-            getWidth(), getHeight(),
-            entitiesString
-        );
     }
 }

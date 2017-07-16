@@ -73,21 +73,21 @@ public abstract class Entity implements EngineElement, CollidableEntity, JSONSer
         // TODO use Gson
         return String.format(
             "{ " +
-                "id: %s, " +
-                "entityClass: %s, " +
-                "width: %s, " +
-                "height: %s, " +
-                "center: { " +
-                    "x: %s, " +
-                    "y: %s " +
-                "} " +
+                "\"id\": \"%s\", " +
+                "\"entityClass\": \"%s\", " +
+                "\"width\": %s, " +
+                "\"height\": %s, " +
+                "\"centerX\": %s, " +
+                "\"centerY\": %s, " +
+                "\"rotationRads\": %s " +
             "}",
             getEngineId(),
             getClass(), // TODO define this explicitly instead of using the class
             getState().getShape().getBounds2D().getWidth(),
             getState().getShape().getBounds2D().getHeight(),
             getState().getCenter().getX(),
-            getState().getCenter().getY()
+            getState().getCenter().getY(),
+            getState().getRotation().asRad()
         );
     }
 }
