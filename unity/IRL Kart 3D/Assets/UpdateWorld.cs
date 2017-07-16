@@ -81,9 +81,9 @@ public class UpdateWorld : MonoBehaviour {
 
 	private void UpdateExistingEntity(GameObject gameObject, WorldEntity entity) {
 		// TODO figure out which way we want to use X and Y
-		gameObject.transform.localScale = new Vector3 (entity.height, 1, entity.width);
-		gameObject.transform.position = new Vector3 (entity.centerY, 0, entity.centerX);
-		gameObject.transform.rotation = Quaternion.AngleAxis (entity.rotationDegs, new Vector3 (0, 1, 0));
+		gameObject.transform.localScale = new Vector3 (entity.width, 1, entity.height);
+		gameObject.transform.position = new Vector3 (entity.centerX, 0, entity.centerY);
+		gameObject.transform.rotation = Quaternion.AngleAxis (entity.rotationDegs, new Vector3 (0, -1, 0));
 	}
 
 }
