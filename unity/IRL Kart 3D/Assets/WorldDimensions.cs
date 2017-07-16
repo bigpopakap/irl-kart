@@ -4,10 +4,10 @@ using UnityEngine;
 
 [System.Serializable]
 public class WorldDimensions  {
-	public double minX;
-	public double maxX;
-	public double minY;
-	public double maxY;
-	public double width;
-	public double height;
+	public float minX;
+	public float maxX;
+	public float minY;
+	public float maxY;
+	public float width;
+	public float height;
 }

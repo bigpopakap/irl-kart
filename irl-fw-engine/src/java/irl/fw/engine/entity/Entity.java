@@ -74,7 +74,7 @@ public abstract class Entity implements EngineElement, CollidableEntity, JSONSer
         return String.format(
             "{ " +
                 "\"id\": \"%s\", " +
-                "\"entityClass\": \"%s\", " +
+                "\"type\": \"%s\", " +
                 "\"width\": %s, " +
                 "\"height\": %s, " +
                 "\"centerX\": %s, " +
