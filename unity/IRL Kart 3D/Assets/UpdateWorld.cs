@@ -8,18 +8,20 @@ public class UpdateWorld : MonoBehaviour {
 	private int worldVersion = 0;
 	private World world = null;
 
-	// objects in the Unity world
-	public GameObject floor; // an actual GameObject, not a pre-fab
+	// Objects in the world
 	public Dictionary<string, GameObject> entities = new Dictionary<string, GameObject>(); // list of created GameObjects
 
 	// prefabs to create objects
 	public GameObject kartPrefab;
 
+	void Start () {
+		Application.runInBackground = true;
+	}
+
 	void Update () {
 		StartCoroutine (CacheWorld ());
 
 		if (this.world != null) {
-			UpdateFloor (this.floor, this.world, this.worldVersion);
 			CreateNewEntities (this.entities, this.world, this.worldVersion);
 			UpdateExistingEntities (this.entities, this.world, this.worldVersion);
 		}
@@ -40,13 +42,8 @@ public class UpdateWorld : MonoBehaviour {
 
 			yield return world;
 		} else {
-			print ("Error requesting " + url + ": " + worldRequest.error);
+			Debug.LogWarning ("Error requesting " + url + ": " + worldRequest.error);
 		}
-	}
-
-	private void UpdateFloor(GameObject floor, World world, int worldVersion) {
-		print ("World version " + worldVersion + ") transforming floor to " + floor.transform.localScale);
-		floor.transform.localScale = new Vector3 (world.dimensions.width, 1, world.dimensions.height);
 	}
 
 	private void CreateNewEntities(Dictionary<string, GameObject> entities, World world, int worldVersion) {
@@ -83,7 +80,10 @@ public class UpdateWorld : MonoBehaviour {
 	}
 
 	private void UpdateExistingEntity(GameObject gameObject, WorldEntity entity) {
-		// TODO
+		// TODO figure out which way we want to use X and Y
+		gameObject.transform.localScale = new Vector3 (entity.height, 1, entity.width);
+		gameObject.transform.position = new Vector3 (entity.centerY, 0, entity.centerX);
+		gameObject.transform.rotation = Quaternion.AngleAxis (entity.rotationDegs, new Vector3 (0, 1, 0));
 	}
 
 }

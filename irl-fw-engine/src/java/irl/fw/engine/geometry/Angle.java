@@ -39,7 +39,7 @@ public class Angle {
     public double asDeg() {
         switch (type) {
             case DEGREES: return value;
-            case RADIANS: return Math.toRadians(value);
+            case RADIANS: return Math.toDegrees(value);
             default: throw new IllegalStateException("Unexpected angle type: " + type);
         }
     }

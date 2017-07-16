@@ -10,5 +10,5 @@ public class WorldEntity {
 	public float height;
 	public float centerX;
 	public float centerY;
-	public double rotationRads;
+	public float rotationDegs;
 }

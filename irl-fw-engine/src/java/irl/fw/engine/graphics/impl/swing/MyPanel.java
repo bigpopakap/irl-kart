@@ -72,8 +72,7 @@ class MyPanel extends JPanel {
                 world.getWidth(), world.getHeight()));
 
         //draw all the items in the world
-        world.getEntities().stream()
-                .forEach(entity -> draw(g2, entity));
+        world.getEntities().forEach(entity -> draw(g2, entity));
 
         //revert back to the original transform
         g2.setTransform(savedTrans);

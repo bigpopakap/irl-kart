@@ -79,7 +79,7 @@ public abstract class Entity implements EngineElement, CollidableEntity, JSONSer
                 "\"height\": %s, " +
                 "\"centerX\": %s, " +
                 "\"centerY\": %s, " +
-                "\"rotationRads\": %s " +
+                "\"rotationDegs\": %s " +
             "}",
             getEngineId(),
             getClass(), // TODO define this explicitly instead of using the class
@@ -87,7 +87,7 @@ public abstract class Entity implements EngineElement, CollidableEntity, JSONSer
             getState().getShape().getBounds2D().getHeight(),
             getState().getCenter().getX(),
             getState().getCenter().getY(),
-            getState().getRotation().asRad()
+            getState().getRotation().asDeg()
         );
     }
 }
