@@ -10,6 +10,12 @@
 
 # Mac
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
 # Running output stuff
 .log
@@ -17,3 +23,20 @@
 # Maven
 log/
 target/
+
+# Unity
+Temp/
+Library/
+
+# VisualStudio
+ExportedObj/
+obj/
+*.svd
+*.userprefs
+/*.csproj
+*.pidb
+*.suo
+/*.sln
+*.user
+*.unityproj
+*.booproj
