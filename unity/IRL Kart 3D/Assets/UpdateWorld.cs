@@ -13,6 +13,7 @@ public class UpdateWorld : MonoBehaviour {
 
 	// prefabs to create objects
 	public GameObject kartPrefab;
+	public GameObject shellPrefab;
 
 	void Start () {
 		Application.runInBackground = true;
@@ -61,7 +62,13 @@ public class UpdateWorld : MonoBehaviour {
 
 	private GameObject CreateNewEntity(WorldEntity entity) {
 		if (entity.type.Equals ("class irl.kart.entities.Kart")) {
-			return Instantiate (this.kartPrefab);
+			GameObject kart = Instantiate (this.kartPrefab);
+			kart.transform.localScale = new Vector3 (entity.width, 10, entity.height); // TODO don't hardcode the car height
+			return kart;
+		} if (entity.type.Equals ("class irl.kart.entities.weapons.Shell")) {
+			GameObject shell = Instantiate (this.shellPrefab);
+			shell.transform.localScale = new Vector3 (100, 100, 100); // TODO don't hardcode this size
+			return shell;
 		} else {
 			Debug.LogWarning ("Unexpected entity type: " + entity.type);
 			return null;
@@ -80,8 +87,6 @@ public class UpdateWorld : MonoBehaviour {
 	}
 
 	private void UpdateExistingEntity(GameObject gameObject, WorldEntity entity) {
-		// TODO figure out which way we want to use X and Y
-		gameObject.transform.localScale = new Vector3 (entity.width, 1, entity.height);
 		gameObject.transform.position = new Vector3 (entity.centerX, 0, entity.centerY);
 		gameObject.transform.rotation = Quaternion.AngleAxis (entity.rotationDegs, new Vector3 (0, -1, 0));
 	}
