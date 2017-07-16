@@ -1,4 +1,0 @@
-sceneSetups:
-- path: Assets/IRL Kart 2D.unity
-  isLoaded: 1
-  isActive: 1
