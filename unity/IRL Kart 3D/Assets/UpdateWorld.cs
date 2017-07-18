@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class UpdateWorld : MonoBehaviour {
 
+	private static bool SHOULD_DRAW_PHYSICAL_ENTITIES = true;
+
 	private static string url = "http://localhost:8080/world";
 	private int worldVersion = 0;
 	private World world = null;
@@ -49,6 +51,10 @@ public class UpdateWorld : MonoBehaviour {
 
 	private void CreateNewEntities(Dictionary<string, GameObject> entities, World world, int worldVersion) {
 		foreach (WorldEntity worldEntity in world.entities) {
+			if (!SHOULD_DRAW_PHYSICAL_ENTITIES && !worldEntity.isVirtual) {
+				// do nothing. We won't draw this
+			}
+
 			if (!entities.ContainsKey (worldEntity.id)) {
 				print ("World version " + worldVersion + ") trying to create new entity of type " + worldEntity.type + " with ID " + worldEntity.id + "...");
 
@@ -61,11 +67,11 @@ public class UpdateWorld : MonoBehaviour {
 	}
 
 	private GameObject CreateNewEntity(WorldEntity entity) {
-		if (entity.type.Equals ("class irl.kart.entities.Kart")) {
+		if (entity.type.Equals ("Kart")) {
 			GameObject kart = Instantiate (this.kartPrefab);
-			kart.transform.localScale = new Vector3 (entity.width, 10, entity.height); // TODO don't hardcode the car height
+			kart.transform.localScale = new Vector3 (entity.lengthX, 10, entity.lengthZ); // TODO don't hardcode the car height
 			return kart;
-		} if (entity.type.Equals ("class irl.kart.entities.weapons.Shell")) {
+		} if (entity.type.Equals ("Shell")) {
 			GameObject shell = Instantiate (this.shellPrefab);
 			shell.transform.localScale = new Vector3 (100, 100, 100); // TODO don't hardcode this size
 			return shell;
@@ -87,7 +93,8 @@ public class UpdateWorld : MonoBehaviour {
 	}
 
 	private void UpdateExistingEntity(GameObject gameObject, WorldEntity entity) {
-		gameObject.transform.position = new Vector3 (entity.centerX, 0, entity.centerY);
+		// TODO update the localScale here instead of when the object is created
+		gameObject.transform.position = new Vector3 (entity.centerX, 0, entity.centerZ);
 		gameObject.transform.rotation = Quaternion.AngleAxis (entity.rotationDegs, new Vector3 (0, -1, 0));
 	}
 

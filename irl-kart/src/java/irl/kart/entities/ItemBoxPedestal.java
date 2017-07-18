@@ -47,6 +47,11 @@ public class ItemBoxPedestal extends VirtualEntity {
     }
 
     @Override
+    public String getEntityDisplayType() {
+        return "ItemBoxPedestal";
+    }
+
+    @Override
     public boolean collide(Entity other) {
         //this doesn't interact with any other object
         return false;

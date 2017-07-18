@@ -88,6 +88,11 @@ public class Kart extends IRLEntity implements ItemUser, WeaponTarget {
             .subscribe(update -> this.useItem());
     }
 
+    @Override
+    public String getEntityDisplayType() {
+        return "Kart";
+    }
+
     public String getKartId() {
         return kartId;
     }

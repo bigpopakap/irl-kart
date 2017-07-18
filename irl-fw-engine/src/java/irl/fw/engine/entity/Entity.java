@@ -21,8 +21,6 @@ public abstract class Entity implements EngineElement, CollidableEntity, JSONSer
     private final EntityDisplayConfig displayConfig;
     private volatile EntityState state;
 
-    private EventQueue<EntityState> states;
-
     public Entity(EntityConfig entityConfig, EntityState initState) {
         if (entityConfig == null || entityConfig.getId() == null
             || entityConfig.getDisplayConfig() == null) {
@@ -31,7 +29,6 @@ public abstract class Entity implements EngineElement, CollidableEntity, JSONSer
 
         this.engineId = entityConfig.getId();
         this.displayConfig = entityConfig.getDisplayConfig();
-        this.states = new EventQueue<>();
         setState(initState);
     }
 
@@ -42,6 +39,8 @@ public abstract class Entity implements EngineElement, CollidableEntity, JSONSer
         return engineId;
     }
 
+    public abstract String getEntityDisplayType();
+
     public EntityDisplayConfig getDisplayConfig() {
         return displayConfig;
     }
@@ -50,17 +49,12 @@ public abstract class Entity implements EngineElement, CollidableEntity, JSONSer
         return state;
     }
 
-    public Observable<EntityState> getStates() {
-        return states.get();
-    }
-
     public synchronized void setState(EntityState state) {
         this.state = state;
-        this.states.mergeIn(this.state);
     }
 
-    public synchronized void updateState(EntityStateUpdate stateUpdates) {
-        setState(stateUpdates.fillAndBuild(getState()));
+    public synchronized void updateState(EntityStateUpdate stateUpdate) {
+        setState(stateUpdate.fillAndBuild(getState()));
     }
 
     @Override
@@ -75,14 +69,18 @@ public abstract class Entity implements EngineElement, CollidableEntity, JSONSer
             "{ " +
                 "\"id\": \"%s\", " +
                 "\"type\": \"%s\", " +
-                "\"width\": %s, " +
-                "\"height\": %s, " +
+                "\"isVirtual\": \"%s\", " +
+                "\"color\": \"%s\", " +
+                "\"lengthX\": %s, " +
+                "\"lengthZ\": %s, " + // Unity uses z as the other horizontal axis
                 "\"centerX\": %s, " +
-                "\"centerY\": %s, " +
+                "\"centerZ\": %s, " + // Unity uses z as the other horizontal axis
                 "\"rotationDegs\": %s " +
             "}",
             getEngineId(),
-            getClass(), // TODO define this explicitly instead of using the class
+            getEntityDisplayType(),
+            isVirtual(),
+            getDisplayConfig().getFillColor(),
             getState().getShape().getBounds2D().getWidth(),
             getState().getShape().getBounds2D().getHeight(),
             getState().getCenter().getX(),

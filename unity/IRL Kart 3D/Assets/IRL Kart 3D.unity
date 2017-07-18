@@ -135,7 +135,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b11be8a3262b4f0399761332e6f8d38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  kartPrefab: {fileID: 1086303848978300, guid: 8e0e2238ae5954ce7a5276300bebbb74, type: 2}
+  kartPrefab: {fileID: 100004, guid: 3eed8165b861f444cbb8fe297fefedd7, type: 3}
+  shellPrefab: {fileID: 1714487235562872, guid: 12a01eade5556254c973a9fa43332ed4,
+    type: 2}
 --- !u!4 &67558630
 Transform:
   m_ObjectHideFlags: 0

@@ -39,4 +39,9 @@ public class Banana extends WeaponEntity {
         );
     }
 
+    @Override
+    public String getEntityDisplayType() {
+        return "Banana";
+    }
+
 }

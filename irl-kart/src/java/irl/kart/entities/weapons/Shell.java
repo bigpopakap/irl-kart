@@ -47,6 +47,11 @@ public class Shell extends WeaponEntity {
         this.sourceKartId = sourceKartId;
     }
 
+    @Override
+    public String getEntityDisplayType() {
+        return "Shell";
+    }
+
     public EntityId getSourceKartId() {
         return sourceKartId;
     }

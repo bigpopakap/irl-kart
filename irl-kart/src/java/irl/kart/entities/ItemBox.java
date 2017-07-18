@@ -68,6 +68,11 @@ public class ItemBox extends VirtualEntity implements RemovableEntity {
     }
 
     @Override
+    public String getEntityDisplayType() {
+        return "ItemBox";
+    }
+
+    @Override
     public boolean collide(Entity other) {
         if (other instanceof ItemUser) {
             ItemUser itemUser = (ItemUser) other;

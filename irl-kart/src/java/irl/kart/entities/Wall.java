@@ -26,4 +26,9 @@ public class Wall extends IRLEntity {
         );
     }
 
+    @Override
+    public String getEntityDisplayType() {
+        return "Wall";
+    }
+
 }

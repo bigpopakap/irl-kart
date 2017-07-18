@@ -6,9 +6,10 @@ using UnityEngine;
 public class WorldEntity {
 	public string id;
 	public string type;
-	public float width;
-	public float height;
+	public bool isVirtual;
+	public float lengthX;
+	public float lengthZ;
 	public float centerX;
-	public float centerY;
+	public float centerZ;
 	public float rotationDegs;
 }
