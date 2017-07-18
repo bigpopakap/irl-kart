@@ -37,14 +37,11 @@ public class Kart extends IRLEntity implements ItemUser, WeaponTarget {
 
     //TODO this kart shouldn't know about its length and shape.
     //      that should come from the beacon
+    public static final int KART_WIDTH = 9;
     public static final int KART_LENGTH = 12;
     public static final ImmutableShape SHAPE = new ImmutableShape(
-        ImmutableShape.Type.CONVEX_POLY,
-        new Polygon(
-            new int[] { 9, 9, 4,           0, 0},
-            new int[] { 0, 9, KART_LENGTH, 9, 0},
-            5
-        )
+        ImmutableShape.Type.RECTANGLE,
+        new Rectangle(KART_WIDTH, KART_LENGTH)
     );
 
     private final String kartId;
