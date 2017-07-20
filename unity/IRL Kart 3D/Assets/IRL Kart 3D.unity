@@ -138,6 +138,8 @@ MonoBehaviour:
   kartPrefab: {fileID: 100004, guid: 3eed8165b861f444cbb8fe297fefedd7, type: 3}
   shellPrefab: {fileID: 1714487235562872, guid: 12a01eade5556254c973a9fa43332ed4,
     type: 2}
+  bananaPrefab: {fileID: 1435122529586276, guid: 925cb6d2fb16bbb49a3bf6d2ac722e6b,
+    type: 2}
 --- !u!4 &67558630
 Transform:
   m_ObjectHideFlags: 0

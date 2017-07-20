@@ -16,6 +16,7 @@ public class UpdateWorld : MonoBehaviour {
 	// prefabs to create objects
 	public GameObject kartPrefab;
 	public GameObject shellPrefab;
+	public GameObject bananaPrefab;
 
 	void Start () {
 		Application.runInBackground = true;
@@ -25,6 +26,7 @@ public class UpdateWorld : MonoBehaviour {
 		StartCoroutine (CacheWorld ());
 
 		if (this.world != null) {
+			PruneRemovedEntities (this.entities, this.world, this.worldVersion);
 			CreateNewEntities (this.entities, this.world, this.worldVersion);
 			UpdateExistingEntities (this.entities, this.world, this.worldVersion);
 		}
@@ -46,6 +48,30 @@ public class UpdateWorld : MonoBehaviour {
 			yield return world;
 		} else {
 			Debug.LogWarning ("Error requesting " + url + ": " + worldRequest.error);
+		}
+	}
+
+	private void PruneRemovedEntities(Dictionary<string, GameObject> entities, World world, int worldVersion) {
+		ArrayList toRemove = new ArrayList ();
+
+		foreach (string id in entities.Keys) {
+			bool found = false;
+
+			foreach (WorldEntity worldEntity in world.entities) {
+				if (id.Equals (worldEntity.id)) {
+					found = true;
+					break;
+				}
+			}
+
+			if (!found) {
+				toRemove.Add (id);
+			}
+		}
+
+		foreach (string id in toRemove.ToArray()) {
+			Destroy (entities [id]);
+			entities.Remove (id);
 		}
 	}
 
@@ -71,10 +97,13 @@ public class UpdateWorld : MonoBehaviour {
 			GameObject kart = Instantiate (this.kartPrefab);
 			kart.transform.localScale = new Vector3 (entity.lengthX, 10, entity.lengthZ); // TODO don't hardcode the car height
 			return kart;
-		} if (entity.type.Equals ("Shell")) {
+		} else if (entity.type.Equals ("Shell")) {
 			GameObject shell = Instantiate (this.shellPrefab);
 			shell.transform.localScale = new Vector3 (100, 100, 100); // TODO don't hardcode this size
 			return shell;
+		} else if (entity.type.Equals ("Banana")) {
+			GameObject banana = Instantiate (this.bananaPrefab);
+			return banana;
 		} else {
 			Debug.LogWarning ("Unexpected entity type: " + entity.type);
 			return null;
